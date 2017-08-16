@@ -1,0 +1,18 @@
+Package: rdflib
+Title: High level wrapper around the 'redland' package for common 'rdf' applications 
+Version: 0.0.1
+Authors@R: person("Carl", "Boettiger", email = "cboettig@gmail.com", role = c("aut", "cre"))
+Description: A friendly and consise user interface for performing common
+             tasks on 'rdf' data, such as parsing and converting between
+             formats including 'rdfxml', 'turtle', 'nquads', 'ntriples',
+             and 'trig', creating 'rdf' graphs, and performing 'SPARQL'
+             queries. This package wraps the 'redland' R package which
+             provides direct bindings to the redland C library, and offers
+             additional control and features for more experienced users.
+Depends: R (>= 3.4.1)
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: redland,
+    methods
+RoxygenNote: 6.0.1
