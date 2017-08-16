@@ -16,3 +16,5 @@ LazyData: true
 Imports: redland,
     methods
 RoxygenNote: 6.0.1
+Suggests: magrittr,
+    jsonld
