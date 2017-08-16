@@ -1,4 +1,6 @@
 
+[![Travis-CI Build Status](https://travis-ci.org/cboettig/rdflib.svg?branch=master)](https://travis-ci.org/cboettig/rdflib) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/cboettig/rdflib?branch=master&svg=true)](https://ci.appveyor.com/project/cboettig/rdflib) [![Coverage Status](https://img.shields.io/codecov/c/github/cboettig/rdflib/master.svg)](https://codecov.io/github/cboettig/rdflib?branch=master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/rdflib)](https://cran.r-project.org/package=rdflib)
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 rdflib
 ======
