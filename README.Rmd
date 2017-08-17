@@ -50,8 +50,8 @@ Parse a file and serialize into a different format:
 
 ```{r parse}
 system.file("extdata", "dc.rdf", package="redland") %>%
-  parse_rdf() %>%
-  serialize("test.nquads", "nquads")
+  rdf_parse() %>%
+  rdf_serialize("test.nquads", "nquads")
 ```
 
 
@@ -65,7 +65,7 @@ sparql <-
   SELECT ?a ?c
   WHERE { ?a dc:creator ?c . }'
 
-rdf <- parse_rdf(file)
+rdf <- rdf_parse(file)
 rdf %>% query(sparql)
 
 ```
@@ -74,7 +74,7 @@ Initialize graph a new object or add triples statements to an existing graph:
 
 ```{r}
 x <- rdf()
-x <- add(x, 
+x <- rdf_add(x, 
     subject="http://www.dajobe.org/",
     predicate="http://purl.org/dc/elements/1.1/language",
     object="en")
@@ -91,7 +91,7 @@ only the `nquads` serialization format.
 library(jsonld)
 
 tmp <- tempfile()
-serialize(x, tmp, "nquads")
+rdf_serialize(x, tmp, "nquads")
 
 str <- readLines(tmp) %>% jsonld_from_rdf() 
 str
@@ -103,7 +103,7 @@ perform SPARQL queries, add triples, or serialize into other formats.
 ```{r}
 tmp <- tempfile()
 str %>% jsonld_to_rdf() %>% writeLines(tmp)
-rdf <- parse_rdf(tmp, format = "nquads")
+rdf <- rdf_parse(tmp, format = "nquads")
 ```
 
 

@@ -17,44 +17,56 @@ rdf <- function(){
 
 #' Parse RDF files
 #'
-#' @aliases parse_rdf parse.rdf
-#' @param file path to the rdf file to serialize
-#' @param format rdf serialization format of the file,
-#' one of "rdfxml", "nquads", "ntriples", "trig", or "turtle"
+#' @aliases rdf_parse
+#' @param doc path to the rdf doc to serialize
+#' @param format rdf serialization format of the doc,
+#' one of "rdfxml", "nquads", "ntriples", "trig", "turtle"
+#' or "jsonld"
 #' @param ... additional parameters (not implemented)
 #'
 #' @return an rdf S3 object, containing the redland world
 #'  and model objects
 #' @importClassesFrom redland World Storage Model Parser
 #' @importMethodsFrom redland parseFileIntoModel
+#' @importFrom jsonld jsonld_to_rdf
 #' @export
 #'
 #' @examples
-#' file <- system.file("extdata", "dc.rdf", package="redland")
-#' rdf <- parse_rdf(file)
+#' doc <- system.file("extdata", "dc.rdf", package="redland")
+#' rdf <- rdf_parse(doc)
 #'
-parse_rdf <- function(file,
+rdf_parse <- function(doc,
                      format = c("rdfxml",
                                 "nquads",
                                 "ntriples",
                                 "trig",
-                                "turtle"),
+                                "turtle",
+                                "jsonld"),
                   ...){
   format <- match.arg(format)
+  
+  ## redlands doesn't support jsonld. So rewrite as nquads using jsonld package
+  if(format == "jsonld"){
+    tmp <- tempfile()
+    writeLines(jsonld::jsonld_to_rdf(readLines(doc)), tmp)
+    doc <- tmp
+    format <- "nquads"
+  }
+  
   x <- rdf()
   mimetype <- rdf_mimetypes[format]
   parser <- new("Parser", x$world, name = format, mimeType = mimetype)
-  redland::parseFileIntoModel(parser, x$world, file, x$model)
+  redland::parseFileIntoModel(parser, x$world, doc, x$model)
 
   x
 }
 
 
 
-#' Serialize RDF files
+#' Serialize RDF docs
 #'
-#' @inheritParams parse_rdf
-#' @inheritParams query
+#' @inheritParams rdf_parse
+#' @inheritParams rdf_query
 #' @param namespace string giving the namespace to set
 #' @param prefix string giving the prefix associated with the namespace
 #'
@@ -68,30 +80,36 @@ parse_rdf <- function(file,
 #' infile <- system.file("extdata", "dc.rdf", package="redland")
 #' out <- tempfile("file", fileext = ".rdf")
 #'
-#' rdf <- parse_rdf(infile)
-#' serialize(rdf, out)
+#' rdf <- rdf_parse(infile)
+#' rdf_serialize(rdf, out)
 #'
 #' ## With a namespace
-#' serialize(rdf,
+#' rdf_serialize(rdf,
 #'           out,
 #'           namespace = "http://purl.org/dc/elements/1.1/",
 #'           prefix = "dc")
 #'
-serialize <- function(x, file, format, namespace, prefix, ...) UseMethod("serialize")
-
-#' @export
-serialize.rdf <- function(x,
-                          file,
+rdf_serialize <- function(x,
+                          doc,
                           format = c("rdfxml",
                                      "nquads",
                                      "ntriples",
                                      "trig",
-                                     "turtle"),
+                                     "turtle",
+                                     "jsonld"),
                           namespace = NULL,
                           prefix = NULL,
                           ...){
 
   format <- match.arg(format)
+  
+  
+  ## redlands doesn't support jsonld. So write as nquads and then trnasform
+  jsonld_output <- format == "jsonld"
+  if(jsonld_output){
+    format <- "nquads"
+  }
+  
   mimetype <- rdf_mimetypes[format]
 
   serializer <-
@@ -104,8 +122,16 @@ serialize.rdf <- function(x,
                  namespace = namespace,
                  prefix = prefix)
   }
-  invisible(
-  redland::serializeToFile(serializer, x$world, x$model, file))
+ 
+  status <-
+    redland::serializeToFile(serializer, x$world, x$model, doc)
+  
+  if(jsonld_output){
+    json <- jsonld::jsonld_from_rdf(readLines(doc))
+    writeLines(json, doc)
+  }
+  
+  invisible(status)
 }
 
 
@@ -122,20 +148,17 @@ serialize.rdf <- function(x,
 #' @importMethodsFrom redland executeQuery getNextResult
 #' @export
 #' @examples
-#' file <- system.file("extdata", "dc.rdf", package="redland")
+#' doc <- system.file("extdata", "dc.rdf", package="redland")
 #'
 #' sparql <-
 #' 'PREFIX dc: <http://purl.org/dc/elements/1.1/>
 #'  SELECT ?a ?c
 #'  WHERE { ?a dc:creator ?c . }'
 #'
-#' rdf <- parse_rdf(file)
-#' query(rdf, sparql)
+#' rdf <- rdf_parse(doc)
+#' rdf_query(rdf, sparql)
 #'
-query <- function(x, query, ...) UseMethod("query")
-
-#' @export
-query.rdf <- function(x, query, ...){
+rdf_query <- function(x, query, ...){
   queryObj <- new("Query", x$world, query, base_uri=NULL,
                   query_language="sparql", query_uri=NULL)
   queryResult <- redland::executeQuery(queryObj, x$model)
@@ -171,23 +194,12 @@ query.rdf <- function(x, query, ...){
 #'
 #' @examples
 #' x <- rdf()
-#' add(x, 
+#' rdf_add(x, 
 #'     subject="http://www.dajobe.org/",
 #'     predicate="http://purl.org/dc/elements/1.1/language",
 #'     object="en")
 #'
-add <- function(x,
-                subject,
-                predicate,
-                object,
-                subjectType = as.character(NA),
-                objectType = as.character(NA),
-                datatype_uri = as.character(NA)) {
-  UseMethod("add")
-}
-
-#' @export  
-add.rdf <- function(x, subject, predicate, object, 
+rdf_add <- function(x, subject, predicate, object, 
                     subjectType = as.character(NA), 
                     objectType = as.character(NA), 
                     datatype_uri = as.character(NA)){
@@ -209,3 +221,20 @@ rdf_mimetypes <- c("nquads" = "text/x-nquads",
                    "turtle" = "application/turtle")
 
 # application/x-turtle & text/turtle also ok
+
+
+
+# rdf functions like working with local files
+# this helper function allows us to also use URLs or strings
+#' @importFrom utils download.file
+text_or_url_to_doc <- function(x, tmp = tempfile()){
+  if(file.exists(x)){
+   return(x) 
+  } else if(grepl("^https?://", x)) {
+    utils::download.file(x, tmp)
+    return(tmp)
+  } else {
+    writeLines(x, tmp)
+    return(tmp)
+  }
+}
