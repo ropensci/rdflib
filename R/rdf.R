@@ -16,7 +16,7 @@ rdf <- function(){
 }
 
 #' @export
-format_.rdf <- function(x,
+format.rdf <- function(x,
                        format = getOption("rdf_print_format", "nquads"),
                        ...){
   tmp <- tempfile()
@@ -30,7 +30,7 @@ format_.rdf <- function(x,
 
 #' @export
 print.rdf <- function(x, ...){
-  cat(format_.rdf(x), sep = "\n")
+  cat(format.rdf(x), sep = "\n")
 }
 
 
@@ -150,7 +150,7 @@ rdf_serialize <- function(x,
   if(jsonld_output){
     txt <- readLines(doc)
     if(length(txt) > 0){ ## don't attempt to write empty file into json
-      json <- jsonld::jsonld_from_rdf()
+      json <- jsonld::jsonld_from_rdf(txt)
       writeLines(json, doc)
     }
   }

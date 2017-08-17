@@ -1,6 +1,6 @@
 
 
-doc <- system.file("extdata", "dc.rdf", package="redland")
+doc <- system.file("extdata/example.rdf", package="redland")
 rdf <- rdf_parse(doc) 
 
 out <- tempfile()
