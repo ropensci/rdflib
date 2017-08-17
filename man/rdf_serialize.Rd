@@ -10,7 +10,7 @@ rdf_serialize(x, doc, format = c("rdfxml", "nquads", "ntriples", "trig",
 \arguments{
 \item{x}{an rdf object (e.g. from \code{\link{parse}})}
 
-\item{doc}{path to the rdf doc to serialize}
+\item{doc}{path to the rdf doc to parse}
 
 \item{format}{rdf serialization format of the doc,
 one of "rdfxml", "nquads", "ntriples", "trig", "turtle"

@@ -1,16 +1,18 @@
-library(magrittr)
 
-system.file("extdata", "dc.rdf", package="redland") %>%
-  rdf_parse() %>%
-  rdf_serialize("test.nquads", "nquads")
 
-file <- system.file("extdata", "dc.rdf", package="redland")
+doc <- system.file("extdata", "dc.rdf", package="redland")
+rdf <- rdf_parse(doc) 
+
+out <- tempfile()
+rdf_serialize(rdf, out, "nquads")
+
 sparql <-
 'PREFIX dc: <http://purl.org/dc/elements/1.1/>
  SELECT ?a ?c
  WHERE { ?a dc:creator ?c . }'
-rdf <- rdf_parse(file)
-rdf %>% rdf_query(sparql)
+
+rdf <- rdf_parse(doc)
+rdf_query(rdf, sparql)
 
 
 x <- rdf()
@@ -20,18 +22,10 @@ x <- rdf_add(x,
          object="en")
 
 
-
-library(jsonld)
-tmp <- tempfile()
-rdf_serialize(x, tmp, "nquads")
-str <- readLines(tmp) %>% jsonld_from_rdf() 
-
-
-tmp <- tempfile()
-str %>% jsonld_to_rdf() %>% writeLines(tmp)
-rdf <- rdf_parse(tmp, format = "nquads")
+rdf_serialize(x, out, "jsonld")
+rdf <- rdf_parse(out, format = "jsonld")
 
 
 
-unlink("test.nquads")
+unlink(out)
 
