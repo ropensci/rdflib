@@ -41,6 +41,7 @@ testthat::test_that("we can parse and serialize json-ld", {
 })
 
 testthat::test_that("print and format work", {
+  rdf <- rdf_parse(doc)
   txt <- format(rdf, format = "rdfxml")
   print(rdf)
   
