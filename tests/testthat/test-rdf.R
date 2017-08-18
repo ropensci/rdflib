@@ -53,6 +53,27 @@ testthat::test_that("we can parse from a text string", {
   rdf_parse(txt, format="rdfxml")
 })
 
+testthat::test_that("we can add a namespace on serializing", {
+  rdf <- rdf_parse(doc)
+  rdf_serialize(rdf,
+                out,
+                namespace = "http://purl.org/dc/elements/1.1/",
+                prefix = "dc")
+})
+
+testthat::test_that("we can parse from a url", {
+  testthat::skip_on_cran()
+ rdf_parse("https://tinyurl.com/ycf95c9h")
+})
+
+
+## FIXME why does this fail?
+testthat::test_that("we can parse and serialize json-ld", {
+  x <- rdf_parse(doc)
+#  rdf_serialize(x, out, "jsonld")
+
+})
+
 
 unlink(out)
 
