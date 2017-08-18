@@ -25,7 +25,8 @@ x <- rdf_add(x,
 rdf_serialize(x, out, "jsonld")
 rdf <- rdf_parse(out, format = "jsonld")
 
-
+txt <- format(rdf)
+print(rdf)
 
 unlink(out)
 
