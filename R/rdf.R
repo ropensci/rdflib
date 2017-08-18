@@ -15,10 +15,28 @@ rdf <- function(){
             class = "rdf")
 }
 
+#' @export
+format.rdf <- function(x,
+                       format = getOption("rdf_print_format", "nquads"),
+                       ...){
+  tmp <- tempfile()
+  rdf_serialize(x, 
+                tmp,
+                format = format)
+  txt <- readLines(tmp)
+  unlink(tmp)
+  txt
+}
+
+#' @export
+print.rdf <- function(x, ...){
+  cat(format.rdf(x), sep = "\n")
+}
+
+
 #' Parse RDF files
 #'
-#' @aliases rdf_parse
-#' @param doc path to the rdf doc to serialize
+#' @param doc path to the rdf doc to parse
 #' @param format rdf serialization format of the doc,
 #' one of "rdfxml", "nquads", "ntriples", "trig", "turtle"
 #' or "jsonld"
@@ -45,16 +63,19 @@ rdf_parse <- function(doc,
                   ...){
   format <- match.arg(format)
   
+  # convert string input or url to local file
+  doc <- text_or_url_to_doc(doc)
+  
   ## redlands doesn't support jsonld. So rewrite as nquads using jsonld package
   if(format == "jsonld"){
     tmp <- tempfile()
-    writeLines(jsonld::jsonld_to_rdf(readLines(doc)), tmp)
+    writeLines(jsonld::jsonld_to_rdf(doc), tmp)
     doc <- tmp
     format <- "nquads"
   }
   
   x <- rdf()
-  mimetype <- rdf_mimetypes[format]
+  mimetype <- unname(rdf_mimetypes[format])
   parser <- new("Parser", x$world, name = format, mimeType = mimetype)
   redland::parseFileIntoModel(parser, x$world, doc, x$model)
 
@@ -127,8 +148,11 @@ rdf_serialize <- function(x,
     redland::serializeToFile(serializer, x$world, x$model, doc)
   
   if(jsonld_output){
-    json <- jsonld::jsonld_from_rdf(readLines(doc))
-    writeLines(json, doc)
+    txt <- readLines(doc)
+    if(length(txt) > 0){ ## don't attempt to write empty file into json
+      json <- jsonld::jsonld_from_rdf(txt)
+      writeLines(json, doc)
+    }
   }
   
   invisible(status)

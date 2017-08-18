@@ -78,6 +78,14 @@ x <- rdf_add(x,
     subject="http://www.dajobe.org/",
     predicate="http://purl.org/dc/elements/1.1/language",
     object="en")
+x
+```
+
+Change the default display format (`nquads`) for graph objects:
+
+```{r}
+options(rdf_print_format = "jsonld")
+x
 ```
 
 
