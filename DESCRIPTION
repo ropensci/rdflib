@@ -7,8 +7,11 @@ Description: A friendly and consise user interface for performing common
              formats including 'rdfxml', 'turtle', 'nquads', 'ntriples',
              and 'trig', creating 'rdf' graphs, and performing 'SPARQL'
              queries. This package wraps the 'redland' R package which
-             provides direct bindings to the redland C library. This
-             interface takes inspiration from the Python rdflib library.
+             provides direct bindings to the 'redland' C library.  Additionally,
+             the package supports parsing and serialization of 'rdf'
+             into 'json-ld' through the 'json-ld' package, which binds
+             the official 'json-ld' 'javascript' 'API'. The package
+             interface takes inspiration from the Python 'rdflib' library.
 Depends: R (>= 3.4.1)
 License: MIT + file LICENSE
 Encoding: UTF-8

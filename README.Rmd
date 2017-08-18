@@ -24,7 +24,10 @@ tasks on rdf data, such as parsing and converting between
 formats including rdfxml, turtle, nquads, ntriples,
 and trig, creating rdf graphs, and performing SPARQL
 queries. This package wraps the redland R package which
-provides direct bindings to the redland C library. This
+provides direct bindings to the redland C library. Additionally,
+the package supports parsing and serialization of rdf
+into json-ld through the json-ld package, which binds
+the official json-ld javascript API. The package
 interface takes inspiration from the Python rdflib library.
 
 ## Installation
@@ -49,7 +52,9 @@ library(rdflib)
 Parse a file and serialize into a different format:
 
 ```{r parse}
-system.file("extdata", "dc.rdf", package="redland") %>%
+doc <- system.file("extdata", "dc.rdf", package="redland")
+
+doc %>%
   rdf_parse() %>%
   rdf_serialize("test.nquads", "nquads")
 ```
@@ -58,16 +63,16 @@ system.file("extdata", "dc.rdf", package="redland") %>%
 Perform SPARQL queries:
 
 ```{r sparql}
-file <- system.file("extdata", "dc.rdf", package="redland")
-
 sparql <-
  'PREFIX dc: <http://purl.org/dc/elements/1.1/>
   SELECT ?a ?c
   WHERE { ?a dc:creator ?c . }'
 
-rdf <- rdf_parse(file)
-rdf %>% query(sparql)
+rdf <- rdf_parse(doc)
+rdf
 
+
+rdf %>% rdf_query(sparql)
 ```
 
 Initialize graph a new object or add triples statements to an existing graph:
@@ -92,28 +97,13 @@ x
 ## JSON-LD
 
 We can also work with the JSON-LD format through additional functions provided in the 
-R package, `jsonld`.  Note that at the time of writing, jsonld-rdf interface supports 
-only the `nquads` serialization format.
+R package, `jsonld`. 
 
 ```{r}
-library(jsonld)
-
-tmp <- tempfile()
-rdf_serialize(x, tmp, "nquads")
-
-str <- readLines(tmp) %>% jsonld_from_rdf() 
-str
+out <- tempfile()
+rdf_serialize(x, out, "jsonld")
+rdf_parse(out, format = "jsonld")
 ```
-
-Likewise, we can convert JSON-LD data into an RDF model, on which we can then
-perform SPARQL queries, add triples, or serialize into other formats. 
-
-```{r}
-tmp <- tempfile()
-str %>% jsonld_to_rdf() %>% writeLines(tmp)
-rdf <- rdf_parse(tmp, format = "nquads")
-```
-
 
 For more information on the JSON-LD RDF API, see <https://json-ld.org/spec/latest/json-ld-rdf/>.
 

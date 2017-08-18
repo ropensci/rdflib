@@ -36,7 +36,7 @@ print.rdf <- function(x, ...){
 
 #' Parse RDF files
 #'
-#' @param doc path to the rdf doc to parse
+#' @param doc path, URL, or literal string of the rdf document to parse
 #' @param format rdf serialization format of the doc,
 #' one of "rdfxml", "nquads", "ntriples", "trig", "turtle"
 #' or "jsonld"
@@ -88,6 +88,7 @@ rdf_parse <- function(doc,
 #'
 #' @inheritParams rdf_parse
 #' @inheritParams rdf_query
+#' @param doc file path to write out to
 #' @param namespace string giving the namespace to set
 #' @param prefix string giving the prefix associated with the namespace
 #'
