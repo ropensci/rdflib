@@ -7,16 +7,19 @@ testthat::test_that("we can parse (in rdfxml)
                     and serialize (in nquads) a simple rdf graph", {
   rdf <- rdf_parse(doc) 
   rdf_serialize(rdf, out, "nquads")
+  roundtrip <- rdf_parse(out, "nquads")
+  testthat::expect_is(roundtrip, "rdf")
 })
 
 testthat::test_that("we can make sparql queries", {
-sparql <-
-'PREFIX dc: <http://purl.org/dc/elements/1.1/>
- SELECT ?a ?c
- WHERE { ?a dc:creator ?c . }'
-
-rdf <- rdf_parse(doc)
-rdf_query(rdf, sparql)
+  sparql <-
+  'PREFIX dc: <http://purl.org/dc/elements/1.1/>
+   SELECT ?a ?c
+   WHERE { ?a dc:creator ?c . }'
+  
+  rdf <- rdf_parse(doc)
+  match <- rdf_query(rdf, sparql)
+  expect_length(match, 2)
 })
 
 testthat::test_that("we can initialize add triples to rdf graph", {
@@ -43,7 +46,7 @@ testthat::test_that("we can parse and serialize json-ld", {
 testthat::test_that("print and format work", {
   rdf <- rdf_parse(doc)
   txt <- format(rdf, format = "rdfxml")
-  print(rdf)
+  testthat::expect_output(print(rdf), ".*johnsmith.*")
   
   testthat::expect_is(txt, "character")
 })
@@ -51,7 +54,9 @@ testthat::test_that("print and format work", {
 testthat::test_that("we can parse from a text string", {
   rdf <- rdf_parse(doc)
   txt <- format(rdf, format = "rdfxml")
-  rdf_parse(txt, format="rdfxml")
+  testthat::expect_is(txt, "character")
+  roundtrip <- rdf_parse(txt, format="rdfxml")
+  testthat::expect_is(roundtrip, "rdf")
 })
 
 testthat::test_that("we can add a namespace on serializing", {
@@ -60,19 +65,27 @@ testthat::test_that("we can add a namespace on serializing", {
                 out,
                 namespace = "http://purl.org/dc/elements/1.1/",
                 prefix = "dc")
+  roundtrip <- rdf_parse(doc)
+  testthat::expect_is(roundtrip, "rdf")
+  
 })
+
+
+testthat::test_that("we can parse and serialize json-ld", {
+  x <- rdf_parse(doc)
+  rdf_serialize(x, out, "jsonld")
+  roundtrip <- rdf_parse(out, "jsonld")
+  testthat::expect_is(roundtrip, "rdf")
+
+})
+
+
 
 testthat::test_that("we can parse from a url", {
   testthat::skip_on_cran()
- rdf_parse("https://tinyurl.com/ycf95c9h")
-})
-
-
-## FIXME why does this fail?
-testthat::test_that("we can parse and serialize json-ld", {
-  x <- rdf_parse(doc)
-#  rdf_serialize(x, out, "jsonld")
-
+  rdf <- rdf_parse("https://tinyurl.com/ycf95c9h")
+  testthat::expect_is(rdf, "rdf")
+  
 })
 
 

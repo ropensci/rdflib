@@ -8,7 +8,7 @@ rdf_parse(doc, format = c("rdfxml", "nquads", "ntriples", "trig", "turtle",
   "jsonld"), ...)
 }
 \arguments{
-\item{doc}{path to the rdf doc to parse}
+\item{doc}{path, URL, or literal string of the rdf document to parse}
 
 \item{format}{rdf serialization format of the doc,
 one of "rdfxml", "nquads", "ntriples", "trig", "turtle"

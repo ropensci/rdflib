@@ -23,7 +23,7 @@ format.rdf <- function(x,
   rdf_serialize(x, 
                 tmp,
                 format = format)
-  txt <- readLines(tmp)
+  txt <- paste(readLines(tmp), collapse = "\n")
   unlink(tmp)
   txt
 }
@@ -149,7 +149,7 @@ rdf_serialize <- function(x,
     redland::serializeToFile(serializer, x$world, x$model, doc)
   
   if(jsonld_output){
-    txt <- readLines(doc)
+    txt <- paste(readLines(doc), collapse = "\n")
     if(length(txt) > 0){ ## don't attempt to write empty file into json
       json <- jsonld::jsonld_from_rdf(txt)
       writeLines(json, doc)
