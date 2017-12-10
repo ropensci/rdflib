@@ -15,6 +15,11 @@ Description: A friendly and concise user interface for performing common
              into 'JSON-LD' through the `jsonld` package, which binds
              the official 'JSON-LD' 'javascript' 'API'. The package
              interface takes inspiration from the Python 'rdflib' library.
+             This latter ability makes 'rdflib' a quick route into JSON
+             from RDF-XML and other RDF serializations that all tend to be
+             less developer-friendly.  For instance, performing JSON-LD 
+             compaction on RDF-XML file can provide convenient, developer
+             friendly names.
 Depends: R (>= 3.4.1)
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -28,5 +33,7 @@ Imports: redland,
 RoxygenNote: 6.0.1
 Suggests: magrittr,
     covr,
-    testthat
-    
+    testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

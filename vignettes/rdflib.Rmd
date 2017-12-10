@@ -1,0 +1,159 @@
+---
+title: "rdflib Introduction"
+author: "Carl Boettiger"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{rdflib Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+`rdflib` is really just a lightweight wrapper around two existing R packages: `redland`, and `jsonld`, which themselves are (less trivial) wrappers around existing libraries (the redland C library, and the JSON-LD javascript implementation) which themselves are instances of a set of W3C Standards for the representation of linked data.  `rdflib` has two key features: a simpler, higher-level interface for the common tasks performed in the `redland` library (user does not have to manage `world`, `model` and `storage` objects by default just to perform standard operations and conversions), and integration between the now popular `json-ld` serialization, which is not part of the `redland` library.
+
+However, for many R users, `rdflib` can be thought of as a simple way to convert parse common data formats (e.g. RDF XML) into something more R-friendly.  In this vignette, we illustrate how this might work in a simple example of some citation data returned in RDF-XML format from CrossRef.
+
+```{r setup, include=FALSE}
+library(jsonld)
+library(jsonlite)
+library(magrittr)
+library(httr)
+library(xml2)
+# devtools::install_github("cboettig/rdflib@0.0.1")
+library(rdflib)
+```
+
+
+Let's begin by reading in some `RDF+XML` data from CrossRef by querying a DOI and requesting `rdf+xml` return type (via Content Negotiation):
+
+```{r}
+"http://dx.doi.org/10.1002/ece3.2314" %>%
+  httr::GET(httr::add_headers(Accept="application/rdf+xml")) %>%
+  httr::content(as = "parsed", type = "application/xml") %>%
+  xml2::write_xml("ex.xml")
+```
+
+Our `rdflib` functions perform the simple task of parsing this `rdfxml` file into R (as a `redland` `rdf` class object) and then writing it back out in `jsonld` serialization:
+
+
+```{r}
+rdf_parse("ex.xml", "rdfxml") %>% 
+  rdf_serialize("ex.json", "jsonld")
+```
+
+
+and we now have JSON.  
+
+```{r}
+context <- 
+'{
+    "prism": "http://prismstandard.org/namespaces/basic/2.1/",
+    "dc": "http://purl.org/dc/terms/",
+    "bibo": "http://purl.org/ontology/bibo/",
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "owl": "http://www.w3.org/2002/07/owl#"
+}
+'
+json <- jsonld_compact("ex.json", context)
+```
+
+The resulting JSON is now has more concise keys in place of the long URLs.    
+
+
+
+## SPARQL queries on JSON-LD data
+
+------
+
+
+<!--
+
+## Switching contexts and framing
+
+
+```{r}
+context <- 
+ '{
+    "prism": "http://prismstandard.org/namespaces/basic/2.1/",
+    "dc": "http://purl.org/dc/terms/",
+    "bibo": "http://purl.org/ontology/bibo/",
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "schema": "http://schema.org/",
+
+    "schema:pageStart": "prism:startingPage", 
+    "schema:pageEnd": "prism:endingPage",
+    "schema:volumeNumber": "prism:volume",
+    "schema:identifier": {"@id": "prism:issn", "@type": "@id"},
+
+    "schema:Periodical": "bibo:Journal",
+
+    "schema:author": "dc:creator",
+    "schema:isPartOf": "dc:isPartOf",
+    "schema:publisher": "dc:publisher",
+    "schema:name": "dc:title",
+
+    "schema:familyName": "foaf:familyName",
+    "schema:givenName": "foaf:givenName",
+    "schema:Person": "foaf:Person",
+
+    "schema:sameAs": {"@id": "owl:sameAs", "@type": "@id"},
+    "schema:Date": "xsd:date",
+    "schema:datePublished": {"@id": "http://purl.org/dc/terms/date", "@type": "schema:Date"}
+}'
+```
+
+
+Compact raw JSON into this context
+
+```{r}
+jsonld_compact("ex.json", context) %>% 
+  fromJSON(simplifyVector = FALSE) -> X
+```
+
+
+Now replace that context with schema.org context, a bit of a hack
+
+```{r}
+X[["@context"]] <- "http://schema.org"
+X %>% 
+  toJSON(auto_unbox = TRUE, pretty = TRUE) %>% 
+  jsonld_compact("http://schema.org") -> Y
+```
+
+Now frame our desired results to explicitly include only the elements we request, giving the graph in the desired tree structure:
+
+```{r}
+frame <- 
+'{"@context": "http://schema.org",
+ "@graph": {
+   "id": {},
+   "name": {},
+   "pageStart": {},
+    "pageEnd": {},
+    "isPartOf": {
+      "name": {},
+      "identifier": {},
+      "@explicit": true
+    },
+    "author": [
+            {
+              "givenName": {},
+              "familyName": {},
+              "@explicit": true
+            }],
+   "@explicit": true
+ }
+}'
+
+jsonld_frame(Y, frame)
+```
+
+-->
+
+```{r include=FALSE}
+unlink("ex.xml")
+unlink("ex.json")
+```
