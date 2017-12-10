@@ -5,15 +5,15 @@ Authors@R: person("Carl", "Boettiger",
                   email = "cboettig@gmail.com", 
                   role = c("aut", "cre", "cph"),
                   comment=c(ORCID = "http://orcid.org/0000-0002-1642-628X"))
-Description: A friendly and consise user interface for performing common
+Description: A friendly and concise user interface for performing common
              tasks on 'rdf' data, such as parsing and converting between
              formats including 'rdfxml', 'turtle', 'nquads', 'ntriples',
              and 'trig', creating 'rdf' graphs, and performing 'SPARQL'
              queries. This package wraps the 'redland' R package which
              provides direct bindings to the 'redland' C library.  Additionally,
              the package supports parsing and serialization of 'rdf'
-             into 'json-ld' through the 'json-ld' package, which binds
-             the official 'json-ld' 'javascript' 'API'. The package
+             into 'JSON-LD' through the `jsonld` package, which binds
+             the official 'JSON-LD' 'javascript' 'API'. The package
              interface takes inspiration from the Python 'rdflib' library.
 Depends: R (>= 3.4.1)
 License: MIT + file LICENSE
