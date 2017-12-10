@@ -1,11 +1,14 @@
 {
-  "@context": ["https://doi.org/doi:10.5063/schema/codemeta-2.0", "http://schema.org"],
+  "@context": [
+    "https://doi.org/doi:10.5063/schema/codemeta-2.0",
+    "http://schema.org"
+  ],
   "@type": "SoftwareSourceCode",
   "identifier": "rdflib",
   "description": "A friendly and consise user interface for performing common\n             tasks on 'rdf' data, such as parsing and converting between\n             formats including 'rdfxml', 'turtle', 'nquads', 'ntriples',\n             and 'trig', creating 'rdf' graphs, and performing 'SPARQL'\n             queries. This package wraps the 'redland' R package which\n             provides direct bindings to the 'redland' C library.  Additionally,\n             the package supports parsing and serialization of 'rdf'\n             into 'json-ld' through the 'json-ld' package, which binds\n             the official 'json-ld' 'javascript' 'API'. The package\n             interface takes inspiration from the Python 'rdflib' library.",
-  "name": "rdflib: High level wrapper around the 'redland' package for common 'rdf' applications ",
+  "name": "rdflib: A high level wrapper around the 'redland' package for common 'rdf' applications ",
   "codeRepository": "https://github.com/cboettig/rdflib",
-  "issueTracker": "URL: https://github.com/cboettig/rdflib/issues",
+  "issueTracker": "https://github.com/cboettig/rdflib/issues",
   "license": "https://spdx.org/licenses/MIT",
   "version": "0.0.1",
   "programmingLanguage": {
@@ -117,5 +120,5 @@
   ],
   "contIntegration": "https://travis-ci.org/cboettig/rdflib",
   "readme": "https://github.com/cboettig/rdflib/blob/master/README.md",
-  "fileSize": "5.776KB"
+  "fileSize": "5.775KB"
 }

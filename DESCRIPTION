@@ -1,5 +1,5 @@
 Package: rdflib
-Title: High level wrapper around the 'redland' package for common 'rdf' applications 
+Title: A high level wrapper around the 'redland' package for common 'rdf' applications 
 Version: 0.0.1
 Authors@R: person("Carl", "Boettiger", 
                   email = "cboettig@gmail.com", 
