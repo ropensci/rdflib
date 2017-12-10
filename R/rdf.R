@@ -9,8 +9,9 @@
 #' 
 rdf <- function(){
   world <- new("World")
-  storage <- new("Storage", world, "hashes", name="", options="hash-type='memory'")
-  model <- new("Model", world = world, storage, options="")
+  storage <- new("Storage", world, "hashes", name = "", 
+                 options = "hash-type='memory'")
+  model <- new("Model", world = world, storage, options = "")
   structure(list(world = world, model = model),
             class = "rdf")
 }

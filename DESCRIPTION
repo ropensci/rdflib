@@ -1,7 +1,10 @@
 Package: rdflib
 Title: High level wrapper around the 'redland' package for common 'rdf' applications 
 Version: 0.0.1
-Authors@R: person("Carl", "Boettiger", email = "cboettig@gmail.com", role = c("aut", "cre"))
+Authors@R: person("Carl", "Boettiger", 
+                  email = "cboettig@gmail.com", 
+                  role = c("aut", "cre", "cph"),
+                  comment=c(ORCID = "http://orcid.org/0000-0002-1642-628X"))
 Description: A friendly and consise user interface for performing common
              tasks on 'rdf' data, such as parsing and converting between
              formats including 'rdfxml', 'turtle', 'nquads', 'ntriples',
@@ -16,6 +19,8 @@ Depends: R (>= 3.4.1)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+URL: https://github.com/cboettig/rdflib
+BugReports: https://github.com/cboettig/rdflib/issues
 Imports: redland,
     jsonld,
     methods,
@@ -24,3 +29,4 @@ RoxygenNote: 6.0.1
 Suggests: magrittr,
     covr,
     testthat
+    
