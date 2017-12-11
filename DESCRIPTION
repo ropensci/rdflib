@@ -42,6 +42,5 @@ Suggests: magrittr,
     jqr,
     readr,
     dplyr,
-    lubridate,
-    knitr
+    lubridate
 VignetteBuilder: knitr
