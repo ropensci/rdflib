@@ -65,7 +65,42 @@ The resulting JSON is now has more concise keys in place of the long URLs.
 
 ## SPARQL queries on JSON-LD data
 
-------
+
+
+```{r}
+vita <- rdf_parse("http://www.carlboettiger.info/js/vita.json", "jsonld")
+
+sparql <-
+ 'PREFIX schema: <http://schema.org/>
+  SELECT ?coi_given ?coi_family ?year
+  WHERE { 
+    ?paper a schema:ScholarlyArticle . 
+    ?paper schema:author ?authors .
+    ?authors schema:familyName ?coi_family .
+    ?authors schema:givenName ?coi_given .
+    ?paper schema:dateCreated ?year . 
+  FILTER ( ?coi_family != "Boettiger" )
+}
+'
+
+vita %>% rdf_query(sparql)
+```
+
+
+Let's compare that to extracting the same data with `jq` query: 
+
+```{r}
+library(jqr)
+vita <- readr::read_file("http://www.carlboettiger.info/js/vita.json")
+jq(vita,
+   '."@reverse".author[]  | 
+     { year: .dateCreated, 
+       author: .author[] | [.givenName, .familyName]  | join(" ")
+     }') %>% 
+  combine() %>% 
+  fromJSON()
+```
+
 
 
 <!--

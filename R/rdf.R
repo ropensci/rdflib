@@ -185,8 +185,8 @@ rdf_serialize <- function(x,
 #' rdf_query(rdf, sparql)
 #'
 rdf_query <- function(x, query, ...){
-  queryObj <- new("Query", x$world, query, base_uri=NULL,
-                  query_language="sparql", query_uri=NULL)
+  queryObj <- new("Query", x$world, query, ...)
+    # ... defaults are: base_uri=NULL, query_language="sparql", query_uri=NULL)
   queryResult <- redland::executeQuery(queryObj, x$model)
   out <- list()
   result <- redland::getNextResult(queryResult)
@@ -196,7 +196,19 @@ rdf_query <- function(x, query, ...){
     out <- c(out, result)
   
     }
-  out
+  rectangularize_query_results(out)
+}
+
+## FIXME: cast data type based on Type-string?
+rectangularize_query_results <- function(out){
+  vars <- unique(names(out))
+  X <- lapply(vars, function(v) 
+    ## Strip ^^TYPE typing
+    gsub('\"(([^\\^])+)\"\\^*.*', 
+         "\\1", 
+         as.character(out[names(out) == v ])))
+  names(X) <- vars
+  as.data.frame(X, stringsAsFactors=FALSE)
 }
 
 
