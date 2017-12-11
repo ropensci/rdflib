@@ -5,10 +5,15 @@ sudo: required
 cache: packages
 dist: precise
 
-apt_packages:
-    - libv8-dev
-    - librdf0-dev
-    - libjq-dev
+
+addons:
+  apt:
+    sources:
+      - sourceline: 'ppa:opencpu/jq'
+    packages:
+      - libv8-dev
+      - librdf0-dev
+      - libjq-dev
 
 after_success:
   - Rscript -e 'covr::codecov()'
