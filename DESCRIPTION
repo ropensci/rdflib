@@ -35,5 +35,13 @@ Suggests: magrittr,
     covr,
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    jsonlite,
+    httr,
+    xml2,
+    jqr,
+    readr,
+    printr,
+    dplyr,
+    lubridate
 VignetteBuilder: knitr

@@ -9,26 +9,123 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r include=FALSE}
+
+library(printr) # pretty output tables
+
+```
 
 
 `rdflib` is really just a lightweight wrapper around two existing R packages: `redland`, and `jsonld`, which themselves are (less trivial) wrappers around existing libraries (the redland C library, and the JSON-LD javascript implementation) which themselves are instances of a set of W3C Standards for the representation of linked data.  `rdflib` has two key features: a simpler, higher-level interface for the common tasks performed in the `redland` library (user does not have to manage `world`, `model` and `storage` objects by default just to perform standard operations and conversions), and integration between the now popular `json-ld` serialization, which is not part of the `redland` library.
 
-However, for many R users, `rdflib` can be thought of as a simple way to convert parse common data formats (e.g. RDF XML) into something more R-friendly.  In this vignette, we illustrate how this might work in a simple example of some citation data returned in RDF-XML format from CrossRef.
 
-```{r setup, include=FALSE}
+```{r setup, message=FALSE}
+library(rdflib)
+library(magrittr) # pipes
+
+## JSON toolkit 
 library(jsonld)
 library(jsonlite)
-library(magrittr)
+library(jqr)
+
+## For accessing some remote data sources
 library(httr)
 library(xml2)
-# devtools::install_github("cboettig/rdflib@0.0.1")
-library(rdflib)
+library(readr)
+
+## for some typical data processing
+library(dplyr)
+library(lubridate)
+
 ```
 
 
-Let's begin by reading in some `RDF+XML` data from CrossRef by querying a DOI and requesting `rdf+xml` return type (via Content Negotiation):
+
+## SPARQL queries on JSON-LD data
+
+One example of this utility is the ability to perform graph queries using SPARQL on JSON-LD datasets.  The SPARQL query language is analgous to other query languages such as SQL, but instead of working on an existing set of tables in a relational database, we can query data from a triplestore.  
+
+This is sometimes called "schema on read", since our query will define the schema (i.e. the structure or skeleton of the `data.frame`) our data is returned in.  Because SPARQL is a graph query language, this makes it easy to construct a query that would be cumbersome in SQL or even other recursive tree queries like `jq`, which both would require some knowledge of how the stored data is organized. 
+
+To illustrate this, consider the following example.  NSF asks me to list all of my co-authors within the past four years as conflicts of interest (COI).  Here is a query that for all papers where I am an author, returns a table of given name, family name and year of publication:
 
 ```{r}
+ex <- system.file("extdata/vita.json", package="rdflib")
+vita <- rdf_parse(ex, "jsonld")
+
+sparql <-
+ 'PREFIX schema: <http://schema.org/>
+
+  SELECT ?coi_given ?coi_family ?year
+
+  WHERE { 
+    ?paper a schema:ScholarlyArticle . 
+    ?paper schema:author ?authors .
+    ?paper schema:dateCreated ?year . 
+    ?authors schema:familyName ?coi_family .
+    OPTIONAL { ?authors schema:givenName ?coi_given . }
+
+    FILTER ( ?coi_family != "Boettiger" )
+}
+'
+
+coi <- vita %>% rdf_query(sparql)
+coi
+```
+
+
+Now we have rectangular data, we can tidy things up a bit more. (In principle I believe we could have done this in SPARQL as well)
+
+```{r}
+coi %>% 
+  ## join names, year as Date
+  mutate(year = as.Date(year), name = paste(coi_given, coi_family)) %>% 
+  ## interaction in last 4 years
+  filter(year > lubridate::today() - lubridate::years(3)) %>% 
+  ## For each person, list only most recent date
+  group_by(name) %>% 
+  summarise(year = max(year)) 
+  
+  
+```
+
+Yay, that's wasn't so bad.  Rectangling JSON without a graph query is not as easy.  This can be immensely frustrating to do using basic iteration operations with `purrr`, even with it's powerful syntax.  Rectangling is a bit better with a tree-based query language, like a `jq` query.  The only limitation here is that we have to know just a little about how our data is structured, since there are multiple tree structures that correspond to the same graph (or we could just use JSON-LD frame first, but that adds another step in the puzzle.)
+
+Here's the same extraction on the same data, but with a `jq` query:
+
+```{r}
+coi2 <- 
+  readr::read_file(ex) %>%
+  jqr::jq(
+     '."@reverse".author[]  | 
+       { year: .dateCreated, 
+         author: .author[] | [.givenName, .familyName]  | join(" ")
+       }') %>%
+  jqr::combine() %>%
+  jsonlite::fromJSON()
+
+```
+
+```{r}
+coi2 %>% 
+  mutate(year = as.Date(year)) %>%
+  filter(year > lubridate::today() - lubridate::years(3)) %>% 
+  filter(!grepl("Boettiger", author)) %>%
+  ## For each person, list only most recent date
+  group_by(author) %>% 
+  summarise(year = max(year))  
+```
+
+
+
+## Turning RDF-XML into more friendly JSON
+
+
+`rdflib` can also be useful as quick and lossless way to convert parse common data formats (e.g. RDF XML) into something more R-friendly.  In this vignette, we illustrate how this might work in a simple example of some citation data returned in RDF-XML format from CrossRef.
+
+Let's begin by reading in some `RDF+XML` data from CrossRef by querying a DOI and requesting `rdf+xml` return type (via Content Negotiation):
+
+```{r message=FALSE}
 "http://dx.doi.org/10.1002/ece3.2314" %>%
   httr::GET(httr::add_headers(Accept="application/rdf+xml")) %>%
   httr::content(as = "parsed", type = "application/xml") %>%
@@ -44,149 +141,21 @@ rdf_parse("ex.xml", "rdfxml") %>%
 ```
 
 
-and we now have JSON.  
+and we now have JSON file.  We can clean this file up a bit by replacing the long URIs with short prefixes by "compacting" the file into a specific JSON-LD context. FOAF, OWL, and Dublin Core are all recognized by schema.org, so we need not declare them at all here.  PRISM and BIBO ontologies are not, so we simply declare them as additional prefixes:
 
 ```{r}
 context <- 
-'{
+'{ "@context": [
+    "http://schema.org",
+  {
     "prism": "http://prismstandard.org/namespaces/basic/2.1/",
-    "dc": "http://purl.org/dc/terms/",
-    "bibo": "http://purl.org/ontology/bibo/",
-    "foaf": "http://xmlns.com/foaf/0.1/",
-    "owl": "http://www.w3.org/2002/07/owl#"
-}
-'
+    "bibo": "http://purl.org/ontology/bibo/"
+  }]
+}'
 json <- jsonld_compact("ex.json", context)
+json
 ```
 
-The resulting JSON is now has more concise keys in place of the long URLs.    
-
-
-
-## SPARQL queries on JSON-LD data
-
-
-
-```{r}
-vita <- rdf_parse("http://www.carlboettiger.info/js/vita.json", "jsonld")
-
-sparql <-
- 'PREFIX schema: <http://schema.org/>
-  SELECT ?coi_given ?coi_family ?year
-  WHERE { 
-    ?paper a schema:ScholarlyArticle . 
-    ?paper schema:author ?authors .
-    ?authors schema:familyName ?coi_family .
-    ?authors schema:givenName ?coi_given .
-    ?paper schema:dateCreated ?year . 
-  FILTER ( ?coi_family != "Boettiger" )
-}
-'
-
-vita %>% rdf_query(sparql)
-```
-
-
-Let's compare that to extracting the same data with `jq` query: 
-
-```{r}
-library(jqr)
-vita <- readr::read_file("http://www.carlboettiger.info/js/vita.json")
-jq(vita,
-   '."@reverse".author[]  | 
-     { year: .dateCreated, 
-       author: .author[] | [.givenName, .familyName]  | join(" ")
-     }') %>% 
-  combine() %>% 
-  fromJSON()
-```
-
-
-
-<!--
-
-## Switching contexts and framing
-
-
-```{r}
-context <- 
- '{
-    "prism": "http://prismstandard.org/namespaces/basic/2.1/",
-    "dc": "http://purl.org/dc/terms/",
-    "bibo": "http://purl.org/ontology/bibo/",
-    "foaf": "http://xmlns.com/foaf/0.1/",
-    "owl": "http://www.w3.org/2002/07/owl#",
-    "schema": "http://schema.org/",
-
-    "schema:pageStart": "prism:startingPage", 
-    "schema:pageEnd": "prism:endingPage",
-    "schema:volumeNumber": "prism:volume",
-    "schema:identifier": {"@id": "prism:issn", "@type": "@id"},
-
-    "schema:Periodical": "bibo:Journal",
-
-    "schema:author": "dc:creator",
-    "schema:isPartOf": "dc:isPartOf",
-    "schema:publisher": "dc:publisher",
-    "schema:name": "dc:title",
-
-    "schema:familyName": "foaf:familyName",
-    "schema:givenName": "foaf:givenName",
-    "schema:Person": "foaf:Person",
-
-    "schema:sameAs": {"@id": "owl:sameAs", "@type": "@id"},
-    "schema:Date": "xsd:date",
-    "schema:datePublished": {"@id": "http://purl.org/dc/terms/date", "@type": "schema:Date"}
-}'
-```
-
-
-Compact raw JSON into this context
-
-```{r}
-jsonld_compact("ex.json", context) %>% 
-  fromJSON(simplifyVector = FALSE) -> X
-```
-
-
-Now replace that context with schema.org context, a bit of a hack
-
-```{r}
-X[["@context"]] <- "http://schema.org"
-X %>% 
-  toJSON(auto_unbox = TRUE, pretty = TRUE) %>% 
-  jsonld_compact("http://schema.org") -> Y
-```
-
-Now frame our desired results to explicitly include only the elements we request, giving the graph in the desired tree structure:
-
-```{r}
-frame <- 
-'{"@context": "http://schema.org",
- "@graph": {
-   "id": {},
-   "name": {},
-   "pageStart": {},
-    "pageEnd": {},
-    "isPartOf": {
-      "name": {},
-      "identifier": {},
-      "@explicit": true
-    },
-    "author": [
-            {
-              "givenName": {},
-              "familyName": {},
-              "@explicit": true
-            }],
-   "@explicit": true
- }
-}'
-
-jsonld_frame(Y, frame)
-```
-
--->
 
 ```{r include=FALSE}
 unlink("ex.xml")
