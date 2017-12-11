@@ -3,6 +3,6 @@ services:
   - docker
 script:
   - docker run -ti -v $(pwd):/home/rstudio/repo -w /home/rstudio/repo \
-    rocker/verse \
-    bash -c "apt-get update && apt-get -y install libjq-dev && R -e 'devtools::install(dep=TRUE); devtools::check()'"
+    rocker/verse:latest \
+    bash -c "apt-get update && apt-get -y install libjq-dev && R -e 'devtools::install(dep=TRUE); status <- devtools::check(); testthat::expect_length(status$errors,0); testthat::expect_length(status$warnings,0)'"
     
