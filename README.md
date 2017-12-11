@@ -53,11 +53,8 @@ rdf
 
 
 rdf %>% rdf_query(sparql)
-#> $a
-#> [1] "<http://www.dajobe.org/>"
-#> 
-#> $c
-#> [1] "\"Dave Beckett\""
+#>                          a            c
+#> 1 <http://www.dajobe.org/> Dave Beckett
 ```
 
 Initialize graph a new object or add triples statements to an existing graph:

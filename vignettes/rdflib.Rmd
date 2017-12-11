@@ -7,13 +7,19 @@ vignette: >
   %\VignetteIndexEntry{rdflib Introduction}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  
+header-includes: |
+  <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
+  <script src="http://code.jquery.com/jquery-2.1.2.min.js"></script>
+  <script src="http://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+  
+  <script type="text/javascript">
+           $(document).ready(function() {
+               $("table").DataTable();
+           } );
+  </script>
 ---
 
-```{r include=FALSE}
-
-library(printr) # pretty output tables
-
-```
 
 
 `rdflib` is really just a lightweight wrapper around two existing R packages: `redland`, and `jsonld`, which themselves are (less trivial) wrappers around existing libraries (the redland C library, and the JSON-LD javascript implementation) which themselves are instances of a set of W3C Standards for the representation of linked data.  `rdflib` has two key features: a simpler, higher-level interface for the common tasks performed in the `redland` library (user does not have to manage `world`, `model` and `storage` objects by default just to perform standard operations and conversions), and integration between the now popular `json-ld` serialization, which is not part of the `redland` library.
@@ -70,14 +76,18 @@ sparql <-
 '
 
 coi <- vita %>% rdf_query(sparql)
-coi
+```
+
+```{r echo=FALSE}
+knitr::kable(coi)
 ```
 
 
 Now we have rectangular data, we can tidy things up a bit more. (In principle I believe we could have done this in SPARQL as well)
 
 ```{r}
-coi %>% 
+coi2 <- 
+  coi %>% 
   ## join names, year as Date
   mutate(year = as.Date(year), name = paste(coi_given, coi_family)) %>% 
   ## interaction in last 4 years
@@ -89,12 +99,17 @@ coi %>%
   
 ```
 
+```{r echo=FALSE}
+knitr::kable(coi2)
+```
+
+
 Yay, that's wasn't so bad.  Rectangling JSON without a graph query is not as easy.  This can be immensely frustrating to do using basic iteration operations with `purrr`, even with it's powerful syntax.  Rectangling is a bit better with a tree-based query language, like a `jq` query.  The only limitation here is that we have to know just a little about how our data is structured, since there are multiple tree structures that correspond to the same graph (or we could just use JSON-LD frame first, but that adds another step in the puzzle.)
 
 Here's the same extraction on the same data, but with a `jq` query:
 
 ```{r}
-coi2 <- 
+coi_jq <- 
   readr::read_file(ex) %>%
   jqr::jq(
      '."@reverse".author[]  | 
@@ -107,7 +122,8 @@ coi2 <-
 ```
 
 ```{r}
-coi2 %>% 
+coi3 <- 
+  coi_jq %>% 
   mutate(year = as.Date(year)) %>%
   filter(year > lubridate::today() - lubridate::years(3)) %>% 
   filter(!grepl("Boettiger", author)) %>%
@@ -115,6 +131,11 @@ coi2 %>%
   group_by(author) %>% 
   summarise(year = max(year))  
 ```
+
+```{r echo=FALSE}
+knitr::kable(coi3)
+```
+
 
 
 
@@ -153,7 +174,7 @@ context <-
   }]
 }'
 json <- jsonld_compact("ex.json", context)
-json
+
 ```
 
 

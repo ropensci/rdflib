@@ -41,7 +41,7 @@ Suggests: magrittr,
     xml2,
     jqr,
     readr,
-    printr,
     dplyr,
-    lubridate
+    lubridate,
+    knitr
 VignetteBuilder: knitr
