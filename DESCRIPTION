@@ -17,7 +17,7 @@ Description: The Resource Description Framework, or 'RDF' is a widely used
              This package wraps the low level 'redland' R package which
              provides direct bindings to the 'redland' C library.  Additionally,
              the package supports the newer and more developer friendly
-             'JSON-LD' format through the `jsonld` package. The package
+             'JSON-LD' format through the 'jsonld' package. The package
              interface takes inspiration from the Python 'rdflib' library.
 Depends: R (>= 3.4.1)
 License: MIT + file LICENSE

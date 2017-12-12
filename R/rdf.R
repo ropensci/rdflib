@@ -278,3 +278,35 @@ text_or_url_to_doc <- function(x, tmp = tempfile()){
     return(tmp)
   }
 }
+
+#' rdflib: Tools to Manipulate and Query Semantic Data
+#'
+#' The Resource Description Framework, or RDF is a widely used
+#' data representation model that forms the cornerstone of the 
+#' Semantic Web. 'RDF' represents data as a graph rather than 
+#' the familiar data table or rectangle of relational databases.
+#'
+#' 
+#' It has three main goals:
+#'
+#' \itemize{
+#' \item Easily read, write, and convert between all major RDF serialization formats
+#' \item Support SPARQL queries to extract data from an RDF graph into a data.frame
+#' \item Support JSON-LD format as a first-class citizen in RDF manipulations
+#' }
+#'
+#' For more information, see the Wikipedia pages for RDF, SPARQL, and JSON-LD:
+#' 
+#' #' \itemize{
+#' \item \url{https://en.wikipedia.org/wiki/Resource_Description_Framework}
+#' \item \url{https://en.wikipedia.org/wiki/SPARQL}
+#' \item \url{https://en.wikipedia.org/wiki/JSON-LD}
+#' }
+#'
+#' To learn more about rdflib, start with the vignettes:
+#' `browseVignettes(package = "rdflib")`
+#'
+#'
+"_PACKAGE"
+
+
