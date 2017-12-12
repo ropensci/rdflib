@@ -1,25 +1,24 @@
 Package: rdflib
-Title: A high level wrapper around the 'redland' package for common 'rdf' applications 
+Title: Tools to Manipulate and Query Semantic Data
 Version: 0.0.2
 Authors@R: person("Carl", "Boettiger", 
                   email = "cboettig@gmail.com", 
                   role = c("aut", "cre", "cph"),
                   comment=c(ORCID = "http://orcid.org/0000-0002-1642-628X"))
-Description: A friendly and concise user interface for performing common
-             tasks on 'rdf' data, such as parsing and converting between
-             formats including 'rdfxml', 'turtle', 'nquads', 'ntriples',
-             and 'trig', creating 'rdf' graphs, and performing 'SPARQL'
-             queries. This package wraps the 'redland' R package which
+Description: The Resource Description Framework, or 'RDF' is a widely used
+             data representation model that forms the cornerstone of the 
+             Semantic Web. 'RDF' represents data as a graph rather than 
+             the familiar data table or rectangle of relational databases.
+             The 'rdflib' package provides a friendly and concise user interface
+             for performing common tasks on 'RDF' data, such as reading, writing
+             and converting between the various serializations of 'RDF' data,
+             including 'rdfxml', 'turtle', 'nquads', 'ntriples', 'trig', and 'json-ld';
+             creating new 'RDF' graphs, and performing graph queries using 'SPARQL'.
+             This package wraps the low level 'redland' R package which
              provides direct bindings to the 'redland' C library.  Additionally,
-             the package supports parsing and serialization of 'rdf'
-             into 'JSON-LD' through the `jsonld` package, which binds
-             the official 'JSON-LD' 'javascript' 'API'. The package
+             the package supports the newer and more developer friendly
+             'JSON-LD' format through the `jsonld` package. The package
              interface takes inspiration from the Python 'rdflib' library.
-             This latter ability makes 'rdflib' a quick route into JSON
-             from RDF-XML and other RDF serializations that all tend to be
-             less developer-friendly.  For instance, performing JSON-LD 
-             compaction on RDF-XML file can provide convenient, developer
-             friendly names.
 Depends: R (>= 3.4.1)
 License: MIT + file LICENSE
 Encoding: UTF-8

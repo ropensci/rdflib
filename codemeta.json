@@ -5,8 +5,8 @@
   ],
   "@type": "SoftwareSourceCode",
   "identifier": "rdflib",
-  "description": "A friendly and concise user interface for performing common\n             tasks on 'rdf' data, such as parsing and converting between\n             formats including 'rdfxml', 'turtle', 'nquads', 'ntriples',\n             and 'trig', creating 'rdf' graphs, and performing 'SPARQL'\n             queries. This package wraps the 'redland' R package which\n             provides direct bindings to the 'redland' C library.  Additionally,\n             the package supports parsing and serialization of 'rdf'\n             into 'JSON-LD' through the `jsonld` package, which binds\n             the official 'JSON-LD' 'javascript' 'API'. The package\n             interface takes inspiration from the Python 'rdflib' library.\n             This latter ability makes 'rdflib' a quick route into JSON\n             from RDF-XML and other RDF serializations that all tend to be\n             less developer-friendly.  For instance, performing JSON-LD \n             compaction on RDF-XML file can provide convenient, developer\n             friendly names.",
-  "name": "rdflib: A high level wrapper around the 'redland' package for common 'rdf' applications ",
+  "description": "The Resource Description Framework, or 'RDF' is a widely used\n             data representation model that forms the cornerstone of the \n             Semantic Web. 'RDF' represents data as a graph rather than \n             the familiar data table or rectangle of relational databases.\n             The 'rdflib' package provides a friendly and concise user interface\n             for performing common tasks on 'RDF' data, such as reading, writing\n             and converting between the various serializations of 'RDF' data,\n             including 'rdfxml', 'turtle', 'nquads', 'ntriples', 'trig', and 'json-ld';\n             creating new 'RDF' graphs, and performing graph queries using 'SPARQL'.\n             This package wraps the low level 'redland' R package which\n             provides direct bindings to the 'redland' C library.  Additionally,\n             the package supports the newer and more developer friendly\n             'JSON-LD' format through the `jsonld` package. The package\n             interface takes inspiration from the Python 'rdflib' library.",
+  "name": "rdflib: Tools to Manipulate and Query Semantic Data",
   "codeRepository": "https://github.com/cboettig/rdflib",
   "issueTracker": "https://github.com/cboettig/rdflib/issues",
   "license": "https://spdx.org/licenses/MIT",
@@ -230,6 +230,6 @@
   ],
   "contIntegration": "https://travis-ci.org/cboettig/rdflib",
   "readme": "https://github.com/cboettig/rdflib/blob/master/README.md",
-  "fileSize": "16.826KB",
+  "fileSize": "16.879KB",
   "releaseNotes": "https://github.com/cboettig/rdflib/blob/master/NEWS.md"
 }

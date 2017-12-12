@@ -7,3 +7,5 @@
 ^codecov\.yml$
 ^codemeta\.json$
 ^docs$
+^paper\.md$
+^paper\.bib$
