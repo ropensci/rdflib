@@ -10,7 +10,7 @@
   "codeRepository": "https://github.com/cboettig/rdflib",
   "issueTracker": "https://github.com/cboettig/rdflib/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -175,6 +175,17 @@
         "name": "Central R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "DT",
+      "name": "DT",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
     }
   ],
   "softwareRequirements": [
@@ -219,5 +230,6 @@
   ],
   "contIntegration": "https://travis-ci.org/cboettig/rdflib",
   "readme": "https://github.com/cboettig/rdflib/blob/master/README.md",
-  "fileSize": "16.128KB"
+  "fileSize": "16.826KB",
+  "releaseNotes": "https://github.com/cboettig/rdflib/blob/master/NEWS.md"
 }

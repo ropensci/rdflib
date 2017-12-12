@@ -1,6 +1,6 @@
 Package: rdflib
 Title: A high level wrapper around the 'redland' package for common 'rdf' applications 
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: person("Carl", "Boettiger", 
                   email = "cboettig@gmail.com", 
                   role = c("aut", "cre", "cph"),
