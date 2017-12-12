@@ -136,18 +136,24 @@ DT::datatable(coi3)
 
 Let's begin by reading in some `RDF+XML` data from CrossRef by querying a DOI and requesting `rdf+xml` return type (via Content Negotiation):
 
-```{r message=FALSE}
+```{r eval=FALSE}
+xml <- "ex.xml"
+
 "http://dx.doi.org/10.1002/ece3.2314" %>%
   httr::GET(httr::add_headers(Accept="application/rdf+xml")) %>%
   httr::content(as = "parsed", type = "application/xml") %>%
-  xml2::write_xml("ex.xml")
+  xml2::write_xml(xml)
+```
+
+```{r include=FALSE}
+xml<- system.file("extdata/ex.xml", package="rdflib")
 ```
 
 Our `rdflib` functions perform the simple task of parsing this `rdfxml` file into R (as a `redland` `rdf` class object) and then writing it back out in `jsonld` serialization:
 
 
 ```{r}
-rdf_parse("ex.xml", "rdfxml") %>% 
+rdf_parse(xml, "rdfxml") %>% 
   rdf_serialize("ex.json", "jsonld")
 ```
 

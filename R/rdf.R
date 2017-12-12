@@ -171,7 +171,7 @@ rdf_serialize <- function(x,
 #' @return a list of all query results
 #' @import methods
 #' @importClassesFrom redland Query
-#' @importMethodsFrom redland executeQuery getNextResult
+#' @importMethodsFrom redland executeQuery getNextResult freeQuery freeQueryResults
 #' @export
 #' @examples
 #' doc <- system.file("extdata", "dc.rdf", package="redland")
@@ -195,7 +195,9 @@ rdf_query <- function(x, query, ...){
      result <- redland::getNextResult(queryResult)
     out <- c(out, result)
   
-    }
+  }
+  redland::freeQueryResults(queryResult)
+  redland::freeQuery(queryObj)
   rectangularize_query_results(out)
 }
 

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:j.0="http://purl.org/dc/terms/" xmlns:j.1="http://prismstandard.org/namespaces/basic/2.1/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:j.2="http://purl.org/ontology/bibo/" xmlns:j.3="http://xmlns.com/foaf/0.1/">
+  <rdf:Description rdf:about="http://dx.doi.org/10.1002/ece3.2314">
+    <j.0:isPartOf>
+      <j.2:Journal rdf:about="http://id.crossref.org/issn/2045-7758">
+        <owl:sameAs>urn:issn:2045-7758</owl:sameAs>
+        <j.0:title>Ecology and Evolution</j.0:title>
+        <j.1:issn>2045-7758</j.1:issn>
+        <j.2:issn>2045-7758</j.2:issn>
+      </j.2:Journal>
+    </j.0:isPartOf>
+    <j.0:date rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2016-08-18</j.0:date>
+    <j.1:endingPage>6434</j.1:endingPage>
+    <j.0:identifier>10.1002/ece3.2314</j.0:identifier>
+    <j.1:startingPage>6425</j.1:startingPage>
+    <j.2:volume>6</j.2:volume>
+    <j.0:title>After the games are over: life-history trade-offs drive dispersal attenuation following range expansion</j.0:title>
+    <j.2:doi>10.1002/ece3.2314</j.2:doi>
+    <owl:sameAs rdf:resource="info:doi/10.1002/ece3.2314"/>
+    <j.1:volume>6</j.1:volume>
+    <owl:sameAs rdf:resource="doi:10.1002/ece3.2314"/>
+    <j.0:publisher>Wiley-Blackwell</j.0:publisher>
+    <j.1:doi>10.1002/ece3.2314</j.1:doi>
+    <j.0:creator>
+      <j.3:Person rdf:about="http://id.crossref.org/contributor/benjamin-l-phillips-2etprmps2zm1a">
+        <j.3:name>Benjamin L. Phillips</j.3:name>
+        <j.3:familyName>Phillips</j.3:familyName>
+        <j.3:givenName>Benjamin L.</j.3:givenName>
+      </j.3:Person>
+    </j.0:creator>
+    <j.0:creator>
+      <j.3:Person rdf:about="http://id.crossref.org/contributor/t-alex-perkins-2etprmps2zm1a">
+        <j.3:name>T. Alex Perkins</j.3:name>
+        <j.3:familyName>Perkins</j.3:familyName>
+        <j.3:givenName>T. Alex</j.3:givenName>
+      </j.3:Person>
+    </j.0:creator>
+    <j.0:creator>
+      <j.3:Person rdf:about="http://id.crossref.org/contributor/carl-boettiger-2etprmps2zm1a">
+        <j.3:name>Carl Boettiger</j.3:name>
+        <j.3:familyName>Boettiger</j.3:familyName>
+        <j.3:givenName>Carl</j.3:givenName>
+      </j.3:Person>
+    </j.0:creator>
+    <j.2:pageStart>6425</j.2:pageStart>
+    <j.2:pageEnd>6434</j.2:pageEnd>
+  </rdf:Description>
+</rdf:RDF>
