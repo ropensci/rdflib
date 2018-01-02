@@ -2,7 +2,9 @@
 title: "rdflib Introduction"
 author: "Carl Boettiger"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    df_print: paged
 vignette: >
   %\VignetteIndexEntry{rdflib Introduction}
   %\VignetteEngine{knitr::rmarkdown}
@@ -79,7 +81,7 @@ Now we have rectangular data, we can tidy things up a bit more. (In principle I 
 coi2 <- 
   coi %>% 
   ## join names, year as Date
-  mutate(year = as.Date(year), name = paste(coi_given, coi_family)) %>% 
+  mutate(year = as.Date(year), name = paste0(coi_family, ", ", coi_given)) %>% 
   ## interaction in last 4 years
   filter(year > lubridate::today() - lubridate::years(3)) %>% 
   ## For each person, list only most recent date
