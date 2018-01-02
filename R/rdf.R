@@ -88,14 +88,16 @@ rdf_parse <- function(doc,
 }
 
 # Whenever we convert JSON-LD to RDF we should set a @base if not set.
-# https://json-ld.org/playground does this (with it's own url) but jsonld R package does not.
+# https://json-ld.org/playground does this (with it's own url) 
+# but jsonld R package does not.
 # For details, see https://github.com/cboettig/rdflib/issues/5
 #
 #' @importFrom jsonld jsonld_expand jsonld_compact
 add_base_uri <- function(doc, tmp = tempfile()){
   
-  ## Cannot assume it has context, may already be expanded (e.g. from rdf_serialize)
-  ## Expanding will also make any preset @base context take precedence 
+  ## Cannot assume it has context, may already be expanded 
+  ## (e.g. from rdf_serialize).  Expanding will also make 
+  ## any preset @base context take precedence 
   expanded <- jsonld::jsonld_expand(doc)
   base <- getOption("rdflib_base_uri", "localhost://")
   context <- paste0('{"@base": "', base, '"}')
@@ -115,6 +117,7 @@ add_base_uri <- function(doc, tmp = tempfile()){
 #'
 #' @return an integer containing the return status where non
 #'  zero indicates an error occured during serialization
+#' @importFrom methods new
 #' @importClassesFrom redland Serializer
 #' @importMethodsFrom redland setNameSpace serializeToFile
 #'
@@ -189,7 +192,6 @@ rdf_serialize <- function(x,
 #' @param ... additional arguments to a redland initialize-Query
 #'
 #' @return a list of all query results
-#' @import methods
 #' @importClassesFrom redland Query
 #' @importMethodsFrom redland executeQuery getNextResult freeQuery freeQueryResults
 #' @export

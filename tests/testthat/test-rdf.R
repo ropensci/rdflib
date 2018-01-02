@@ -82,7 +82,7 @@ testthat::test_that("we can parse and serialize json-ld", {
 
 
 testthat::test_that("we can parse from a url", {
-  testthat::skip_on_cran()
+  #testthat::skip_on_cran()
   rdf <- rdf_parse("https://tinyurl.com/ycf95c9h")
   testthat::expect_is(rdf, "rdf")
   

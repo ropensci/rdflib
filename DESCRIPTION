@@ -1,6 +1,6 @@
 Package: rdflib
 Title: Tools to Manipulate and Query Semantic Data
-Version: 0.0.2
+Version: 0.0.3
 Authors@R: person("Carl", "Boettiger", 
                   email = "cboettig@gmail.com", 
                   role = c("aut", "cre", "cph"),
