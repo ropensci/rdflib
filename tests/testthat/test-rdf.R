@@ -1,7 +1,7 @@
 testthat::context("test-rdf.R")
 
 doc <- system.file("extdata/example.rdf", package="redland")
-out <- tempfile()
+out <- "testing.rdf"
 
 testthat::test_that("we can parse (in rdfxml)
                     and serialize (in nquads) a simple rdf graph", {
@@ -19,7 +19,7 @@ testthat::test_that("we can make sparql queries", {
   
   rdf <- rdf_parse(doc)
   match <- rdf_query(rdf, sparql)
-  expect_length(match, 2)
+  testthat::expect_length(match, 2)
 })
 
 testthat::test_that("we can initialize add triples to rdf graph", {

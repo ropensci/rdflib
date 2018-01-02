@@ -68,11 +68,15 @@ rdf_parse <- function(doc,
   doc <- text_or_url_to_doc(doc)
   
   ## redlands doesn't support jsonld. So rewrite as nquads using jsonld package
+  ## We use tmp to avoid altering input doc, since parsing a local file should
+  ## be a read-only task!
   if(format == "jsonld"){
     tmp <- tempfile()
-    writeLines(jsonld::jsonld_to_rdf(doc), tmp)
-    doc <- tmp
+    tmp <- add_base_uri(doc, tmp)
+    rdf <- jsonld::jsonld_to_rdf(tmp)
+    writeLines(rdf, tmp)
     format <- "nquads"
+    doc <- tmp
   }
   
   x <- rdf()
@@ -83,6 +87,22 @@ rdf_parse <- function(doc,
   x
 }
 
+# Whenever we convert JSON-LD to RDF we should set a @base if not set.
+# https://json-ld.org/playground does this (with it's own url) but jsonld R package does not.
+# For details, see https://github.com/cboettig/rdflib/issues/5
+#
+#' @importFrom jsonld jsonld_expand jsonld_compact
+add_base_uri <- function(doc, tmp = tempfile()){
+  
+  ## Cannot assume it has context, may already be expanded (e.g. from rdf_serialize)
+  ## Expanding will also make any preset @base context take precedence 
+  expanded <- jsonld::jsonld_expand(doc)
+  base <- getOption("rdflib_base_uri", "localhost://")
+  context <- paste0('{"@base": "', base, '"}')
+  compact <- jsonld::jsonld_compact(expanded, context)
+  writeLines(compact, tmp)
+  tmp
+}
 
 
 #' Serialize RDF docs
@@ -127,7 +147,7 @@ rdf_serialize <- function(x,
   format <- match.arg(format)
   
   
-  ## redlands doesn't support jsonld. So write as nquads and then trnasform
+  ## redlands doesn't support jsonld. So write as nquads and then transform
   jsonld_output <- format == "jsonld"
   if(jsonld_output){
     format <- "nquads"
@@ -201,7 +221,7 @@ rdf_query <- function(x, query, ...){
   rectangularize_query_results(out)
 }
 
-## FIXME: cast data type based on Type-string?
+## FIXME: coerce data type based on Type-string?
 rectangularize_query_results <- function(out){
   vars <- unique(names(out))
   X <- lapply(vars, function(v) 
