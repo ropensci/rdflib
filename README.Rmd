@@ -7,7 +7,7 @@ output: github_document
 [![Coverage Status](https://img.shields.io/codecov/c/github/cboettig/rdflib/master.svg)](https://codecov.io/github/cboettig/rdflib?branch=master)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rdflib)](https://cran.r-project.org/package=rdflib)
 [![DOI](https://zenodo.org/badge/100521776.svg)](https://zenodo.org/badge/latestdoi/100521776)
-
+[![](https://badges.ropensci.org/169_status.svg)](https://github.com/ropensci/onboarding/issues/169)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
