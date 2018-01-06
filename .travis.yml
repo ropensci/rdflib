@@ -1,9 +1,20 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 language: R
+dist: trusty
 cache: packages
+latex: false
+sudo: required
+
+matrix:
+  include:
+    - os: linux
+      r: devel
+    - os: linux
+      r: release
+
 addons:
   apt:
-     sources:
+    sources:
       - sourceline: 'ppa:opencpu/jq'
     packages:
       - librdf0-dev
