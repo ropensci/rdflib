@@ -3,6 +3,8 @@ language: R
 cache: packages
 addons:
   apt:
+     sources:
+      - sourceline: 'ppa:opencpu/jq'
     packages:
       - librdf0-dev
       - libv8-dev
