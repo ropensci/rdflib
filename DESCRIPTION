@@ -19,7 +19,6 @@ Description: The Resource Description Framework, or 'RDF' is a widely used
              the package supports the newer and more developer friendly
              'JSON-LD' format through the 'jsonld' package. The package
              interface takes inspiration from the Python 'rdflib' library.
-Depends: R (>= 3.4.1)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
