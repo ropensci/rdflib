@@ -3,7 +3,6 @@ language: R
 dist: trusty
 cache: packages
 latex: false
-sudo: required
 
 matrix:
   include:
