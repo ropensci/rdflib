@@ -1,7 +1,7 @@
 
 #' rdf constructor
 #'
-#' @return an rdf graph object
+#' @return an rdf object
 #' @export
 #'
 #' @examples
@@ -43,7 +43,7 @@ print.rdf <- function(x, ...){
 #' or "jsonld"
 #' @param ... additional parameters (not implemented)
 #'
-#' @return an rdf S3 object, containing the redland world
+#' @return an rdf object, containing the redland world
 #'  and model objects
 #' @importClassesFrom redland World Storage Model Parser
 #' @importMethodsFrom redland parseFileIntoModel
@@ -107,7 +107,7 @@ add_base_uri <- function(doc, tmp = tempfile()){
 }
 
 
-#' Serialize RDF docs
+#' Serialize an RDF Document
 #'
 #' @inheritParams rdf_parse
 #' @inheritParams rdf_query
@@ -115,8 +115,8 @@ add_base_uri <- function(doc, tmp = tempfile()){
 #' @param namespace string giving the namespace to set
 #' @param prefix string giving the prefix associated with the namespace
 #'
-#' @return an integer containing the return status where non
-#'  zero indicates an error occured during serialization
+#' @return rdf_serialize returns the output file path `doc` invisibly.
+#'   This makes it easier to use rdf_serialize in pipe chains with rdf_parse.
 #' @importFrom methods new
 #' @importClassesFrom redland Serializer
 #' @importMethodsFrom redland setNameSpace serializeToFile
@@ -180,7 +180,7 @@ rdf_serialize <- function(x,
     }
   }
   
-  invisible(status)
+  invisible(x)
 }
 
 
@@ -191,7 +191,7 @@ rdf_serialize <- function(x,
 #' @param query a SPARQL query, as text string
 #' @param ... additional arguments to a redland initialize-Query
 #'
-#' @return a list of all query results
+#' @return a data.frame of all query results
 #' @importClassesFrom redland Query
 #' @importMethodsFrom redland executeQuery getNextResult freeQuery freeQueryResults
 #' @export
@@ -236,9 +236,9 @@ rectangularize_query_results <- function(out){
 }
 
 
-#' add a triple (subject, predicate, object) to the rdf graph
+#' add a triple (subject, predicate, object) to the RDF graph
 #'
-#' @param x an rdf graph object
+#' @param x an rdf object
 #' @param subject character string containing the subject
 #' @param predicate character string containing the predicate
 #' @param object character string containing the object
@@ -246,8 +246,8 @@ rectangularize_query_results <- function(out){
 #' @param objectType the Node type of the object, i.e. "blank", "uri"
 #' @param datatype_uri the datatype URI to associate with a object literal value
 #'
-#' @return the rdf graph object.
-#' @details Since the rdf graph object simply contains external pointers
+#' @return the updated RDF graph (rdf object).
+#' @details Since the rdf object simply contains external pointers
 #' to the model object in C code, note that the input object is modified
 #' directly.  
 #' @importClassesFrom redland Statement

@@ -82,6 +82,7 @@ testthat::test_that("we can parse and serialize json-ld", {
 
 
 testthat::test_that("we can parse from a url", {
+  # CRAN seems okay with tests requiring an internet connection
   #testthat::skip_on_cran()
   rdf <- rdf_parse("https://tinyurl.com/ycf95c9h")
   testthat::expect_is(rdf, "rdf")

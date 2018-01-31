@@ -2,7 +2,7 @@
 % Please edit documentation in R/rdf.R
 \name{rdf_serialize}
 \alias{rdf_serialize}
-\title{Serialize RDF docs}
+\title{Serialize an RDF Document}
 \usage{
 rdf_serialize(x, doc, format = c("rdfxml", "nquads", "ntriples", "trig",
   "turtle", "jsonld"), namespace = NULL, prefix = NULL, ...)
@@ -23,11 +23,11 @@ or "jsonld"}
 \item{...}{additional parameters (not implemented)}
 }
 \value{
-an integer containing the return status where non
- zero indicates an error occured during serialization
+rdf_serialize returns the output file path `doc` invisibly.
+  This makes it easier to use rdf_serialize in pipe chains with rdf_parse.
 }
 \description{
-Serialize RDF docs
+Serialize an RDF Document
 }
 \examples{
 infile <- system.file("extdata", "dc.rdf", package="redland")

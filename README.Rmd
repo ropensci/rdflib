@@ -112,3 +112,19 @@ For more information on the JSON-LD RDF API, see <https://json-ld.org/spec/lates
 ```{r include=FALSE}
 unlink("test.nquads")
 ```
+
+----
+
+## Citing rdflib
+
+
+```{r results="asis"}
+citation("rdflib")
+```
+
+Please also cite the underlying `redland` library:
+
+```{r results="asis"}
+citation("redland")
+```
+

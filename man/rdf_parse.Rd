@@ -17,7 +17,7 @@ or "jsonld"}
 \item{...}{additional parameters (not implemented)}
 }
 \value{
-an rdf S3 object, containing the redland world
+an rdf object, containing the redland world
  and model objects
 }
 \description{
