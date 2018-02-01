@@ -4,11 +4,11 @@
 \alias{rdf_serialize}
 \title{Serialize an RDF Document}
 \usage{
-rdf_serialize(x, doc, format = c("rdfxml", "nquads", "ntriples", "trig",
+rdf_serialize(rdf, doc, format = c("rdfxml", "nquads", "ntriples", "trig",
   "turtle", "jsonld"), namespace = NULL, prefix = NULL, ...)
 }
 \arguments{
-\item{x}{an rdf object (e.g. from \code{\link{parse}})}
+\item{rdf}{an rdf object (e.g. from \code{\link{rdf_parse}})}
 
 \item{doc}{file path to write out to}
 
@@ -24,7 +24,8 @@ or "jsonld"}
 }
 \value{
 rdf_serialize returns the output file path `doc` invisibly.
-  This makes it easier to use rdf_serialize in pipe chains with rdf_parse.
+  This makes it easier to use rdf_serialize in pipe chains with
+  \code{\link{rdf_parse}}.
 }
 \description{
 Serialize an RDF Document

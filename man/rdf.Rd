@@ -2,15 +2,26 @@
 % Please edit documentation in R/rdf.R
 \name{rdf}
 \alias{rdf}
-\title{rdf constructor}
+\title{Initialize an `rdf` Object}
 \usage{
 rdf()
 }
 \value{
-an rdf graph object
+an rdf object
 }
 \description{
-rdf constructor
+Initialize an `rdf` Object
+}
+\details{
+an rdf Object is a list of class 'rdf', consisting of
+two pointers to external C objects managed by the redland library.
+These are the `World` object, basically a top-level pointer for
+all RDF models, and a `Model` object, essentially a storage structure
+for all RDF triples. `rdflib` defaults to an in-memory hash-based 
+storage structure at this time. The primary purpose of the `rdf`
+object is to abstract these low-level details away from the user.
+Typical use will be simply to initialize a container to which
+the user would manually add triples using \code{\link{rdf_add}}.
 }
 \examples{
 x <- rdf()

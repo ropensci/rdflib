@@ -2,22 +2,22 @@
 % Please edit documentation in R/rdf.R
 \name{rdf_query}
 \alias{rdf_query}
-\title{SPARQL query}
+\title{Perform a SPARQL Query}
 \usage{
-rdf_query(x, query, ...)
+rdf_query(rdf, query, ...)
 }
 \arguments{
-\item{x}{an rdf object (e.g. from \code{\link{parse}})}
+\item{rdf}{an rdf object (e.g. from \code{\link{rdf_parse}})}
 
 \item{query}{a SPARQL query, as text string}
 
 \item{...}{additional arguments to a redland initialize-Query}
 }
 \value{
-a list of all query results
+a data.frame of all query results
 }
 \description{
-SPARQL query
+Perform a SPARQL Query
 }
 \examples{
 doc <- system.file("extdata", "dc.rdf", package="redland")

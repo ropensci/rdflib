@@ -136,7 +136,7 @@ DT::datatable(coi3)
 
 `rdflib` can also be useful as quick and lossless way to convert parse common data formats (e.g. RDF XML) into something more R-friendly.  In this vignette, we illustrate how this might work in a simple example of some citation data returned in RDF-XML format from CrossRef.
 
-Let's begin by reading in some `RDF+XML` data from CrossRef by querying a DOI and requesting `rdf+xml` return type (via Content Negotiation):
+Let's begin by reading in some `RDF/XML` data from CrossRef by querying a DOI and requesting `rdf+xml` MIME type (via Content Negotiation):
 
 ```{r eval=FALSE}
 xml <- "ex.xml"

@@ -2,7 +2,7 @@
 % Please edit documentation in R/rdf.R
 \name{rdf_parse}
 \alias{rdf_parse}
-\title{Parse RDF files}
+\title{Parse RDF Files}
 \usage{
 rdf_parse(doc, format = c("rdfxml", "nquads", "ntriples", "trig", "turtle",
   "jsonld"), ...)
@@ -21,7 +21,7 @@ an rdf object, containing the redland world
  and model objects
 }
 \description{
-Parse RDF files
+Parse RDF Files
 }
 \examples{
 doc <- system.file("extdata", "dc.rdf", package="redland")

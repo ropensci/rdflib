@@ -1,7 +1,17 @@
 
-#' rdf constructor
+#' Initialize an `rdf` Object
 #'
 #' @return an rdf object
+#' @details an rdf Object is a list of class 'rdf', consisting of
+#' two pointers to external C objects managed by the redland library.
+#' These are the `World` object, basically a top-level pointer for
+#' all RDF models, and a `Model` object, essentially a storage structure
+#' for all RDF triples. `rdflib` defaults to an in-memory hash-based 
+#' storage structure at this time. The primary purpose of the `rdf`
+#' object is to abstract these low-level details away from the user.
+#' Typical use will be simply to initialize a container to which
+#' the user would manually add triples using \code{\link{rdf_add}}.
+#'
 #' @export
 #'
 #' @examples
@@ -35,7 +45,7 @@ print.rdf <- function(x, ...){
 }
 
 
-#' Parse RDF files
+#' Parse RDF Files
 #'
 #' @param doc path, URL, or literal string of the rdf document to parse
 #' @param format rdf serialization format of the doc,
@@ -79,12 +89,12 @@ rdf_parse <- function(doc,
     doc <- tmp
   }
   
-  x <- rdf()
+  rdf <- rdf()
   mimetype <- unname(rdf_mimetypes[format])
-  parser <- new("Parser", x$world, name = format, mimeType = mimetype)
-  redland::parseFileIntoModel(parser, x$world, doc, x$model)
+  parser <- new("Parser", rdf$world, name = format, mimeType = mimetype)
+  redland::parseFileIntoModel(parser, rdf$world, doc, rdf$model)
 
-  x
+  rdf
 }
 
 # Whenever we convert JSON-LD to RDF we should set a @base if not set.
@@ -116,7 +126,8 @@ add_base_uri <- function(doc, tmp = tempfile()){
 #' @param prefix string giving the prefix associated with the namespace
 #'
 #' @return rdf_serialize returns the output file path `doc` invisibly.
-#'   This makes it easier to use rdf_serialize in pipe chains with rdf_parse.
+#'   This makes it easier to use rdf_serialize in pipe chains with
+#'   \code{\link{rdf_parse}}.
 #' @importFrom methods new
 #' @importClassesFrom redland Serializer
 #' @importMethodsFrom redland setNameSpace serializeToFile
@@ -135,7 +146,7 @@ add_base_uri <- function(doc, tmp = tempfile()){
 #'           namespace = "http://purl.org/dc/elements/1.1/",
 #'           prefix = "dc")
 #'
-rdf_serialize <- function(x,
+rdf_serialize <- function(rdf,
                           doc,
                           format = c("rdfxml",
                                      "nquads",
@@ -159,18 +170,18 @@ rdf_serialize <- function(x,
   mimetype <- rdf_mimetypes[format]
 
   serializer <-
-    new("Serializer", x$world,
+    new("Serializer", rdf$world,
         name = format, mimeType = mimetype)
 
   if(!is.null(namespace)){
     redland::setNameSpace(serializer,
-                 x$world,
+                 rdf$world,
                  namespace = namespace,
                  prefix = prefix)
   }
  
   status <-
-    redland::serializeToFile(serializer, x$world, x$model, doc)
+    redland::serializeToFile(serializer, rdf$world, rdf$model, doc)
   
   if(jsonld_output){
     txt <- paste(readLines(doc), collapse = "\n")
@@ -180,14 +191,14 @@ rdf_serialize <- function(x,
     }
   }
   
-  invisible(x)
+  invisible(doc)
 }
 
 
 
-#' SPARQL query
+#' Perform a SPARQL Query
 #'
-#' @param x an rdf object (e.g. from \code{\link{parse}})
+#' @param rdf an rdf object (e.g. from \code{\link{rdf_parse}})
 #' @param query a SPARQL query, as text string
 #' @param ... additional arguments to a redland initialize-Query
 #'
@@ -206,10 +217,10 @@ rdf_serialize <- function(x,
 #' rdf <- rdf_parse(doc)
 #' rdf_query(rdf, sparql)
 #'
-rdf_query <- function(x, query, ...){
-  queryObj <- new("Query", x$world, query, ...)
+rdf_query <- function(rdf, query, ...){
+  queryObj <- new("Query", rdf$world, query, ...)
     # ... defaults are: base_uri=NULL, query_language="sparql", query_uri=NULL)
-  queryResult <- redland::executeQuery(queryObj, x$model)
+  queryResult <- redland::executeQuery(queryObj, rdf$model)
   out <- list()
   result <- redland::getNextResult(queryResult)
   out <- c(out, result)
@@ -223,7 +234,6 @@ rdf_query <- function(x, query, ...){
   rectangularize_query_results(out)
 }
 
-## FIXME: coerce data type based on Type-string?
 rectangularize_query_results <- function(out){
   vars <- unique(names(out))
   X <- lapply(vars, function(v) 
@@ -235,10 +245,11 @@ rectangularize_query_results <- function(out){
   as.data.frame(X, stringsAsFactors=FALSE)
 }
 
-
+#' Add RDF Triples
+#'
 #' add a triple (subject, predicate, object) to the RDF graph
 #'
-#' @param x an rdf object
+#' @param rdf an rdf object
 #' @param subject character string containing the subject
 #' @param predicate character string containing the predicate
 #' @param object character string containing the object
@@ -255,23 +266,23 @@ rectangularize_query_results <- function(out){
 #' @export
 #'
 #' @examples
-#' x <- rdf()
-#' rdf_add(x, 
+#' rdf <- rdf()
+#' rdf_add(rdf, 
 #'     subject="http://www.dajobe.org/",
 #'     predicate="http://purl.org/dc/elements/1.1/language",
 #'     object="en")
 #'
-rdf_add <- function(x, subject, predicate, object, 
+rdf_add <- function(rdf, subject, predicate, object, 
                     subjectType = as.character(NA), 
                     objectType = as.character(NA), 
                     datatype_uri = as.character(NA)){
-  stmt <- new("Statement", world = x$world, 
+  stmt <- new("Statement", world = rdf$world, 
               subject, predicate, object,
               subjectType, objectType, datatype_uri)
-  addStatement(x$model, stmt)
+  addStatement(rdf$model, stmt)
   
   ## rdf object is a list of pointers, modified in pass-by-reference
-  invisible(x)
+  invisible(rdf)
 }
 
 # Must match parser name & q 1.0 mimetype listed at:

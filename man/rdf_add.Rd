@@ -2,13 +2,13 @@
 % Please edit documentation in R/rdf.R
 \name{rdf_add}
 \alias{rdf_add}
-\title{add a triple (subject, predicate, object) to the rdf graph}
+\title{Add RDF Triples}
 \usage{
-rdf_add(x, subject, predicate, object, subjectType = as.character(NA),
+rdf_add(rdf, subject, predicate, object, subjectType = as.character(NA),
   objectType = as.character(NA), datatype_uri = as.character(NA))
 }
 \arguments{
-\item{x}{an rdf graph object}
+\item{rdf}{an rdf object}
 
 \item{subject}{character string containing the subject}
 
@@ -23,19 +23,19 @@ rdf_add(x, subject, predicate, object, subjectType = as.character(NA),
 \item{datatype_uri}{the datatype URI to associate with a object literal value}
 }
 \value{
-the rdf graph object.
+the updated RDF graph (rdf object).
 }
 \description{
-add a triple (subject, predicate, object) to the rdf graph
+add a triple (subject, predicate, object) to the RDF graph
 }
 \details{
-Since the rdf graph object simply contains external pointers
+Since the rdf object simply contains external pointers
 to the model object in C code, note that the input object is modified
 directly.
 }
 \examples{
-x <- rdf()
-rdf_add(x, 
+rdf <- rdf()
+rdf_add(rdf, 
     subject="http://www.dajobe.org/",
     predicate="http://purl.org/dc/elements/1.1/language",
     object="en")
