@@ -18,7 +18,7 @@ rdf_add(rdf, subject, predicate, object, subjectType = as.character(NA),
 
 \item{subjectType}{the Node type of the subject, i.e. "blank", "uri"}
 
-\item{objectType}{the Node type of the object, i.e. "blank", "uri"}
+\item{objectType}{the Node type of the object, i.e. "blank", "uri", "literal"}
 
 \item{datatype_uri}{the datatype URI to associate with a object literal value}
 }
@@ -39,5 +39,9 @@ rdf_add(rdf,
     subject="http://www.dajobe.org/",
     predicate="http://purl.org/dc/elements/1.1/language",
     object="en")
+    
+## blank nodes should be declared as such:
+rdf_add(rdf, "", "http://schema.org/jobTitle", "Professor", 
+        subjectType = "blank")   
 
 }

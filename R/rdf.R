@@ -49,7 +49,7 @@ print.rdf <- function(x, ...){
 #'
 #' @param doc path, URL, or literal string of the rdf document to parse
 #' @param format rdf serialization format of the doc,
-#' one of "rdfxml", "nquads", "ntriples", "trig", "turtle"
+#' one of "rdfxml", "nquads", "ntriples", "turtle"
 #' or "jsonld"
 #' @param ... additional parameters (not implemented)
 #'
@@ -68,7 +68,6 @@ rdf_parse <- function(doc,
                      format = c("rdfxml",
                                 "nquads",
                                 "ntriples",
-                                "trig",
                                 "turtle",
                                 "jsonld"),
                   ...){
@@ -151,7 +150,6 @@ rdf_serialize <- function(rdf,
                           format = c("rdfxml",
                                      "nquads",
                                      "ntriples",
-                                     "trig",
                                      "turtle",
                                      "jsonld"),
                           namespace = NULL,
@@ -234,16 +232,6 @@ rdf_query <- function(rdf, query, ...){
   rectangularize_query_results(out)
 }
 
-rectangularize_query_results <- function(out){
-  vars <- unique(names(out))
-  X <- lapply(vars, function(v) 
-    ## Strip ^^TYPE typing
-    gsub('\"(([^\\^])+)\"\\^*.*', 
-         "\\1", 
-         as.character(out[names(out) == v ])))
-  names(X) <- vars
-  as.data.frame(X, stringsAsFactors=FALSE)
-}
 
 #' Add RDF Triples
 #'
@@ -254,7 +242,7 @@ rectangularize_query_results <- function(out){
 #' @param predicate character string containing the predicate
 #' @param object character string containing the object
 #' @param subjectType the Node type of the subject, i.e. "blank", "uri"
-#' @param objectType the Node type of the object, i.e. "blank", "uri"
+#' @param objectType the Node type of the object, i.e. "blank", "uri", "literal"
 #' @param datatype_uri the datatype URI to associate with a object literal value
 #'
 #' @return the updated RDF graph (rdf object).
@@ -271,13 +259,17 @@ rectangularize_query_results <- function(out){
 #'     subject="http://www.dajobe.org/",
 #'     predicate="http://purl.org/dc/elements/1.1/language",
 #'     object="en")
+#'     
+#' ## blank nodes should be declared as such:
+#' rdf_add(rdf, "", "http://schema.org/jobTitle", "Professor", 
+#'         subjectType = "blank")   
 #'
 rdf_add <- function(rdf, subject, predicate, object, 
                     subjectType = as.character(NA), 
                     objectType = as.character(NA), 
                     datatype_uri = as.character(NA)){
   stmt <- new("Statement", world = rdf$world, 
-              subject, predicate, object,
+              subject, predicate, as.character(object),
               subjectType, objectType, datatype_uri)
   addStatement(rdf$model, stmt)
   
@@ -285,15 +277,27 @@ rdf_add <- function(rdf, subject, predicate, object,
   invisible(rdf)
 }
 
+#' Concatenate rdf Objects
+#' Note: this assumes absolute URIs for subject and predicate
+#' @method c rdf
+#' @export
+#' @param ... objects to be concatenated
+c.rdf <- function(...){
+  quads <- lapply(list(...), format)
+  txt <- paste(quads, collapse = "\n")
+  rdf_parse(txt, "nquads")
+}
+
 # Must match parser name & q 1.0 mimetype listed at:
 # http://librdf.org/raptor/api/raptor-formats-types-by-parser.html
+# 3 turtle options listed but only text/turtle works. 
 rdf_mimetypes <- c("nquads" = "text/x-nquads",
                    "ntriples" = "application/n-triples",
                    "rdfxml" = "application/rdf+xml",
                    "trig" = "application/x-trig",
-                   "turtle" = "application/turtle")
+                   "turtle" = "text/turtle")
 
-# application/x-turtle & text/turtle also ok
+# trig not working right now, not clear why
 
 
 

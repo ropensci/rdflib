@@ -1,0 +1,109 @@
+---
+title: "An tidyverse lover's introduction to RDF"
+author: "Carl Boettiger"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    df_print: paged
+vignette: >
+  %\VignetteIndexEntry{rdflib Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  
+---
+
+
+
+In the world of data science, RDF is a bit of an ugly duckling.  Like XML and Java, only without the massive-adoption-that-refuses-to-die part.  In fact RDF is most frequently expressed in XML, and RDF tools are written in Java, which help give RDF has the aesthetics of *steampunk*, of some technology for some futuristic Semantic Web[^1] in a toolset that feels about as lightweight and modern as iron dreadnaught.
+
+[^1]: "The semantic web is the future of the internet and always will be." -Peter Norvig, Director of Research at Google
+
+But don't let these appearances deceive you. RDF really is cool. If you've ever gotten carried away using `tidyr::gather` to make everything into one long table, you may have noticed you can just about always get things down to about three columns, as we see in the obligatory `iris` data example in the `tidyr::gather` docs:
+
+```{r message = FALSE, warning=FALSE}
+library(rdflib)
+library(tidyverse)
+```
+
+
+```{r}
+# get first observation for each Species in iris data -- base R
+mini_iris <- iris[c(1, 51, 101), ]
+# gather Sepal.Length, Sepal.Width, Petal.Length, Petal.Width
+iris_triples <- 
+  gather(mini_iris, key = attribute, value = measurement, -Species)
+iris_triples
+```
+
+If you like long tables like this, RDF is for you. This layout isn't "Tidy Data," where rows are observations and columns are variables, but it is damn useful sometimes.  This format is very liquid, easy to reshape into other structures -- so much so that `tidyr::gather` was originally known as `melt` in the `reshape2` package. 
+
+Looking at this table closely, we see that each row is reduced to the most elementary statement you can make from the data. A row no longer tells you the measurements (observations) *all* attributes (variables) of a given species (key), instead, you get just one fact per row, `setosa` has `Sepal.Length` measurement of `5.1`.  In RDF-world, we think of these three columns as something very special, which we call **triples**.  RDF is all about these triples. 
+
+The first column, `Species`, is the `key` from data.frame, i.e. the **subject** being described. The next column is the variable or attribute being measured, (that is, column names, other than the key column(s), from the tidy data), called the property or **predicate** in RDF-speak (slash grammar-school jargon). The third column is the actual value measured, more **object** of the predicate. Call it key-attribute-value or subject-predicate-object, these are our triples.  
+
+
+
+
+## Subject URIs
+
+In the examples we just considered, we have taken the liberty of treating a specific column (Species; Car model name) as the data key.  This was inutitive but actually a bit sloppy: for instance, we did not verify that these names are unique. We would be better off being more careful about this by treating the row IDs themselves as the `key` column for the data.frame (i.e. as the `subject` in our triple): 
+
+
+```{r}
+mini_iris %>%
+  rowid_to_column("subject") %>%
+  gather(key = predicate, value = object, -subject) %>% 
+  tail()
+```
+
+As you can see, this allows us to `gather` *all* columns, `Species` column included.  Our `subject` column now consists only of simple numeric `id`'s, while we have gained an additional triple for every row in the original data which states `Species` of each `id` (e.g. `1` is `Species` `setosa`).  
+## Predicate URIs
+
+Another more pernicious problem we may run into is that our different tables may use the same attribute (i.e. originally, a column name of a variable) for different things. 
+
+
+
+Okay, at this point you can probably start to spot a few possible issues.
+
+## RDF types
+
+First, we have gotten lucky that all of the measurements (`object` column) we have considered are encoded as `numeric` values. What if our Iris data had included a `Petal.Color` attribute? This kind of thing would create a problem in our `gather` operation, but it is not a problem for RDF. RDF considers the data type (e.g. `string`, `boolean`, `double`, `integer`, `DateTime`, etc) as a piece of the `object` in the triple.  How we store this information is merely a technical problem of "serialization," or how said information is encoded in any given structure (such as a `data.frame`).  We will have more to say about serializations later.  For the moment, we can think of this as having all `object` values coerced into characters, with an optional fourth column declaring there true type.  Conversion of all values to characters if they do not share a consistent type is in fact the default behavior of `tidyr::gather`.  
+
+
+RDF: the Resource Description Framework, is the cornerstone data structure for Linked Data.
+
+  
+  
+
+One thing about having our data melted down to these elmentary statements is that it makes it very easy combine data into a single table. No complex joining patterns, no filtering off parts of a table that don't fit, any new information on any subject can now be added to our database by gathering it into this triple structure and just `rbind`ing these triples onto the end.
+
+For instance, let's look at another classic example, the `mtcars` data set.  It's very different, unrelated data, but easily falls into this same structure:
+
+```{r}
+car_triples <- 
+mtcars %>% 
+  rownames_to_column("Model") %>% 
+  gather(attribute,measurement, -Model)
+car_triples
+```
+
+
+Using consist names for the columns, we can just bind these together:
+
+```{r}
+triples <-
+bind_rows(
+  rename(iris_triples, subject = Species, predicate = attribute, object = measurement),
+  rename( car_triples, subject = Model,   predicate = attribute, object = measurement)
+)
+triples
+```
+
+  
+
+
+```{r}
+rdf <- rdf()
+rdf2 <- rdf %>%
+  rdf_add("", "http://schema.org/jobTitle", "Professor", subjectType = "blank")
+```

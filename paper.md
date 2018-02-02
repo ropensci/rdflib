@@ -26,7 +26,7 @@ the familiar data table or rectangle of relational databases.
 The `rdflib` package provides a friendly and concise user interface
 for performing common tasks on RDF data, such as reading, writing
 and converting between the various serializations of RDF data,
-including `rdfxml`, `turtle`, `nquads`, `ntriples`, `trig`, and `json-ld`;
+including `rdfxml`, `turtle`, `nquads`, `ntriples`, and `json-ld`;
 creating new `rdf` graphs, and performing graph queries using SPARQL [@SPARQL; @W3C_SPARQL].
 This package wraps the low level `redland` R package [@redland] which
 provides direct bindings to the redland C library.  Additionally,

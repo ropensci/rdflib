@@ -4,14 +4,14 @@
 \alias{rdf_parse}
 \title{Parse RDF Files}
 \usage{
-rdf_parse(doc, format = c("rdfxml", "nquads", "ntriples", "trig", "turtle",
-  "jsonld"), ...)
+rdf_parse(doc, format = c("rdfxml", "nquads", "ntriples", "turtle", "jsonld"),
+  ...)
 }
 \arguments{
 \item{doc}{path, URL, or literal string of the rdf document to parse}
 
 \item{format}{rdf serialization format of the doc,
-one of "rdfxml", "nquads", "ntriples", "trig", "turtle"
+one of "rdfxml", "nquads", "ntriples", "turtle"
 or "jsonld"}
 
 \item{...}{additional parameters (not implemented)}

@@ -31,7 +31,7 @@ testthat::test_that("we can initialize add triples to rdf graph", {
   testthat::expect_is(x, "rdf")
 })
 
-testthat::test_that("we can parse and serialize json-ld", {
+testthat::test_that("we can add, parse and serialize json-ld", {
   #x <- rdf_parse(doc)
   x <- rdf()
   x <- rdf_add(x, 
@@ -79,12 +79,51 @@ testthat::test_that("we can parse and serialize json-ld", {
 
 })
 
+testthat::test_that("we can parse and serialize nquads", {
+  x <- rdf_parse(doc)
+  rdf_serialize(x, out, "nquads")
+  roundtrip <- rdf_parse(out, "nquads")
+  testthat::expect_is(roundtrip, "rdf")
+})
+testthat::test_that("we can parse and serialize ntriples", {
+  x <- rdf_parse(doc)
+  rdf_serialize(x, out, "ntriples")
+  roundtrip <- rdf_parse(out, "ntriples")
+  testthat::expect_is(roundtrip, "rdf")
+})
+testthat::test_that("we can parse and serialize tutle", {
+  x <- rdf_parse(doc)
+  rdf_serialize(x, out, "turtle")
+  roundtrip <- rdf_parse(out, "turtle")
+  testthat::expect_is(roundtrip, "rdf")
+})
+testthat::test_that("we can parse and serialize rdfxml", {
+  x <- rdf_parse(doc)
+  rdf_serialize(x, out, "rdfxml")
+  roundtrip <- rdf_parse(out, "rdfxml")
+  testthat::expect_is(roundtrip, "rdf")
+})
 
 
 testthat::test_that("we can parse from a url", {
   # CRAN seems okay with tests requiring an internet connection
   #testthat::skip_on_cran()
   rdf <- rdf_parse("https://tinyurl.com/ycf95c9h")
+  testthat::expect_is(rdf, "rdf")
+  
+})
+
+
+testthat::test_that("we can parse from a string", {
+  string <- 
+    '
+  _:b0 <http://schema.org/jobTitle> "Professor" .
+  _:b0 <http://schema.org/name> "Jane Doe" .
+  _:b0 <http://schema.org/telephone> "(425) 123-4567" .
+  _:b0 <http://schema.org/url> <http://www.janedoe.com> .
+  _:b0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Person> .
+  '
+  rdf <- rdf_parse(string, "nquads")
   testthat::expect_is(rdf, "rdf")
   
 })

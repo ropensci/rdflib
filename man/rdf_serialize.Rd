@@ -4,8 +4,8 @@
 \alias{rdf_serialize}
 \title{Serialize an RDF Document}
 \usage{
-rdf_serialize(rdf, doc, format = c("rdfxml", "nquads", "ntriples", "trig",
-  "turtle", "jsonld"), namespace = NULL, prefix = NULL, ...)
+rdf_serialize(rdf, doc, format = c("rdfxml", "nquads", "ntriples", "turtle",
+  "jsonld"), namespace = NULL, prefix = NULL, ...)
 }
 \arguments{
 \item{rdf}{an rdf object (e.g. from \code{\link{rdf_parse}})}
@@ -13,7 +13,7 @@ rdf_serialize(rdf, doc, format = c("rdfxml", "nquads", "ntriples", "trig",
 \item{doc}{file path to write out to}
 
 \item{format}{rdf serialization format of the doc,
-one of "rdfxml", "nquads", "ntriples", "trig", "turtle"
+one of "rdfxml", "nquads", "ntriples", "turtle"
 or "jsonld"}
 
 \item{namespace}{string giving the namespace to set}

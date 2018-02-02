@@ -12,7 +12,7 @@ Description: The Resource Description Framework, or 'RDF' is a widely used
              The 'rdflib' package provides a friendly and concise user interface
              for performing common tasks on 'RDF' data, such as reading, writing
              and converting between the various serializations of 'RDF' data,
-             including 'rdfxml', 'turtle', 'nquads', 'ntriples', 'trig', and 'json-ld';
+             including 'rdfxml', 'turtle', 'nquads', 'ntriples', and 'json-ld';
              creating new 'RDF' graphs, and performing graph queries using 'SPARQL'.
              This package wraps the low level 'redland' R package which
              provides direct bindings to the 'redland' C library.  Additionally,
@@ -38,8 +38,11 @@ Suggests: magrittr,
     httr,
     xml2,
     jqr,
+    lubridate,
+    DT,
+    tidyverse,
     readr,
     dplyr,
-    lubridate,
-    DT
+    tidyr,
+    tibble
 VignetteBuilder: knitr
