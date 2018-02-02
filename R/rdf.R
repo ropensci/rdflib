@@ -298,7 +298,10 @@ rdf_mimetypes <- c("nquads" = "text/x-nquads",
                    "turtle" = "text/turtle")
 
 # trig not working right now, not clear why
-
+# Consider adding/testing: 
+# - n3 (text/n3)
+# - rdfa (application/xhtml+xml, or text/html)
+# - rss (application/rss+xml or text/rss)
 
 
 # rdf functions like working with local files
