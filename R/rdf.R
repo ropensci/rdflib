@@ -81,7 +81,8 @@ format.rdf <- function(x,
   rdf_serialize(x, 
                 tmp,
                 format = format)
-  txt <- paste(readLines(tmp), collapse = "\n")
+  ## Fix encoding on nquads, ntriples 
+  txt <- utf8me(paste(readLines(tmp), collapse = "\n"))
   unlink(tmp)
   txt
 }
@@ -282,6 +283,7 @@ rdf_query <- function(rdf, query, ...){
 }
 
 
+
 #' Add RDF Triples
 #'
 #' add a triple (subject, predicate, object) to the RDF graph
@@ -301,15 +303,18 @@ rdf_query <- function(rdf, query, ...){
 #'
 #' @details 
 #' 
-#' - Predicate should always be a 
-#'   [URI](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier).
-#' - Subject should be either URI or a character string.  If subject string
-#'   does not look like a URI (e.g. a URL or a `prefix:string`), it
-#'   will be typed as a blank node and prefixed with `_:` automatically,
-#'   equivalent to setting `subjectType="blank"`, See examples.
-#' - Object will automatically type URIs as URIs, strings as literals,
-#'   and empty strings as blank nodes. Override by setting `objectType`
-#'   explicitly (e.g. to treat a URL as a literal; see examples)
+#'  `rdf_add()` will automatically 'duck type' nodes (if looks like a duck...).
+#'  That is, strings that look like URIs will be declared as URIs. (See
+#'   [URI](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier)).
+#'  Predicate should always be a URI (e.g. URL or  a `prefix:string`),
+#'  cannot be blank or literal.  Subjects that look like strings will be 
+#'  treated as [Blank Nodes](https://en.wikipedia.org/wiki/Blank_node) (i.e.
+#'  will be prefixed with `_:`).  An empty subject, `""`, will create a
+#'  blank node with random name.  Objects that look like URIs will be
+#'  typed as resource nodes, otherwise as literals.  An empty object `""`
+#'  will be treated as blank node.  Set `subjectType` or `objectType` 
+#'  explicitly to override this behavior, e.g. to treat an object URI
+#'  as a literal string.  See examples.  
 #' 
 #' @references <https://en.wikipedia.org/wiki/Uniform_Resource_Identifier>
 #' @importClassesFrom redland Statement
@@ -354,6 +359,12 @@ rdf_add <- function(rdf, subject, predicate, object,
                     subjectType = as.character(NA), 
                     objectType = as.character(NA), 
                     datatype_uri = as.character(NA)){
+  
+  ## FIXME: datatype_uri should be inferred from object
+  ## Rather than making object a character.
+  ## Note: redland doesn't appear to support implicit datatype
+  
+  
   stmt <- new("Statement", world = rdf$world, 
               subject, predicate, as.character(object),
               subjectType, objectType, datatype_uri)

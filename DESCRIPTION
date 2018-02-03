@@ -27,7 +27,8 @@ BugReports: https://github.com/cboettig/rdflib/issues
 Imports: redland,
     jsonld,
     methods,
-    utils
+    utils,
+    stringi
 RoxygenNote: 6.0.1
 Roxygen: list(markdown = TRUE)
 Suggests: magrittr,

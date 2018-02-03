@@ -13,6 +13,7 @@
 
 ## Bug Fixes 
 
+* fix encoding with UTF-8 characters (coming from nquads & ntriples)
 * `rdf_query` now coerces data into appropriate type 
    if it recognizes the data URI and can match that 
    to an R type (a few XMLSchema types are recognized,
