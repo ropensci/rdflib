@@ -1,5 +1,17 @@
-# rdflib 0.0.4
+# rdflib 0.1.0
 
+* add `c()` method to concatenate `rdf` objects
+* `rdf_query` now coerces data into appropriate type 
+   if it recognizes the data URI and can match that 
+   to an R type (a few XMLSchema types are recognized,
+   otherwise still defaults to character string)
+* All methods free memory from any temporary objects they initialize
+  (e.g. parsers, serializers, query, statement)
+* rdf includes explicit pointer to storage object
+* rdf constructor supports BDB backend for disk-based triplestore [#6](https://github.com/cboettig/rdflib/issues/6)
+* tests free rdf objects
+* extend unit tests for some of new functionality
+* Add `rdf_free` to free rdf (ideally would be done by GC in redland...)
 
 # rdflib 0.0.3 (2018-01-02)
 

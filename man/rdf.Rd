@@ -4,7 +4,13 @@
 \alias{rdf}
 \title{Initialize an `rdf` Object}
 \usage{
-rdf()
+rdf(path = NULL)
+}
+\arguments{
+\item{path}{where should local database to store RDF triples be created.
+Default NULL will store triples in memory and should be best for most use cases.
+Large databases should give a path on disk. Requires redland package to be 
+built with support for the Berkeley DB (libdb-dev on Ubuntu, berkeley-db on homebrew).}
 }
 \value{
 an rdf object
@@ -14,10 +20,11 @@ Initialize an `rdf` Object
 }
 \details{
 an rdf Object is a list of class 'rdf', consisting of
-two pointers to external C objects managed by the redland library.
-These are the `World` object, basically a top-level pointer for
-all RDF models, and a `Model` object, essentially a storage structure
-for all RDF triples. `rdflib` defaults to an in-memory hash-based 
+three pointers to external C objects managed by the redland library.
+These are the `world` object: basically a top-level pointer for
+all RDF models, and a `model` object: a collection of RDF statements,
+and a `storage` object, indicating how these statements are stored.
+`rdflib` defaults to an in-memory hash-based 
 storage structure at this time. The primary purpose of the `rdf`
 object is to abstract these low-level details away from the user.
 Typical use will be simply to initialize a container to which

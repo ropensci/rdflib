@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:nodeID="b0">
+    <rdf:type rdf:resource="http://schema.org/Person"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="b0">
+    <ns0:name xmlns:ns0="http://schema.org/">Jane Doe</ns0:name>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="b0">
+    <ns0:url xmlns:ns0="http://schema.org/" rdf:resource="http://www.janedoe.com"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="b0">
+    <ns0:jobTitle xmlns:ns0="http://schema.org/">Professor</ns0:jobTitle>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="b0">
+    <ns0:telephone xmlns:ns0="http://schema.org/">(425) 123-4567</ns0:telephone>
+  </rdf:Description>
+</rdf:RDF>

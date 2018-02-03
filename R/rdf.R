@@ -1,30 +1,77 @@
 
 #' Initialize an `rdf` Object
 #'
+#' @param path where should local database to store RDF triples be created.
+#' Default NULL will store triples in memory and should be best for most use cases.
+#' Large databases should give a path on disk. Requires redland package to be 
+#' built with support for the Berkeley DB (libdb-dev on Ubuntu, berkeley-db on homebrew).
+#'
 #' @return an rdf object
 #' @details an rdf Object is a list of class 'rdf', consisting of
-#' two pointers to external C objects managed by the redland library.
-#' These are the `World` object, basically a top-level pointer for
-#' all RDF models, and a `Model` object, essentially a storage structure
-#' for all RDF triples. `rdflib` defaults to an in-memory hash-based 
+#' three pointers to external C objects managed by the redland library.
+#' These are the `world` object: basically a top-level pointer for
+#' all RDF models, and a `model` object: a collection of RDF statements,
+#' and a `storage` object, indicating how these statements are stored.
+#' `rdflib` defaults to an in-memory hash-based 
 #' storage structure at this time. The primary purpose of the `rdf`
 #' object is to abstract these low-level details away from the user.
 #' Typical use will be simply to initialize a container to which
 #' the user would manually add triples using \code{\link{rdf_add}}.
 #'
+#'
+#' @importClassesFrom redland World Model Storage
+#' @importMethodsFrom redland freeWorld freeModel freeStorage
+#' @importFrom utils capture.output
 #' @export
 #'
 #' @examples
 #' x <- rdf()
 #' 
-rdf <- function(){
+rdf <- function(path = NULL){
   world <- new("World")
-  storage <- new("Storage", world, "hashes", name = "", 
-                 options = "hash-type='memory'")
+  
+  ## Handle storage type
+  if(is.character(path)){
+    if(has_bdb()){
+      ## Store in Berkeley DB
+      options <- paste0("new='yes',hash-type='bdb',dir='", path, "'") 
+    } else {
+      warning("BDB driver not found. Falling back on in-memory storage")
+      options <- "hash-type='memory'"
+    }
+  } else { ## Store in memory
+   options <- "hash-type='memory'"
+  }
+  storage <- new("Storage", world, "hashes", name = "rdflib", 
+                 options = options)
+  
+  
   model <- new("Model", world = world, storage, options = "")
-  structure(list(world = world, model = model),
+  structure(list(world = world, model = model, storage = storage),
             class = "rdf")
 }
+
+#' Free Memory Associated with RDF object
+#' 
+#' @param rdf an rdf object
+#' @details Free all pointers associated with an rdf object. 
+#' Frees memory associated with the storage, world, and model
+#' objects. After this a user should remove the rdf object 
+#' from the environment as well with `rm`, since attempting
+#' to reference an object after it has been removed can crash
+#' R!
+#' @export
+#' @examples 
+#' rdf <- rdf()
+#' rdf_free(rdf)
+#' rm(rdf)
+rdf_free <- function(rdf){
+  redland::freeModel(rdf$model)
+  redland::freeStorage(rdf$storage)
+  redland::freeWorld(rdf$world)
+}
+
+
 
 #' @export
 format.rdf <- function(x,
@@ -56,7 +103,7 @@ print.rdf <- function(x, ...){
 #' @return an rdf object, containing the redland world
 #'  and model objects
 #' @importClassesFrom redland World Storage Model Parser
-#' @importMethodsFrom redland parseFileIntoModel
+#' @importMethodsFrom redland parseFileIntoModel freeParser
 #' @importFrom jsonld jsonld_to_rdf
 #' @export
 #'
@@ -92,7 +139,8 @@ rdf_parse <- function(doc,
   mimetype <- unname(rdf_mimetypes[format])
   parser <- new("Parser", rdf$world, name = format, mimeType = mimetype)
   redland::parseFileIntoModel(parser, rdf$world, doc, rdf$model)
-
+  redland::freeParser(parser)
+  
   rdf
 }
 
@@ -129,7 +177,7 @@ add_base_uri <- function(doc, tmp = tempfile()){
 #'   \code{\link{rdf_parse}}.
 #' @importFrom methods new
 #' @importClassesFrom redland Serializer
-#' @importMethodsFrom redland setNameSpace serializeToFile
+#' @importMethodsFrom redland setNameSpace serializeToFile freeSerializer
 #'
 #' @export
 #' @examples
@@ -189,6 +237,7 @@ rdf_serialize <- function(rdf,
     }
   }
   
+  redland::freeSerializer(serializer)
   invisible(doc)
 }
 
@@ -250,7 +299,7 @@ rdf_query <- function(rdf, query, ...){
 #' to the model object in C code, note that the input object is modified
 #' directly.  
 #' @importClassesFrom redland Statement
-#' @importMethodsFrom redland addStatement
+#' @importMethodsFrom redland addStatement freeStatement
 #' @export
 #'
 #' @examples
@@ -271,8 +320,9 @@ rdf_add <- function(rdf, subject, predicate, object,
   stmt <- new("Statement", world = rdf$world, 
               subject, predicate, as.character(object),
               subjectType, objectType, datatype_uri)
-  addStatement(rdf$model, stmt)
+  redland::addStatement(rdf$model, stmt)
   
+  redland::freeStatement(stmt)
   ## rdf object is a list of pointers, modified in pass-by-reference
   invisible(rdf)
 }
@@ -288,36 +338,7 @@ c.rdf <- function(...){
   rdf_parse(txt, "nquads")
 }
 
-# Must match parser name & q 1.0 mimetype listed at:
-# http://librdf.org/raptor/api/raptor-formats-types-by-parser.html
-# 3 turtle options listed but only text/turtle works. 
-rdf_mimetypes <- c("nquads" = "text/x-nquads",
-                   "ntriples" = "application/n-triples",
-                   "rdfxml" = "application/rdf+xml",
-                   "trig" = "application/x-trig",
-                   "turtle" = "text/turtle")
 
-# trig not working right now, not clear why
-# Consider adding/testing: 
-# - n3 (text/n3)
-# - rdfa (application/xhtml+xml, or text/html)
-# - rss (application/rss+xml or text/rss)
-
-
-# rdf functions like working with local files
-# this helper function allows us to also use URLs or strings
-#' @importFrom utils download.file
-text_or_url_to_doc <- function(x, tmp = tempfile()){
-  if(file.exists(x)){
-   return(x) 
-  } else if(grepl("^https?://", x)) {
-    utils::download.file(x, tmp)
-    return(tmp)
-  } else {
-    writeLines(x, tmp)
-    return(tmp)
-  }
-}
 
 #' rdflib: Tools to Manipulate and Query Semantic Data
 #'

@@ -19,5 +19,6 @@ addons:
       - librdf0-dev
       - libv8-dev
       - libjq-dev
+      - libdb-dev
 after_success:
   - Rscript -e 'covr::codecov()'
