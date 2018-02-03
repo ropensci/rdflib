@@ -18,7 +18,7 @@ or "jsonld"}
 }
 \value{
 an rdf object, containing the redland world
- and model objects
+and model objects
 }
 \description{
 Parse RDF Files

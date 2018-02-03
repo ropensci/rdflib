@@ -7,8 +7,8 @@
 \title{rdflib: Tools to Manipulate and Query Semantic Data}
 \description{
 The Resource Description Framework, or RDF is a widely used
-data representation model that forms the cornerstone of the 
-Semantic Web. 'RDF' represents data as a graph rather than 
+data representation model that forms the cornerstone of the
+Semantic Web. 'RDF' represents data as a graph rather than
 the familiar data table or rectangle of relational databases.
 }
 \details{
@@ -29,7 +29,7 @@ For more information, see the Wikipedia pages for RDF, SPARQL, and JSON-LD:
 }
 
 To learn more about rdflib, start with the vignettes:
-`browseVignettes(package = "rdflib")`
+\code{browseVignettes(package = "rdflib")}
 }
 \seealso{
 Useful links:

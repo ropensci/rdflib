@@ -13,10 +13,10 @@ rdf_free(rdf)
 Free Memory Associated with RDF object
 }
 \details{
-Free all pointers associated with an rdf object. 
+Free all pointers associated with an rdf object.
 Frees memory associated with the storage, world, and model
-objects. After this a user should remove the rdf object 
-from the environment as well with `rm`, since attempting
+objects. After this a user should remove the rdf object
+from the environment as well with \code{rm}, since attempting
 to reference an object after it has been removed can crash
 R!
 }

@@ -290,14 +290,28 @@ rdf_query <- function(rdf, query, ...){
 #' @param subject character string containing the subject
 #' @param predicate character string containing the predicate
 #' @param object character string containing the object
-#' @param subjectType the Node type of the subject, i.e. "blank", "uri"
-#' @param objectType the Node type of the object, i.e. "blank", "uri", "literal"
+#' @param subjectType the Node type of the subject, i.e. "uri", "blank"
+#' @param objectType the Node type of the object, i.e. "literal", "uri", "blank"
 #' @param datatype_uri the datatype URI to associate with a object literal value
 #'
-#' @return the updated RDF graph (rdf object).
-#' @details Since the rdf object simply contains external pointers
+#' @return Silently returns the updated RDF graph (rdf object).
+#' Since the rdf object simply contains external pointers
 #' to the model object in C code, note that the input object is modified
-#' directly.  
+#' directly, so you need not assign the output of rdf_add() to anything.
+#'
+#' @details 
+#' 
+#' - Predicate should always be a 
+#'   [URI](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier).
+#' - Subject should be either URI or a character string.  If subject string
+#'   does not look like a URI (e.g. a URL or a `prefix:string`), it
+#'   will be typed as a blank node and prefixed with `_:` automatically,
+#'   equivalent to setting `subjectType="blank"`, See examples.
+#' - Object will automatically type URIs as URIs, strings as literals,
+#'   and empty strings as blank nodes. Override by setting `objectType`
+#'   explicitly (e.g. to treat a URL as a literal; see examples)
+#' 
+#' @references <https://en.wikipedia.org/wiki/Uniform_Resource_Identifier>
 #' @importClassesFrom redland Statement
 #' @importMethodsFrom redland addStatement freeStatement
 #' @export
@@ -309,9 +323,32 @@ rdf_query <- function(rdf, query, ...){
 #'     predicate="http://purl.org/dc/elements/1.1/language",
 #'     object="en")
 #'     
-#' ## blank nodes should be declared as such:
-#' rdf_add(rdf, "", "http://schema.org/jobTitle", "Professor", 
-#'         subjectType = "blank")   
+#' ## non-URI string in subject indicates a blank subject
+#' ## (prefixes to "_:b0")
+#' rdf_add(rdf, "b0", "http://schema.org/jobTitle", "Professor") 
+#' 
+#' ## identically a blank subject.  
+#' ## Note rdf is unchanged when we add the same triple twice.
+#' rdf_add(rdf, "b0", "http://schema.org/jobTitle", "Professor", 
+#'         subjectType = "blank") 
+#'         
+#' ## blank node with empty string creates a default blank node id
+#' rdf_add(rdf, "", "http://schema.org/jobTitle", "Professor")   
+#'                     
+#' 
+#' ## Subject and Object both recognized as URI resources:
+#' rdf_add(rdf, 
+#'         "https://orcid.org/0000-0002-1642-628X",
+#'         "http://schema.org/homepage", 
+#'         "http://carlboettiger.info")  
+#'
+#'  ## Force object to be literal, not URI resource        
+#' rdf_add(rdf, 
+#'         "https://orcid.org/0000-0002-1642-628X",
+#'         "http://schema.org/homepage", 
+#'         "http://carlboettiger.info",
+#'         objectType = "literal")  
+#'         
 #'
 rdf_add <- function(rdf, subject, predicate, object, 
                     subjectType = as.character(NA), 

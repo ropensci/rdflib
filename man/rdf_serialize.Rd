@@ -23,9 +23,9 @@ or "jsonld"}
 \item{...}{additional parameters (not implemented)}
 }
 \value{
-rdf_serialize returns the output file path `doc` invisibly.
-  This makes it easier to use rdf_serialize in pipe chains with
-  \code{\link{rdf_parse}}.
+rdf_serialize returns the output file path \code{doc} invisibly.
+This makes it easier to use rdf_serialize in pipe chains with
+\code{\link{rdf_parse}}.
 }
 \description{
 Serialize an RDF Document

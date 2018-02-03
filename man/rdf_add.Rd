@@ -16,22 +16,33 @@ rdf_add(rdf, subject, predicate, object, subjectType = as.character(NA),
 
 \item{object}{character string containing the object}
 
-\item{subjectType}{the Node type of the subject, i.e. "blank", "uri"}
+\item{subjectType}{the Node type of the subject, i.e. "uri", "blank"}
 
-\item{objectType}{the Node type of the object, i.e. "blank", "uri", "literal"}
+\item{objectType}{the Node type of the object, i.e. "literal", "uri", "blank"}
 
 \item{datatype_uri}{the datatype URI to associate with a object literal value}
 }
 \value{
-the updated RDF graph (rdf object).
+Silently returns the updated RDF graph (rdf object).
+Since the rdf object simply contains external pointers
+to the model object in C code, note that the input object is modified
+directly, so you need not assign the output of rdf_add() to anything.
 }
 \description{
 add a triple (subject, predicate, object) to the RDF graph
 }
 \details{
-Since the rdf object simply contains external pointers
-to the model object in C code, note that the input object is modified
-directly.
+\itemize{
+\item Predicate should always be a
+\href{https://en.wikipedia.org/wiki/Uniform_Resource_Identifier}{URI}.
+\item Subject should be either URI or a character string.  If subject string
+does not look like a URI (e.g. a URL or a \code{prefix:string}), it
+will be typed as a blank node and prefixed with \code{_:} automatically,
+equivalent to setting \code{subjectType="blank"}, See examples.
+\item Object will automatically type URIs as URIs, strings as literals,
+and empty strings as blank nodes. Override by setting \code{objectType}
+explicitly (e.g. to treat a URL as a literal; see examples)
+}
 }
 \examples{
 rdf <- rdf()
@@ -40,8 +51,34 @@ rdf_add(rdf,
     predicate="http://purl.org/dc/elements/1.1/language",
     object="en")
     
-## blank nodes should be declared as such:
-rdf_add(rdf, "", "http://schema.org/jobTitle", "Professor", 
-        subjectType = "blank")   
+## non-URI string in subject indicates a blank subject
+## (prefixes to "_:b0")
+rdf_add(rdf, "b0", "http://schema.org/jobTitle", "Professor") 
 
+## identically a blank subject.  
+## Note rdf is unchanged when we add the same triple twice.
+rdf_add(rdf, "b0", "http://schema.org/jobTitle", "Professor", 
+        subjectType = "blank") 
+        
+## blank node with empty string creates a default blank node id
+rdf_add(rdf, "", "http://schema.org/jobTitle", "Professor")   
+                    
+
+## Subject and Object both recognized as URI resources:
+rdf_add(rdf, 
+        "https://orcid.org/0000-0002-1642-628X",
+        "http://schema.org/homepage", 
+        "http://carlboettiger.info")  
+
+ ## Force object to be literal, not URI resource        
+rdf_add(rdf, 
+        "https://orcid.org/0000-0002-1642-628X",
+        "http://schema.org/homepage", 
+        "http://carlboettiger.info",
+        objectType = "literal")  
+        
+
+}
+\references{
+\url{https://en.wikipedia.org/wiki/Uniform_Resource_Identifier}
 }
