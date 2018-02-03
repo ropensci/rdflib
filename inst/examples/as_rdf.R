@@ -4,10 +4,13 @@ as_rdf.data.frame <- function(df, base_uri = NULL){
 
   subjectType <- "blank"
   if(is.null(base_uri)){
+    ## Use literal name of the object passed to the function as df
     base_uri <- paste0(gsub("[^a-zA-Z]","",deparse(substitute(df))), ":")
     subjectType <- "uri"
   }
   
+  ## better to avoid heavy use of tidyverse?  All but `tidyr::gather` should
+  ## be avoidable
   x <- tibble::rowid_to_column(df, "subject")
   suppressWarnings(
   x <- tidyr::gather(x, key = predicate, value = object, -subject)
@@ -49,6 +52,9 @@ as_rdf.list <- function(x){
   
 }
 
+
+## Testing: Digest some data.frames into RDF and extract back
+
 cars <- mtcars[1:4, 1:4] %>% rownames_to_column("Model")
 
 
@@ -56,7 +62,9 @@ x1 <- as_rdf(iris)
 x2 <- as_rdf(cars)
 rdf <- c(x1,x2)
 
-
+## Look, original data back, no filter / spread required!
+## Could write helper function to construct this pattern of sparql?
+## e.g. return a data.frame with all observations of a list of attributes (properties)
 sparql <-
   'SELECT ?Sepal_Length ?Sepal_Width ?Petal_Length ?Petal_Width ?Species
    WHERE {
