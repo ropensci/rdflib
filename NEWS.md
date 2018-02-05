@@ -10,6 +10,10 @@
 * Numerous improvements to documentation, see 
   [#9](https://github.com/cboettig/rdflib/issues/9) and 
   [#10](https://github.com/cboettig/rdflib/issues/10) 
+* `rdf_add` argument for `object` can now take all atomic types
+   (numeric, integer, string, Date, POSIX, logical) and 
+   will automatically declare the appropriate `datatype_uri`
+   if the user has not manually specified this. 
 
 ## Bug Fixes 
 
