@@ -80,7 +80,7 @@ format.rdf <- function(x,
                 tmp,
                 format = format)
   ## Fix encoding on nquads, ntriples 
-  txt <- utf8me(paste(readLines(tmp), collapse = "\n"))
+  txt <- stringi::stri_unescape_unicode((paste(readLines(tmp), collapse = "\n")))
   unlink(tmp)
   txt
 }

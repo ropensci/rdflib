@@ -4,17 +4,26 @@
 \alias{rdf_query}
 \title{Perform a SPARQL Query}
 \usage{
-rdf_query(rdf, query, ...)
+rdf_query(rdf, query, data.frame = TRUE, ...)
 }
 \arguments{
 \item{rdf}{an rdf object (e.g. from \code{\link{rdf_parse}})}
 
 \item{query}{a SPARQL query, as text string}
 
+\item{data.frame}{logical, should the resutls be returned as a data.frame?}
+
 \item{...}{additional arguments to a redland initialize-Query}
 }
 \value{
-a data.frame of all query results
+a data.frame of all query results (default.)  Columns will
+be named according to variable names in the SPARQL query. Returned
+object values will be coerced to match the corresponding R type
+to any associated datatype URI, if provided. If a column would
+result in mixed classes (e.g. strings and numerics), all types
+in the column will be coerced to character strings. If \code{data.frame}
+is false, results will be returned as a list with each element
+typed by its data URI.
 }
 \description{
 Perform a SPARQL Query

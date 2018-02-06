@@ -80,9 +80,7 @@ rdf_add <- function(rdf, subject, predicate, object,
   if(is.na(datatype_uri)){
     datatype_uri <- xs_class(object)
   }
-  if(length(datatype_uri) == 0){
-      datatype_uri <- as.character(NA)
-  }
+
   
   stmt <- new("Statement", world = rdf$world, 
               subject, predicate, as.character(object),
@@ -97,9 +95,8 @@ rdf_add <- function(rdf, subject, predicate, object,
 
 ## Don't explicitly type characters as strings, since this is default
 xs_class <- function(x){
-  gsub("^xs:", 
-       "http://www.w3.org/2001/XMLSchema#",
-       switch(class(x),
+  type <- 
+       switch(class(x)[[1]],
               "numeric" = "xs:decimal",
 #              "character" = "xs:string",
               "factor" = "xs:string",
@@ -108,5 +105,13 @@ xs_class <- function(x){
               "Date" = "xs:date",
               "POSIXct" = "xs:dateTime",
               NULL
-       ))
+       )
+  string <- gsub("^xs:", 
+       "http://www.w3.org/2001/XMLSchema#",
+        type)
+  ## consistent return length, character(1)
+  if(length(string) == 0){
+    string <- as.character(NA)
+  }
+  string
 }

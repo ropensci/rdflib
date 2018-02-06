@@ -1,9 +1,19 @@
 #' @importFrom methods as
 type_by_datauri <- function(x){
   types <- get_types(x)
-  r_types <- vapply(get_types(x), r_class, character(length(1)))
-  df <- data.frame(value = get_values(x), class = r_types)
-  apply(df, 1, function(x) as(utf8me(x[1]), x[2]))
+  r_types <- vapply(types, r_class, character(length(1)))
+  values <- get_values(x)
+  
+  ## Output must be a list since types can differ
+  out <- vector("list", length = length(values))
+  for(i in seq_along(values)){
+    out[[i]] <- as(utf8me(values[i]), r_types[[i]])
+    
+  }
+  #df <- data.frame(value = get_values(x), class = r_types, stringsAsFactors = FALSE)
+  #apply(df, 1, function(x) as(utf8me(x[1]), x[2]))
+  #names(out) <- names(x)
+  out
 }
 
 ## Utilities to coerce return type, if recognized
@@ -22,7 +32,7 @@ r_class <- function(x){
 
 ## Helper utilitiesfor parsing data URIs
 get_values <- function(x) gsub('\"(([^\\^])+)\"\\^*(.*)',  "\\1", x)
-get_types <- function(x) out <- gsub('\"(([^\\^])+)\"\\^*(.*)',  "\\3", x)
+get_types <- function(x) gsub('\"(([^\\^])+)\"\\^*(.*)',  "\\3", x)
 
 #' @importFrom stringi stri_unescape_unicode
 # https://stackoverflow.com/questions/48602294
@@ -32,8 +42,9 @@ utf8me <- function(x){
 }
 
 
-
-
+## so that we can do as("2018-02-05", "Date") in type_by_datauri
+setAs("character", "Date", function(from) as.Date(as.character(from)))
+setAs("character", "POSIXct", function(from) as.POSIXct(as.character(from)))
 
 
 has_bdb <- function(){
@@ -70,6 +81,4 @@ rdf_mimetypes <- c("nquads" = "text/x-nquads",
 # - n3 (text/n3) 
 # - rdfa (application/xhtml+xml, or text/html)
 # - rss (application/rss+xml or text/rss)
-
-
 
