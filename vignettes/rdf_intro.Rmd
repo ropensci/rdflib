@@ -121,19 +121,14 @@ Because this case is a little different, the URL is attached directly after the 
 
 This `gather` thing started well, but now are data is looking pretty ugly, not to mention cumbersome.  You have some idea why RDF hasn't taken data science by storm, and we haven't even looked at how ugly this gets when you write it in the RDF/XML serialization yet!  On the upside, we've introduced most of the essential concepts that will let us start to work with data as triples.  
 
+- URI vs URL
 - prefixes for URIs
+- blank nodes
 - Triple notation
 - JSON-LD
 
-
-
-
-
-
 JSON-LD offers a fresh look at how we might serialize RDF in a way that is both familiar and easy to read.  The simplicity is really quite brilliant.  Just about all the ugly parts -- URI strings, type strings, even the prefixes -- are pushed up into the "context", a kind of header for holding these details, while stuff most applications will really care about is unencumbered, standard JSON.  This approach makes brilliant use of the "Object Notation" in the JSON to handle the ever-troublesome notion of a subject
 
-
-## URIs and blank nodes
 
 
 ## SPARQL: Getting back to Tidy Tables!
