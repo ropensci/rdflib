@@ -17,9 +17,10 @@ testthat::test_that("we can initialize add triples to rdf graph", {
   rdf <- rdf()
   rdf <- rdf_add(rdf, 
                  subject="http://www.dajobe.org/",
-                 predicate="http://purl.org/dc/elements/1.1/language",
-                 object="en")
+                 predicate="http://schema.org/dateCreated",
+                 object=as.Date("2015-01-01"))
   testthat::expect_is(rdf, "rdf")
   rdf_free(rdf)
   
 })
+

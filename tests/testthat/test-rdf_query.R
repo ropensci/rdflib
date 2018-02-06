@@ -74,3 +74,5 @@ testthat::test_that("SPARQL handles data types", {
 })
 
 unlink(out)
+
+

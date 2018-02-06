@@ -85,3 +85,5 @@ rectangularize_query_results <- function(out){
   ## Or we could use tibble::as_data_frame for list columns w/ mixed type..
   as.data.frame(X, stringsAsFactors=FALSE)
 }
+
+
