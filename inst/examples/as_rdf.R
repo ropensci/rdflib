@@ -85,7 +85,8 @@ table_schema <- function(..., columns = NULL, prefix=NULL, na.rm = TRUE){
   else
     where <- paste(where, ".")
   where <- paste(where, collapse = "\n")
-  query <- paste("SELECT", paste0(select, collapse = " "), "\nWHERE {\n", where, "\n}")
+  query <- paste("SELECT", paste0(select, collapse = " "),
+                 "\nWHERE {\n", where, "\n}")
   query
 }
 
@@ -99,7 +100,7 @@ rdf_query(rdf, sparql) %>% as_tibble()
 
 ## Look, original data back, no filter / spread required!
 ## Could write helper function to construct this pattern of sparql?
-## e.g. return a data.frame with all observations of a list of attributes (properties)
+## e.g. return a data.frame with all observations of a list of attributes
 sparql <-
   'SELECT ?Sepal_Length ?Sepal_Width ?Petal_Length ?Petal_Color ?Species
    WHERE {

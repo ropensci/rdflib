@@ -18,7 +18,6 @@ r_class <- function(x){
   switch(gsub("<http://www.w3.org/2001/XMLSchema#(.*)>", "xs:\\1", x),
          "xs:decimal" = "numeric",
          "xs:string" = "character",
-         "xs:string" = "factor",
          "xs:boolean" = "logical",
          "xs:integer" = "integer",
          "xs:date" = "Date",
