@@ -1,7 +1,8 @@
 
 library(redland)
 world <- new("World")
-storage <- new("Storage", world, "hashes", name="", options="hash-type='memory'")
+storage <- new("Storage", world, "hashes", name="", 
+               options="hash-type='memory'")
 model <- new("Model", world, storage, options="")
 
 stmt <- new("Statement", 
@@ -25,16 +26,19 @@ r <-getNextResult(queryResult)
 r
 
 ## These two fail to encode UTF-8, I get "Ma\u00EBlle" not Maëlle
-serializer <- new("Serializer", world, name = "nquads", mimeType = "text/x-nquads")
+serializer <- new("Serializer", world, name = "nquads", 
+                  mimeType = "text/x-nquads")
 redland::serializeToFile(serializer, world, model, "test.rdf")
 cat(readLines("test.rdf"))
 
-serializer <- new("Serializer", world, name = "ntriples", mimeType = "application/n-triples")
+serializer <- new("Serializer", world, name = "ntriples", 
+                  mimeType = "application/n-triples")
 redland::serializeToFile(serializer, world, model, "test.rdf")
 cat(readLines("test.rdf"))
 
 ## As expected here
-serializer <- new("Serializer", world, name = "turtle", mimeType = "text/turtle")
+serializer <- new("Serializer", world, name = "turtle", 
+                  mimeType = "text/turtle")
 redland::serializeToFile(serializer, world, model, "test.rdf")
 cat(readLines("test.rdf"))
 
@@ -83,3 +87,5 @@ stringi::stri_unescape_unicode(txt)
 a <- '"some text with \"interior quotes\" and more text"'
 gsub("(^.+(\").+$)", "\\2", a)
 stringr::str_replace(a, )
+
+

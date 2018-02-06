@@ -10,9 +10,6 @@ type_by_datauri <- function(x){
     out[[i]] <- as(utf8me(values[i]), r_types[[i]])
     
   }
-  #df <- data.frame(value = get_values(x), class = r_types, stringsAsFactors = FALSE)
-  #apply(df, 1, function(x) as(utf8me(x[1]), x[2]))
-  #names(out) <- names(x)
   out
 }
 

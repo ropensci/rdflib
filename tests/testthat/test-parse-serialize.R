@@ -97,7 +97,6 @@ testthat::test_that("we can parse from a text string", {
   _:b0 <http://schema.org/name> "Jane Doe" .
   _:b0 <http://schema.org/age> "35" .
   _:b0 <http://schema.org/url> <http://www.janedoe.com> .
-  _:b0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Person> .
   '
   rdf <- rdf_parse(string, "nquads")
   testthat::expect_is(rdf, "rdf")

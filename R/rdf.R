@@ -70,7 +70,7 @@ rdf_free <- function(rdf){
   redland::freeWorld(rdf$world)
 }
 
-
+#' @importFrom stringi stri_unescape_unicode
 #' @export
 format.rdf <- function(x,
                        format = getOption("rdf_print_format", "nquads"),
@@ -80,7 +80,8 @@ format.rdf <- function(x,
                 tmp,
                 format = format)
   ## Fix encoding on nquads, ntriples 
-  txt <- stringi::stri_unescape_unicode((paste(readLines(tmp), collapse = "\n")))
+  txt <- stringi::stri_unescape_unicode(
+    paste(readLines(tmp), collapse = "\n"))
   unlink(tmp)
   txt
 }
