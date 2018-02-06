@@ -50,12 +50,12 @@ rdf_query <- function(rdf, query, data.frame = TRUE, ...){
     out <- rectangularize_query_results(out)
   } else {
     ## group by query variable 
-    vars <- unique(names(out))
-    out <- lapply(vars, function(v){ 
-      contents <- as.character(out[names(out) == v ])
-      type_by_datauri(contents)  
-      })
-  names(out) <- vars
+#    vars <- unique(names(out))
+#    out <- lapply(vars, function(v){ 
+#      contents <- as.character(out[names(out) == v ])
+#      type_by_datauri(contents)  
+#      })
+#  names(out) <- vars
   }
   out
 }

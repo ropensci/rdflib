@@ -89,3 +89,22 @@ gsub("(^.+(\").+$)", "\\2", a)
 stringr::str_replace(a, )
 
 
+
+
+
+
+
+
+## Look, original data back, no filter / spread required!
+## Could write helper function to construct this pattern of sparql?
+## e.g. return a data.frame with all observations of a list of attributes
+sparql <-
+  'SELECT ?Sepal_Length ?Sepal_Width ?Petal_Length ?Petal_Color ?Species
+WHERE {
+OPTIONAL { ?s <iris:Sepal.Width>  ?Sepal_Width }
+OPTIONAL { ?s <iris:Sepal.Length>  ?Sepal_Length }
+OPTIONAL { ?s <iris:Petal.Color>  ?Petal_Color }
+OPTIONAL { ?s <iris:Petal.Length>  ?Petal_Length }
+OPTIONAL { ?s <iris:Species>  ?Species } 
+}'
+rdf_query(rdf, sparql) %>% head()

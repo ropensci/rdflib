@@ -1,6 +1,25 @@
 doc <- system.file("extdata/example.rdf", package="redland")
 out <- "testing.rdf"
 
+testthat::test_that("we can make CONSTRUCT queries", {
+
+  ## No errors but no return either, not sure 
+  ## what the correct construction is.  
+  ## currently registers as a skipped test.  
+  rdf <- rdf()
+  rdf_add(rdf, 
+          "http://carlboettiger.info", 
+          "http://schema.org/name", 
+          "Carl Boettiger")
+  sparql <- 'CONSTRUCT { ?x ?p ?o . }
+             WHERE { ?x ?p ?o . }'
+  
+  rdf_query(rdf, sparql, data.frame = FALSE)
+
+  
+  rdf_free(rdf)
+  
+})
 
 testthat::test_that("we can make sparql queries", {
   sparql <-

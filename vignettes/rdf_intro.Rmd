@@ -18,66 +18,13 @@ In the world of data science, RDF is a bit of an ugly duckling.  Like XML and Ja
 
 [^1]: "The semantic web is the future of the internet and always will be." -Peter Norvig, Director of Research at Google
 
-But don't let these appearances deceive you. RDF really is cool. If you've ever gotten carried away using `tidyr::gather` to make everything into one long table, you may have noticed you can just about always get things down to about three columns, as we see in the obligatory `iris` data example in the `tidyr::gather` docs:
+But don't let these appearances deceive you. RDF really is cool. If you've ever gotten carried away using `tidyr::gather` to make everything into one long table, you may have noticed you can just about always get things down to about three columns, as we see with an obligatory `mtcars` data example for `tidyr::gather`:
 
 ```{r message = FALSE, warning=FALSE}
 library(rdflib)
 library(tidyverse)
 ```
 
-
-```{r}
-# get first observation for each Species in iris data -- base R
-mini_iris <- iris[c(1, 51, 101), ]
-# gather Sepal.Length, Sepal.Width, Petal.Length, Petal.Width
-iris_triples <- 
-  gather(mini_iris, key = attribute, value = measurement, -Species)
-iris_triples
-```
-
-If you like long tables like this, RDF is for you. This layout isn't "Tidy Data," where rows are observations and columns are variables, but it is damn useful sometimes.  This format is very liquid, easy to reshape into other structures -- so much so that `tidyr::gather` was originally known as `melt` in the `reshape2` package. 
-
-Looking at this table closely, we see that each row is reduced to the most elementary statement you can make from the data. A row no longer tells you the measurements (observations) *all* attributes (variables) of a given species (key), instead, you get just one fact per row, `setosa` has `Sepal.Length` measurement of `5.1`.  In RDF-world, we think of these three columns as something very special, which we call **triples**.  RDF is all about these triples. 
-
-The first column, `Species`, is the `key` from data.frame, i.e. the **subject** being described. The next column is the variable or attribute being measured, (that is, column names, other than the key column(s), from the tidy data), called the property or **predicate** in RDF-speak (slash grammar-school jargon). The third column is the actual value measured, more **object** of the predicate. Call it key-attribute-value or subject-predicate-object, these are our triples.  
-
-
-
-
-## Subject URIs
-
-In the examples we just considered, we have taken the liberty of treating a specific column (Species; Car model name) as the data key.  This was inutitive but actually a bit sloppy: for instance, we did not verify that these names are unique. We would be better off being more careful about this by treating the row IDs themselves as the `key` column for the data.frame (i.e. as the `subject` in our triple): 
-
-
-```{r}
-mini_iris %>%
-  rowid_to_column("subject") %>%
-  gather(key = predicate, value = object, -subject) %>% 
-  tail()
-```
-
-As you can see, this allows us to `gather` *all* columns, `Species` column included.  Our `subject` column now consists only of simple numeric `id`'s, while we have gained an additional triple for every row in the original data which states `Species` of each `id` (e.g. `1` is `Species` `setosa`).  
-## Predicate URIs
-
-Another more pernicious problem we may run into is that our different tables may use the same attribute (i.e. originally, a column name of a variable) for different things. 
-
-
-
-Okay, at this point you can probably start to spot a few possible issues.
-
-## RDF types
-
-First, we have gotten lucky that all of the measurements (`object` column) we have considered are encoded as `numeric` values. What if our Iris data had included a `Petal.Color` attribute? This kind of thing would create a problem in our `gather` operation, but it is not a problem for RDF. RDF considers the data type (e.g. `string`, `boolean`, `double`, `integer`, `DateTime`, etc) as a piece of the `object` in the triple.  How we store this information is merely a technical problem of "serialization," or how said information is encoded in any given structure (such as a `data.frame`).  We will have more to say about serializations later.  For the moment, we can think of this as having all `object` values coerced into characters, with an optional fourth column declaring there true type.  Conversion of all values to characters if they do not share a consistent type is in fact the default behavior of `tidyr::gather`.  
-
-
-RDF: the Resource Description Framework, is the cornerstone data structure for Linked Data.
-
-  
-  
-
-One thing about having our data melted down to these elmentary statements is that it makes it very easy combine data into a single table. No complex joining patterns, no filtering off parts of a table that don't fit, any new information on any subject can now be added to our database by gathering it into this triple structure and just `rbind`ing these triples onto the end.
-
-For instance, let's look at another classic example, the `mtcars` data set.  It's very different, unrelated data, but easily falls into this same structure:
 
 ```{r}
 car_triples <- 
@@ -88,22 +35,103 @@ car_triples
 ```
 
 
-Using consist names for the columns, we can just bind these together:
+If you like long tables like this, RDF is for you. This layout isn't "Tidy Data," where rows are observations and columns are variables, but it is damn useful sometimes.  This format is very liquid, easy to reshape into other structures -- so much so that `tidyr::gather` was originally known as `melt` in the `reshape2` package. It's also a good way to get started thinking about RDF.
+
+## It's all about the triples
+
+Looking at this table closely, we see that *each row is reduced to the most elementary statement you can make from the data*. A row no longer tells you the measurements (observations) *all* attributes (variables) of a given species (key), instead, you get just one fact per row, `Mazda RX4` gets a `mpg` measurement of `21.0`.  In RDF-world, we think of these three-part statements as something very special, which we call **triples**.  RDF is all about these triples. 
+
+The first column came from the row names in this case, the `Model` of car.  This acts serves as a `key` to index the data.frame, i.e. the **subject** being described. The next column is the variable (also called attribute or property) being measured, (that is, column names, other than the key column(s), from the tidy data), called the property or **predicate** in RDF-speak (slash grammar-school jargon). The third column is the actual value measured, more **object** of the predicate. Call it key-property-value or subject-predicate-object, these are our triples.  We can represent just about any data in fully elementary manner.  
+
+
+## Subject URIs
+
+Using row names as our subject was inutitive but actually a bit sloppy.  `tidyverse` lovers know that `tidyverse` doesn't like rownames, they aren't tidy and have a way of causing trouble.  Of course, we made rownames into a proper column to use `gather`, but we could have taken this one step further.  In true tidyverse fashion, this rownames-column is really just one more variable we can observe, one more attribute of the thing we were describing: say, thing A (Car A) is a `car_model_name` as  `Mazda RX4` and thing A also has `mpg` of `21`. We can accomplish such a greater level of abstraction by keeping the Model as just another variable the row ids themselves as the key (i.e. the *subject*) of our triple:
 
 ```{r}
-triples <-
-bind_rows(
-  rename(iris_triples, subject = Species, predicate = attribute, object = measurement),
-  rename( car_triples, subject = Model,   predicate = attribute, object = measurement)
-)
-triples
+car_triples <- 
+mtcars %>% 
+  rownames_to_column("Model") %>% 
+  rowid_to_column("subject") %>% 
+
+  gather(predicate, object, -subject)
+car_triples
 ```
 
-  
+This is identical to a `gather` of *all* columns, where we have just made the original row ids an explicit column for reference (diligent reader will recognize we would need this information to reverse the operation and `spread` the data back into it's wide form; without it, our transformation is lossy and irreversible).   Our `subject` column now consists only of simple numeric `id`'s, while we have gained an additional triple for every row in the original data which states `Model` of each `id` number (e.g. `1` is `Model` `Mazda RX4`).  Okay, now you're probably thinking: "wait a minute, `1` is not a very unique or specific key, surely that will cause trouble," and you'd be right. For instance, if we performed the same transformation on the iris data, we get triples in the exact same format, ready to `bind_rows`:
+
 
 
 ```{r}
-rdf <- rdf()
-rdf2 <- rdf %>%
-  rdf_add("", "http://schema.org/jobTitle", "Professor", subjectType = "blank")
+iris %>%
+  rowid_to_column("subject") %>%
+  gather(key = predicate, value = object, -subject)
 ```
+
+
+but in the `iris` data, `1` corresponds to the first individual Iris flower in the measurement data, and not a Mazda RX4.  If we don't want to get confused, we're going to need to make sure our identifiers are unique: not just kind of unique, but unique in the **World** wide.  And what else is unique world-wide? Yup, you guessed it, we are going to use URLs for our subject identifiers, just like the world wide web.  Think of this as a clever out-sourcing to the whole internet domain registry service.  Here, we'll imagine registering each of these example datasets with a separate **base URL**, so instead of a vague `1` to identify the first observation in the `iris` example data, we'll use the URL `http://example.com/iris#1`, which we can now distinguish from `http://example.com/mtcars#1` (and if you're way ahead of me, yes, we'll have more to say about URI vs URL and the use of blank nodes in just a minute).  For example:
+
+```{r}
+iris %>%
+  rowid_to_column("subject") %>%
+  mutate(subject = paste0("http://example.com/iris#", subject)) %>%
+  gather(key = predicate, value = object, -subject)
+
+```
+
+## Predicate URIs
+
+A slightly more subtle version of the same problem can arise with our predicates. Different tables may use the same attribute (i.e. originally, a column name of a variable) for different things -- the attribute labeld `cyl` means "number of cylinders" in `mtcars` data.frame, but could mean something very different in different data.  Luckily we've already seen how to make names unique in RDF turn them into URLs.
+
+```{r}
+iris %>%
+  rowid_to_column("subject") %>%
+  mutate(subject = paste0("http://example.com/iris#", subject)) %>%
+  gather(key = predicate, value = object, -subject) %>%
+  mutate(predicate = paste0("http://example.com/iris#", predicate))
+
+```
+
+
+At this point the motivation for the name "Linked Data" is probably becoming painfully obvious.  
+
+
+## Datatype URIs
+
+One more column to go!  But wait a minute, the `object` column is different, isn't it? These measurements don't suffer from the same ambiguity -- after all, there is no confusion if a car has `4` cylinders and an iris has `4` mm long sepals.  However, a new issue has arisen in the data type (e.g. `string`, `boolean`, `double`, `integer`, `dateTime`, etc).  A close look reveals our `object` column is encoded as a `character` and not `numeric` -- how'd that happen?  `tidyr::gather` has coerced the whole column into character strings because some of the values, that is, the `Species` names in `iris` and the Model names in `mtcars`, are text strings (and it couldn't exactly coerce them into integers).  Perhaps this isn't a big deal -- we can often guess the type of an object just by how it looks (so-called [Duck typing](https://en.wikipedia.org/wiki/Duck_typing), because if it quacks like duck...).  Still, being explicit about data types is a Good Thing, so fortunately there's an explicit way to address this too ... oh no ... not ... yes ... more URLs!  
+
+Luckily we don't have to make up `example.com` URLs this time because there's already a well-established list of data types widely used across the internet that were originally developed for use in XML (I warned you) Schemas, listed in see the [W3C RDF DataTypes](https://www.w3.org/TR/rdf11-concepts/#section-Datatypes).  As the standard shows, familiar types `string`, `double`, `boolean`, `integer`, etc are made explict using the XML Schema URL: `http://www.w3.org/2001/XMLSchema#`, followed by the type; so an integer would be ``http://www.w3.org/2001/XMLSchema#integer`, a character string `http://www.w3.org/2001/XMLSchema#string` etc.  
+
+Because this case is a little different, the URL is attached directly after the object value, which is set off by quotes, using the symbol `^^` (I dunnno, but I think two duck feet), such that `5.1` becomes `"5.1"^^http://www.w3.org/2001/XMLSchema#double`.  Wow[^2].  Most of the time we won't have to worry about the type, because, if it quacks... 
+
+[^2]: Couldn't we just have used another column?  Perhaps, but then it wouldn't be a triple.  More to the point, the datatype modifies `object` alone, not the predicate or subject.  
+
+## Dialing back the ugly
+
+This `gather` thing started well, but now are data is looking pretty ugly, not to mention cumbersome.  You have some idea why RDF hasn't taken data science by storm, and we haven't even looked at how ugly this gets when you write it in the RDF/XML serialization yet!  On the upside, we've introduced most of the essential concepts that will let us start to work with data as triples.  
+
+- prefixes for URIs
+- Triple notation
+- JSON-LD
+
+## URIs and blank nodes
+
+
+## SPARQL: Getting back to Tidy Tables!
+
+
+## From tables to Graphs
+
+So far we have considered examples where the data could be represented in tabular for and the object. This is where RDF at last begins to come into its own.  
+
+
+
+# Going further
+
+```{r}
+options("rdf_print_format" =  "jsonld")
+```
+
+
+## Database backends
+
