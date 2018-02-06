@@ -44,6 +44,17 @@ Looking at this table closely, we see that *each row is reduced to the most elem
 The first column came from the row names in this case, the `Model` of car.  This acts serves as a `key` to index the data.frame, i.e. the **subject** being described. The next column is the variable (also called attribute or property) being measured, (that is, column names, other than the key column(s), from the tidy data), called the property or **predicate** in RDF-speak (slash grammar-school jargon). The third column is the actual value measured, more **object** of the predicate. Call it key-property-value or subject-predicate-object, these are our triples.  We can represent just about any data in fully elementary manner.  
 
 
+
+subject | predicate | object
+object  | property  | value
+row id  | column name | cell
+key     | variable  | measurement
+key     | attribute | value  
+
+
+Table: the many names for triples.  The first naming convention is the terminology typically associated with RDF.  The second set are terms typically associated with JSON data, while the remaining are all examples in tabular or relational data structures.  
+
+
 ## Subject URIs
 
 Using row names as our subject was inutitive but actually a bit sloppy.  `tidyverse` lovers know that `tidyverse` doesn't like rownames, they aren't tidy and have a way of causing trouble.  Of course, we made rownames into a proper column to use `gather`, but we could have taken this one step further.  In true tidyverse fashion, this rownames-column is really just one more variable we can observe, one more attribute of the thing we were describing: say, thing A (Car A) is a `car_model_name` as  `Mazda RX4` and thing A also has `mpg` of `21`. We can accomplish such a greater level of abstraction by keeping the Model as just another variable the row ids themselves as the key (i.e. the *subject*) of our triple:
@@ -113,6 +124,14 @@ This `gather` thing started well, but now are data is looking pretty ugly, not t
 - prefixes for URIs
 - Triple notation
 - JSON-LD
+
+
+
+
+
+
+JSON-LD offers a fresh look at how we might serialize RDF in a way that is both familiar and easy to read.  The simplicity is really quite brilliant.  Just about all the ugly parts -- URI strings, type strings, even the prefixes -- are pushed up into the "context", a kind of header for holding these details, while stuff most applications will really care about is unencumbered, standard JSON.  This approach makes brilliant use of the "Object Notation" in the JSON to handle the ever-troublesome notion of a subject
+
 
 ## URIs and blank nodes
 
