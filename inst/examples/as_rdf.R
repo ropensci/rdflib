@@ -31,16 +31,6 @@ as_rdf.list <- function(x){
 }
 
 
-## Testing: Digest some data.frames into RDF and extract back
-# library(tidyverse)
-# cars <- mtcars %>% rownames_to_column("Model")
-# x1 <- as_rdf(iris, "iris:")
-# x2 <- as_rdf(cars, "mtcars:")
-# rdf <- c(x1,x2)
-
-rdf_serialize(x1, "iris.json", "jsonld")
-jsonld::jsonld_compact("iris.json", context = '{"@base": "iris:"}')
-
 
 #' Tidy Schema
 #' 
@@ -60,11 +50,11 @@ jsonld::jsonld_compact("iris.json", context = '{"@base": "iris:"}')
 #' 
 #' ## use columns arg for an existing vector of names.
 #' columns <- names(iris)
-#' sparql <- table_schema(columns = columns, prefix = "iris")
+#' sparql <- tidy_schema(columns = columns, prefix = "iris")
 #' rdf_query(rdf, sparql)
 #' 
 #' ## use na.rm = FALSE to include NA if variable is not defined for some observations
-#' sparql <- table_schema("Species",  "Sepal.Length", "Sepal.Color",
+#' sparql <- tidy_schema("Species",  "Sepal.Length", "Sepal.Color",
 #'                        prefix = "iris", na.rm=FALSE)
 #' rdf_query(rdf, sparql)
 tidy_schema <- function(..., columns = NULL, prefix=NULL, na.rm = TRUE){

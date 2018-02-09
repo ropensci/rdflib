@@ -3,8 +3,7 @@ title: "An tidyverse lover's introduction to RDF"
 author: "Carl Boettiger"
 date: "`r Sys.Date()`"
 output: 
-  rmarkdown::html_vignette:
-    df_print: paged
+  rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{rdflib Introduction}
   %\VignetteEngine{knitr::rmarkdown}
@@ -31,9 +30,11 @@ car_triples <-
 mtcars %>% 
   rownames_to_column("Model") %>% 
   gather(attribute,measurement, -Model)
-car_triples
 ```
 
+```{r echo=FALSE}
+DT::datatable(car_triples)
+```
 
 If you like long tables like this, RDF is for you. This layout isn't "Tidy Data," where rows are observations and columns are variables, but it is damn useful sometimes.  This format is very liquid, easy to reshape into other structures -- so much so that `tidyr::gather` was originally known as `melt` in the `reshape2` package. It's also a good way to get started thinking about RDF.
 
@@ -44,15 +45,17 @@ Looking at this table closely, we see that *each row is reduced to the most elem
 The first column came from the row names in this case, the `Model` of car.  This acts serves as a `key` to index the data.frame, i.e. the **subject** being described. The next column is the variable (also called attribute or property) being measured, (that is, column names, other than the key column(s), from the tidy data), called the property or **predicate** in RDF-speak (slash grammar-school jargon). The third column is the actual value measured, more **object** of the predicate. Call it key-property-value or subject-predicate-object, these are our triples.  We can represent just about any data in fully elementary manner.  
 
 
+&nbsp;          | &nbsp;  | &nbsp;      | &nbsp;
+----------------|---------|-------------|-------------
+**RDF**         | subject | predicate   | object         
+**JSON**        | object  | property    | value
+**spreadsheet** | row id  | column name | cell
+**data.frame**  | key     | variable    | measurement
+**data.frame**  | key     | attribute   | value  
 
-subject | predicate | object
-object  | property  | value
-row id  | column name | cell
-key     | variable  | measurement
-key     | attribute | value  
+Table: **Table 1**: The many names for triples.  
 
-
-Table: the many names for triples.  The first naming convention is the terminology typically associated with RDF.  The second set are terms typically associated with JSON data, while the remaining are all examples in tabular or relational data structures.  
+Table 1 summarizes the many different names associated with triples.  The first naming convention is the terminology typically associated with RDF.  The second set are terms typically associated with JSON data, while the remaining are all examples in tabular or relational data structures.  
 
 
 ## Subject URIs
@@ -64,30 +67,43 @@ car_triples <-
 mtcars %>% 
   rownames_to_column("Model") %>% 
   rowid_to_column("subject") %>% 
-
   gather(predicate, object, -subject)
-car_triples
 ```
+
+
+```{r echo=FALSE}
+DT::datatable(car_triples)
+```
+
 
 This is identical to a `gather` of *all* columns, where we have just made the original row ids an explicit column for reference (diligent reader will recognize we would need this information to reverse the operation and `spread` the data back into it's wide form; without it, our transformation is lossy and irreversible).   Our `subject` column now consists only of simple numeric `id`'s, while we have gained an additional triple for every row in the original data which states `Model` of each `id` number (e.g. `1` is `Model` `Mazda RX4`).  Okay, now you're probably thinking: "wait a minute, `1` is not a very unique or specific key, surely that will cause trouble," and you'd be right. For instance, if we performed the same transformation on the iris data, we get triples in the exact same format, ready to `bind_rows`:
 
 
 
 ```{r}
-iris %>%
+iris_triples <- iris %>%
   rowid_to_column("subject") %>%
   gather(key = predicate, value = object, -subject)
+```
+
+```{r echo=FALSE}
+DT::datatable(iris_triples)
 ```
 
 
 but in the `iris` data, `1` corresponds to the first individual Iris flower in the measurement data, and not a Mazda RX4.  If we don't want to get confused, we're going to need to make sure our identifiers are unique: not just kind of unique, but unique in the **World** wide.  And what else is unique world-wide? Yup, you guessed it, we are going to use URLs for our subject identifiers, just like the world wide web.  Think of this as a clever out-sourcing to the whole internet domain registry service.  Here, we'll imagine registering each of these example datasets with a separate **base URL**, so instead of a vague `1` to identify the first observation in the `iris` example data, we'll use the URL `http://example.com/iris#1`, which we can now distinguish from `http://example.com/mtcars#1` (and if you're way ahead of me, yes, we'll have more to say about URI vs URL and the use of blank nodes in just a minute).  For example:
 
 ```{r}
-iris %>%
+iris_triples <- iris %>%
   rowid_to_column("subject") %>%
   mutate(subject = paste0("http://example.com/iris#", subject)) %>%
   gather(key = predicate, value = object, -subject)
 
+```
+
+
+```{r echo=FALSE}
+DT::datatable(iris_triples)
 ```
 
 ## Predicate URIs
@@ -95,12 +111,18 @@ iris %>%
 A slightly more subtle version of the same problem can arise with our predicates. Different tables may use the same attribute (i.e. originally, a column name of a variable) for different things -- the attribute labeld `cyl` means "number of cylinders" in `mtcars` data.frame, but could mean something very different in different data.  Luckily we've already seen how to make names unique in RDF turn them into URLs.
 
 ```{r}
-iris %>%
+iris_triples <- iris %>%
   rowid_to_column("subject") %>%
   mutate(subject = paste0("http://example.com/iris#", subject)) %>%
   gather(key = predicate, value = object, -subject) %>%
   mutate(predicate = paste0("http://example.com/iris#", predicate))
 
+```
+
+
+
+```{r echo=FALSE}
+DT::datatable(iris_triples)
 ```
 
 
@@ -130,8 +152,59 @@ This `gather` thing started well, but now are data is looking pretty ugly, not t
 JSON-LD offers a fresh look at how we might serialize RDF in a way that is both familiar and easy to read.  The simplicity is really quite brilliant.  Just about all the ugly parts -- URI strings, type strings, even the prefixes -- are pushed up into the "context", a kind of header for holding these details, while stuff most applications will really care about is unencumbered, standard JSON.  This approach makes brilliant use of the "Object Notation" in the JSON to handle the ever-troublesome notion of a subject
 
 
+```{r}
+source(system.file("examples/as_rdf.R", package="rdflib"))
+## Testing: Digest some data.frames into RDF and extract back
+ library(tidyverse)
+ cars <- mtcars %>% rownames_to_column("Model")
+ x1 <- as_rdf(iris, "iris:")
+ x2 <- as_rdf(cars, "mtcars:")
+ rdf <- c(x1,x2)
+```
+
+
+```{r}
+rdf_serialize(x1, "iris.json", "jsonld")
+json <- jsonld::jsonld_compact("iris.json", 
+                               context = 
+'{
+  "Petal.Width": {"@id": "iris:Petal.Width", 
+  "@type": "http://www.w3.org/2001/XMLSchema#decimal" },
+  "Petal.Length": {"@id": "iris:Petal.Length", 
+  "@type": "http://www.w3.org/2001/XMLSchema#decimal" },
+  "Sepal.Length": {"@id": "iris:Sepal.Length", 
+  "@type": "http://www.w3.org/2001/XMLSchema#decimal" },
+  "Sepal.Width": {"@id": "iris:Sepal.Width", 
+  "@type": "http://www.w3.org/2001/XMLSchema#decimal" }
+}')
+```
 
 ## SPARQL: Getting back to Tidy Tables!
+
+
+```{r}
+sparql <-
+  'SELECT  ?Species ?Sepal_Length ?Sepal_Width ?Petal_Length  ?Petal_Width
+WHERE {
+ ?s <iris:Species>  ?Species .
+ ?s <iris:Sepal.Width>  ?Sepal_Width .
+ ?s <iris:Sepal.Length>  ?Sepal_Length . 
+ ?s <iris:Petal.Length>  ?Petal_Length .
+ ?s <iris:Petal.Width>  ?Petal_Width 
+}'
+
+iris2 <- rdf_query(rdf, sparql)
+```
+
+```{r}
+DT::datatable(iris2)
+```
+
+```{r}
+sparql <- tidy_schema("Species",  "Sepal.Length", "Sepal.Width", prefix = "iris")
+cat(sparql)
+#rdf_query(rdf, sparql)
+```
 
 
 ## From tables to Graphs
