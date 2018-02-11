@@ -135,19 +135,56 @@ One more column to go!  But wait a minute, the `object` column is different, isn
 
 Luckily we don't have to make up `example.com` URLs this time because there's already a well-established list of data types widely used across the internet that were originally developed for use in XML (I warned you) Schemas, listed in see the [W3C RDF DataTypes](https://www.w3.org/TR/rdf11-concepts/#section-Datatypes).  As the standard shows, familiar types `string`, `double`, `boolean`, `integer`, etc are made explict using the XML Schema URL: `http://www.w3.org/2001/XMLSchema#`, followed by the type; so an integer would be ``http://www.w3.org/2001/XMLSchema#integer`, a character string `http://www.w3.org/2001/XMLSchema#string` etc.  
 
-Because this case is a little different, the URL is attached directly after the object value, which is set off by quotes, using the symbol `^^` (I dunnno, but I think two duck feet), such that `5.1` becomes `"5.1"^^http://www.w3.org/2001/XMLSchema#double`.  Wow[^2].  Most of the time we won't have to worry about the type, because, if it quacks... 
+Because this case is a little different, the URL is attached directly after the object value, which is set off by quotes, using the symbol `^^` (I dunno, but I think two duck feet), such that `5.1` becomes `"5.1"^^http://www.w3.org/2001/XMLSchema#double`.  Wow[^2].  Most of the time we won't have to worry about the type, because, if it quacks... 
 
 [^2]: Couldn't we just have used another column?  Perhaps, but then it wouldn't be a triple.  More to the point, the datatype modifies `object` alone, not the predicate or subject.  
 
+
+# rdflib
+
+```{r}
+library(rdflib)
+library(magrittr)
+```
+
+
+```{r}
+base <- "http://example.com/iris#"
+rdf <- rdf()
+
+rdf %>% 
+  rdf_add(paste0(base, "1"), 
+          paste0(base, "Sepal.Length"), 
+          5.1)
+
+rdf
+```
+
+
 ## Dialing back the ugly
 
-This `gather` thing started well, but now are data is looking pretty ugly, not to mention cumbersome.  You have some idea why RDF hasn't taken data science by storm, and we haven't even looked at how ugly this gets when you write it in the RDF/XML serialization yet!  On the upside, we've introduced most of the essential concepts that will let us start to work with data as triples.  
+This `gather` thing started well, but now are data is looking pretty ugly, not to mention cumbersome.  You have some idea why RDF hasn't taken data science by storm, and we haven't even looked at how ugly this gets when you write it in the RDF/XML serialization yet!  On the upside, we've introduced most of the essential concepts that will let us start to work with data as triples.  Before we proceed further, we'll take a quick look at some of the options for expressing triples in different ways, and also introduce some of the different serializations (ways of representing in text) frequently used to express these triples.  
 
-- URI vs URL
-- prefixes for URIs
-- blank nodes
-- Triple notation
+#### Prefixes for URIs
+
+Long URL strings are one of the most obvious ways that what started off looking like a concise, minimal statement got ugly and cumbersome.  Borrowing from the notion of [Namespaces in XML](https://en.wikipedia.org/wiki/XML_namespace), most RDF tools permit custom prefixes to be declared and swapped in for longer URLs.  A prefix is typically a short string[^3] followed by a `:` that is used in place of the shared root URL. For instance, we might use the prefix `iris:Sepal.Length` and `iris:Sepal.Width` where `iris:` is defined to mean `http://example.com/iris#` in our example above.   
+
+ [^3]: Technically I believe it should be a [NCName](https://www.w3.org/TR/xmlschema-2/#NCName), defined by the regex `[\i-[:]][\c-[:]]*`.  [Essentially](https://stackoverflow.com/questions/1631396), this says it cannot include symbol characters like `:`, `@`, `$`, `%`, `&`, `/`, `+`, `,`, `;`, whitespace characters or different parenthesis. Furthermore an NCName cannot begin with a number, dot or minus character although they can appear later in an NCName.  
+ 
+#### URI vs URL
+
+While I've referred to these things as [URL](https://en.wikipedia.org/wiki/URL)s, (uniform resource locator, aka web address) technically they can be a broader class of things known as [URI](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier)s (uniform resource identifier).  In addition to including anything that is a URL, URIs include things which are not URLs, like `urn:isbn:0-486-27557-4` or `urn:uuid:aac06f69-7ec8-403d-ad84-baa549133dce`, which are URNs: unique resource numbers in some numbering scheme (e.g. book ISBN numbers, or UUIDs), neither of which are URLs but nonetheless enjoy the same globally unique property.
+
+#### Blank nodes
+
+Sometimes we do not need a globally unique identifier, we just want a way to refer to a node (e.g. subject, and sometimes an object) uniquely in our document. This is the role of a [blank node](https://en.wikipedia.org/wiki/Blank_node) (do follow the link for a better overview).  These are frequently denoted with the prefix `_:`, e.g. we could have replaced the sample IDs as `_:1`, `_:2` instead of the URLs such as `http://example.com/iris#1` etc.  Note that RDF operations need not preserve the actual string pattern in a blank ID name, it means the exact same thing if we replace all the `_:1`s with `_:b1` and `_:2` with `_:b2`,  etc.
+
+## Triple notation: RDF/XML, `turtle`, and `nquads`
+
+So far we have relied on a three-column tabular format to represent our triples.  
+
 - JSON-LD
+- Reasoning
 
 JSON-LD offers a fresh look at how we might serialize RDF in a way that is both familiar and easy to read.  The simplicity is really quite brilliant.  Just about all the ugly parts -- URI strings, type strings, even the prefixes -- are pushed up into the "context", a kind of header for holding these details, while stuff most applications will really care about is unencumbered, standard JSON.  This approach makes brilliant use of the "Object Notation" in the JSON to handle the ever-troublesome notion of a subject
 
