@@ -140,25 +140,31 @@ Because this case is a little different, the URL is attached directly after the 
 [^2]: Couldn't we just have used another column?  Perhaps, but then it wouldn't be a triple.  More to the point, the datatype modifies `object` alone, not the predicate or subject.  
 
 
-# rdflib
+# Triples in `rdflib`
+
+So far, we have explored the concept of triples using familiar `data.frame` structures, but haven't yet introduced any `rdflib` functions.  Though we've been thinking of RDF data in this explicitly tabular three-column structure, that is really just one potentially convienent representation. Just as the same tabular data can be represented in a `data.frame`, written to disk as a `.csv` file, or stored in a database (like MySQL or Postgresql), so it is for RDF to even greater degree.  We have separate abstractions for the information itself compared to how it is represented.  
+
+To take advantage of this abstraction, `rdflib` introduces an `rdf` class object. Depending on how this is initialized, this could utilize storage in memory (the default), on disk, or potentially in an array of different databases, (including relational databases like Postgres and rdf-specific ones like Virtuoso, depending on how the underying `redland` library is compiled -- a topic beyond our scope here).  Here, we simply initialize an `rdf` object using the default in-memory storage:
 
 ```{r}
-library(rdflib)
-library(magrittr)
+rdf <- rdf()
 ```
+
+To add triples to this `rdf` object (often called an RDF Model or RDF Graph), we use the function `rdf_add`, which takes a subject, predicate, and object as arguments, as we have just discussed.  A datatype URI can be inferred from the R type used for the object (e.g. `numeric`, `integer`, `logical`, `character`, etc.)
 
 
 ```{r}
 base <- "http://example.com/iris#"
-rdf <- rdf()
 
 rdf %>% 
-  rdf_add(paste0(base, "1"), 
-          paste0(base, "Sepal.Length"), 
-          5.1)
+  rdf_add(subject = paste0(base, "obs1"), 
+          predicate = paste0(base, "Sepal.Length"), 
+          object = 5.1)
 
 rdf
 ```
+
+The result is displayed as a triple discussed above. This is technically an example of the `nquad` notation we will see later.  Note the inferred datatype URI.
 
 
 ## Dialing back the ugly
