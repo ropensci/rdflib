@@ -4,6 +4,8 @@
 #' @param format rdf serialization format of the doc,
 #' one of "rdfxml", "nquads", "ntriples", "turtle"
 #' or "jsonld"
+#' @param rdf an existing rdf triplestore to extend with triples from
+#' the parsed file.  Default will create a new rdf object.
 #' @param ... additional parameters (not implemented)
 #'
 #' @return an rdf object, containing the redland world
@@ -23,6 +25,7 @@ rdf_parse <- function(doc,
                                  "ntriples",
                                  "turtle",
                                  "jsonld"),
+                      rdf = NULL,
                       ...){
   format <- match.arg(format)
   
@@ -35,13 +38,16 @@ rdf_parse <- function(doc,
   if(format == "jsonld"){
     tmp <- tempfile()
     tmp <- add_base_uri(doc, tmp)
-    rdf <- jsonld::jsonld_to_rdf(tmp)
-    writeLines(rdf, tmp)
+    x <- jsonld::jsonld_to_rdf(tmp)
+    writeLines(x, tmp)
     format <- "nquads"
     doc <- tmp
   }
   
-  rdf <- rdf()
+  if(is.null(rdf)){
+    rdf <- rdf()
+  }
+    
   mimetype <- unname(rdf_mimetypes[format])
   parser <- new("Parser", rdf$world, name = format, mimeType = mimetype)
   redland::parseFileIntoModel(parser, rdf$world, doc, rdf$model)

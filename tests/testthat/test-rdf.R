@@ -16,24 +16,23 @@ testthat::test_that("We can initialize and free rdf objects", {
 })
 
 testthat::test_that("We warn if we cannot use disk-based storage", {
-  testthat::skip_if(has_bdb())
-  path <- tempdir()
-  testthat::expect_warning(rdf <- rdf(path), "BDB driver not found")
-  
+  testthat::skip_if(rdf_has_bdb())
+  options(rdflib_storage = "BDB")
+  testthat::expect_warning(rdf <- rdf(), "BDB driver not found")
   ## Falls back on memory-based storage, still creates rdf
   testthat::expect_is(rdf, "rdf")
+  options(rdflib_storage = "memory")
   rdf_free(rdf)
   
 })
 
 testthat::test_that("We can use BDB storage", {
-  testthat::skip_if_not(has_bdb())
-  path <- tempdir()
-  testthat::expect_silent(rdf <- rdf(path))
+  testthat::skip_if_not(rdf_has_bdb())
+  options(rdflib_storage = "BDB")
+  testthat::expect_silent(rdf <- rdf())
   testthat::expect_is(rdf, "rdf")
-
+  options(rdflib_storage = "memory")
   rdf_free(rdf)
-  
 })
 
 
@@ -45,7 +44,7 @@ testthat::test_that("we can concatenate rdfs", {
   
   rdf_free(rdf1)
   rdf_free(rdf2)
-  rdf_free(rdf)
+  ## NOTE: rdf is same pointer as rdf1, not a new pointer.  cannot free twice
 })
 
 

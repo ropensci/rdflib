@@ -1,9 +1,7 @@
 #' Initialize an `rdf` Object
 #'
-#' @param path where should local database to store RDF triples be created.
-#' Default NULL will store triples in memory and should be best for most use cases.
-#' Large databases should give a path on disk. Requires redland package to be 
-#' built with support for the Berkeley DB (libdb-dev on Ubuntu, berkeley-db on homebrew).
+#' @param path where should local database to store RDF triples be created, if
+#' configured for disk-based storage; see details.
 #'
 #' @return an rdf object
 #' @details an rdf Object is a list of class 'rdf', consisting of
@@ -11,9 +9,19 @@
 #' These are the `world` object: basically a top-level pointer for
 #' all RDF models, and a `model` object: a collection of RDF statements,
 #' and a `storage` object, indicating how these statements are stored.
-#' `rdflib` defaults to an in-memory hash-based 
-#' storage structure at this time. The primary purpose of the `rdf`
-#' object is to abstract these low-level details away from the user.
+#' 
+#' `rdflib` defaults to an in-memory hash-based storage structure. 
+#' which should be best for most use cases. For very large triplestores,
+#' disk-based storage will be necessary.  Enable this by setting the option
+#' `options(rdflib_storage = "BDB")` before calling `rdf()` to use disk-based
+#' storage. Specify a path with the optional `path` argument, default uses
+#' the current working directory. Disk-based storage requires redland package
+#' to be installed from source with support for the Berkeley DB 
+#' (libdb-dev on Ubuntu, berkeley-db on homebrew), otherwise this will
+#' fall back to in-memory storage with a warning. Check for working BDB
+#' support with the function `rdf_has_bdb()`.  
+#' 
+#' 
 #' Typical use will be simply to initialize a container to which
 #' the user would manually add triples using \code{\link{rdf_add}}.
 #'
@@ -26,12 +34,12 @@
 #' @examples
 #' x <- rdf()
 #' 
-rdf <- function(path = NULL){
+rdf <- function(path = "."){
   world <- new("World")
   
   ## Handle storage type
-  if(is.character(path)){
-    if(has_bdb()){
+  if(getOption("rdflib_storage", "memory") == "BDB"){
+    if(rdf_has_bdb()){
       ## Store in Berkeley DB
       options <- paste0("new='yes',hash-type='bdb',dir='", path, "'") 
     } else {
@@ -91,15 +99,23 @@ print.rdf <- function(x, ...){
   cat(format.rdf(x), sep = "\n")
 }
 
+
+## FIXME -- do not use in-memory print. 
 #' Concatenate rdf Objects
 #' Note: this assumes absolute URIs for subject and predicate
 #' @method c rdf
 #' @export
 #' @param ... objects to be concatenated
 c.rdf <- function(...){
-  quads <- lapply(list(...), format)
-  txt <- paste(quads, collapse = "\n")
-  rdf_parse(txt, "nquads")
+  rdfs <- list(...)
+  loc <- tempdir()
+  rdf <- rdfs[[1]]
+  for(i in seq_along(rdfs)){
+    f <- file.path(loc,paste0(i, ".rdf"))
+    rdf_serialize(rdfs[[i]],f) 
+    rdf_parse(f, rdf = rdf)
+  }
+  rdf
 }
 
 

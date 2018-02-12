@@ -8,7 +8,8 @@ rdf_serialize(rdf, doc, format = c("rdfxml", "nquads", "ntriples", "turtle",
   "jsonld"), namespace = NULL, prefix = NULL, ...)
 }
 \arguments{
-\item{rdf}{an rdf object (e.g. from \code{\link{rdf_parse}})}
+\item{rdf}{an existing rdf triplestore to extend with triples from
+the parsed file.  Default will create a new rdf object.}
 
 \item{doc}{file path to write out to}
 

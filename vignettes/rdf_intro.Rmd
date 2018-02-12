@@ -110,7 +110,7 @@ DT::datatable(iris_triples)
 
 A slightly more subtle version of the same problem can arise with our predicates. Different tables may use the same attribute (i.e. originally, a column name of a variable) for different things -- the attribute labeld `cyl` means "number of cylinders" in `mtcars` data.frame, but could mean something very different in different data.  Luckily we've already seen how to make names unique in RDF turn them into URLs.
 
-```{r}
+```{r mesage = FALSE}
 iris_triples <- iris %>%
   rowid_to_column("subject") %>%
   mutate(subject = paste0("http://example.com/iris#", subject)) %>%
@@ -185,9 +185,28 @@ While I've referred to these things as [URL](https://en.wikipedia.org/wiki/URL)s
 
 Sometimes we do not need a globally unique identifier, we just want a way to refer to a node (e.g. subject, and sometimes an object) uniquely in our document. This is the role of a [blank node](https://en.wikipedia.org/wiki/Blank_node) (do follow the link for a better overview).  These are frequently denoted with the prefix `_:`, e.g. we could have replaced the sample IDs as `_:1`, `_:2` instead of the URLs such as `http://example.com/iris#1` etc.  Note that RDF operations need not preserve the actual string pattern in a blank ID name, it means the exact same thing if we replace all the `_:1`s with `_:b1` and `_:2` with `_:b2`,  etc.
 
-## Triple notation: RDF/XML, `turtle`, and `nquads`
+In `librdf` we can get a blank node by passing an empty string or character string that is not a URI as the subject.  Here we also use a URI that isn't a URL as predicate: 
 
-So far we have relied on a three-column tabular format to represent our triples.  
+```{r}
+rdf <- rdf()
+rdf %>% rdf_add("",   
+                "iris:Sepal.Length", 
+                object = 5.1)
+rdf
+```
+
+Note that we get a blank node, `_:`  with a randomly generated string.  
+
+## Triple notation: `nquads` `rdfxml`, `turtle`, and `nquads`
+
+So far we have relied primarily on a three-column tabular format to represent our triples.  
+
+```{r}
+options(rdf_print_format = "rdfxml")
+rdf
+```
+
+
 
 - JSON-LD
 - Reasoning

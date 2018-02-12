@@ -4,13 +4,11 @@
 \alias{rdf}
 \title{Initialize an \code{rdf} Object}
 \usage{
-rdf(path = NULL)
+rdf(path = ".")
 }
 \arguments{
-\item{path}{where should local database to store RDF triples be created.
-Default NULL will store triples in memory and should be best for most use cases.
-Large databases should give a path on disk. Requires redland package to be
-built with support for the Berkeley DB (libdb-dev on Ubuntu, berkeley-db on homebrew).}
+\item{path}{where should local database to store RDF triples be created, if
+configured for disk-based storage; see details.}
 }
 \value{
 an rdf object
@@ -24,9 +22,18 @@ three pointers to external C objects managed by the redland library.
 These are the \code{world} object: basically a top-level pointer for
 all RDF models, and a \code{model} object: a collection of RDF statements,
 and a \code{storage} object, indicating how these statements are stored.
-\code{rdflib} defaults to an in-memory hash-based
-storage structure at this time. The primary purpose of the \code{rdf}
-object is to abstract these low-level details away from the user.
+
+\code{rdflib} defaults to an in-memory hash-based storage structure.
+which should be best for most use cases. For very large triplestores,
+disk-based storage will be necessary.  Enable this by setting the option
+\code{options(rdflib_storage = "BDB")} before calling \code{rdf()} to use disk-based
+storage. Specify a path with the optional \code{path} argument, default uses
+the current working directory. Disk-based storage requires redland package
+to be installed from source with support for the Berkeley DB
+(libdb-dev on Ubuntu, berkeley-db on homebrew), otherwise this will
+fall back to in-memory storage with a warning. Check for working BDB
+support with the function \code{rdf_has_bdb()}.
+
 Typical use will be simply to initialize a container to which
 the user would manually add triples using \code{\link{rdf_add}}.
 }
