@@ -58,65 +58,6 @@ rdf <- function(path = "."){
             class = "rdf")
 }
 
-#' Free Memory Associated with RDF object
-#' 
-#' @param rdf an rdf object
-#' @details Free all pointers associated with an rdf object. 
-#' Frees memory associated with the storage, world, and model
-#' objects. After this a user should remove the rdf object 
-#' from the environment as well with `rm`, since attempting
-#' to reference an object after it has been removed can crash
-#' R!
-#' @export
-#' @examples 
-#' rdf <- rdf()
-#' rdf_free(rdf)
-#' rm(rdf)
-rdf_free <- function(rdf){
-  redland::freeModel(rdf$model)
-  redland::freeStorage(rdf$storage)
-  redland::freeWorld(rdf$world)
-}
-
-#' @importFrom stringi stri_unescape_unicode
-#' @export
-format.rdf <- function(x,
-                       format = getOption("rdf_print_format", "nquads"),
-                       ...){
-  tmp <- tempfile()
-  rdf_serialize(x, 
-                tmp,
-                format = format)
-  ## Fix encoding on nquads, ntriples 
-  txt <- stringi::stri_unescape_unicode(
-    paste(readLines(tmp), collapse = "\n"))
-  unlink(tmp)
-  txt
-}
-
-#' @export
-print.rdf <- function(x, ...){
-  cat(format.rdf(x), sep = "\n")
-}
-
-
-## FIXME -- do not use in-memory print. 
-#' Concatenate rdf Objects
-#' Note: this assumes absolute URIs for subject and predicate
-#' @method c rdf
-#' @export
-#' @param ... objects to be concatenated
-c.rdf <- function(...){
-  rdfs <- list(...)
-  loc <- tempdir()
-  rdf <- rdfs[[1]]
-  for(i in seq_along(rdfs)){
-    f <- file.path(loc,paste0(i, ".rdf"))
-    rdf_serialize(rdfs[[i]],f) 
-    rdf_parse(f, rdf = rdf)
-  }
-  rdf
-}
 
 
 
