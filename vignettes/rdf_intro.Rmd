@@ -11,7 +11,9 @@ vignette: >
   
 ---
 
-
+```{r include=FALSE}
+options(rdf_print_format = "nquads")
+```
 
 In the world of data science, RDF is a bit of an ugly duckling.  Like XML and Java, only without the massive-adoption-that-refuses-to-die part.  In fact RDF is most frequently expressed in XML, and RDF tools are written in Java, which help give RDF has the aesthetics of *steampunk*, of some technology for some futuristic Semantic Web[^1] in a toolset that feels about as lightweight and modern as iron dreadnaught.
 
@@ -22,6 +24,7 @@ But don't let these appearances deceive you. RDF really is cool. If you've ever 
 ```{r message = FALSE, warning=FALSE}
 library(rdflib)
 library(tidyverse)
+library(jsonld)
 ```
 
 
@@ -199,19 +202,149 @@ Note that we get a blank node, `_:`  with a randomly generated string.
 
 ## Triple notation: `nquads` `rdfxml`, `turtle`, and `nquads`
 
-So far we have relied primarily on a three-column tabular format to represent our triples.  
+So far we have relied primarily on a three-column tabular format to represent our triples.  We have also seen the default `print` format used for the `rdf` method, known as [N-Quads](https://www.w3.org/TR/n-quads/) above, which displays a bare, space-separated triple, possibly with a datatype URI attached to the object.  The line ends with a dot, which indicates this is part of the same local triplestore (aka RDF graph or RDF Model).  Technically this could be another URI indicating a unique global address for the triplestore in question.   
+
+We can serialize any `rdf` object out to a file in this format with the `rdf_serialize()` function, e.g.
+
+```{r}
+rdf_serialize(rdf, "rdf.nq", format = "nquads")
+```
+
+ Just as each of these formats can be serialized with `rdf_serialize()`, each can be read by `rdflib` using the function `rdf_parse()`:
+
+
+```{r}
+doc <- system.file("extdata/example.rdf", package="redland")
+rdf <- rdf_parse(doc, format = "rdfxml") 
+rdf
+```
+
+
+N-Quads are convenient in that each triple is displayed on a unique line, and the format supports the blank node and Datatype URIs in the manner we have just discussed. Other formats are not so concise.  Rather than print to file, we can simply change the default print format used by `rdflib` to explore the textual layout of the other serializations.  Here is one of the most common classical serializations, `RDF/XML` which expresses triples in an XML-based schema:
 
 ```{r}
 options(rdf_print_format = "rdfxml")
 rdf
 ```
 
+Just looking at this is probably enough to explain why so many alternative serializations were created.  Another popular format, [`turtle`](https://www.w3.org/TR/turtle/), looks more like `nquads`: 
 
 
-- JSON-LD
-- Reasoning
+```{r}
+options(rdf_print_format = "turtle")
+rdf
+```
 
-JSON-LD offers a fresh look at how we might serialize RDF in a way that is both familiar and easy to read.  The simplicity is really quite brilliant.  Just about all the ugly parts -- URI strings, type strings, even the prefixes -- are pushed up into the "context", a kind of header for holding these details, while stuff most applications will really care about is unencumbered, standard JSON.  This approach makes brilliant use of the "Object Notation" in the JSON to handle the ever-troublesome notion of a subject
+Here, blank nodes are denoted by `[]`.  `turtle` uses indentation to indicate that all three predicates (`creator`, `description`, `title`) are properties of the same subject.  
+
+
+
+### JSON-LD
+
+While formats such as `nquads` and `turtle` provide a much cleaner syntax than RDF/XML, they also introduce a custom format rather than building on a familiar standard (like XML) for which users already have a well-developed set of tools and intuition.  After more than a decade of such challenges (RDF specification started 1997, including an the HTML-embedded serialization of [RDFa](https://en.wikipedia.org/wiki/RDFa) in 2004), a more user friendly specification has emerged in the form of JSON-LD (1.0 W3C specification was released in 2014, the 1.1 specification released in Februrary 2018).  JSON-LD uses the familiar *object notation* of JSON, (hich is rapidly replacing XML as the ubiquitous data exchange format, and will be more familiar to many readers than the specialized RDF formats or even XML.  Here is our `rdf` data in the JSON-LD serialization:
+
+
+```{r}
+options(rdf_print_format = "jsonld")
+rdf
+```
+
+In this serialization, our subject corresponds to "the thing in the curly braces," (i.e. the JSON "object") which is identified by the special `@id` property (omitting `@id` corresponds to a blank node).  The predicate-object pairs in the triple are then just JSON key-value pairs within the curly braces of the given object.  We can make this format look even more natural by stripping out the URLs.  While it is possible to use prefixes in place of URLs, it is more natural to pull them out entirely, e.g. by declaring a default vocabulary in the JSON-LD "Context", like so:
+
+```{r}
+rdf_serialize(rdf, "example.json", "jsonld") %>% 
+  jsonld_compact(context = '{"@vocab": "http://purl.org/dc/elements/1.1/"}')
+```
+
+The context of a JSON-LD file can also define datatypes, use multiple namespaces, and permit different names in the JSON keys from that found in the URLs.  While a complete introduction to JSON-LD is beyond our scope, this representation essentially provides a way to map intuitive JSON structures into precise RDF triples. 
+
+
+
+## From tables to Graphs
+
+So far we have considered examples where the data could be represented in tabular form. 
+We frequently encounter data that cannot be easily represented in such a format.  For instance, consider
+the JSON data in this example:
+
+```{r}
+ex <- system.file("extdata/person.json", package="rdflib")
+cat(readLines(ex), sep = "\n")
+#jsonld_compact(ex, "{}")
+
+```
+
+
+This JSON object for a `Person` has another JSON object nested inside (a `PostalAddress`).  Yet if we look at this data as `nquads`, we see the familiar flat triple structure: 
+
+
+
+```{r}
+options(rdf_print_format = "nquads")
+rdf <- rdf_parse(ex, "jsonld")
+rdf
+```
+
+So what has happened?  Note that our `address` has been given the blank node URI `_:b0`, which serves both as the object in the `address` line of the `Person` and as the subject of all the properties belonging to the `PostalAddress`.  In JSON-LD, this structure is referred to as being 'flattened': 
+
+```{r}
+jsonld_flatten(ex, context = "http://schema.org")
+```
+
+Note that our JSON-LD structure now starts with an object called `@graph`.  Unlike our opening examples, this data is not tabular in nature, but rather, is formatted as a nested _graph_.  Such nesting is very natural in JSON, where objects can be arranged in a tree-like structure with a single outer-most set of `{}` indicating a root object.  A graph is just a more generic form of a tree structure, where we are angostic to the root.  (We could in fact use the `@reverse` property on address to create a root `PostalAddress` that contains the `Person`).  In this way, the notion of data as a `graph` offers a powerful generalization to the notion of tabular data.  The `@graph` above consists of two separate objects: a `PostalAddress` (with `id` of `_:b0`) and a `Person` (with an ORCID id).  This layout acts much like a foreign key in a relational database, or as a list-column in tidyverse (e.g. see `tidyr::nest()`).  `rdflib` uses this flattened representation when serializing JSON-LD objects.  Note that JSON-LD provides a rich set of utilities to go back and forth between flattened and nested layouts using `jsonld_frame`.  For instance, we can recover the original structure just by specifying a frame that indicates which type we want as the root:
+
+```{r}
+jsonld_flatten(ex) %>%
+  jsonld_frame('{"@type": "http://schema.org/Person"}') %>%
+  jsonld_compact(context = "http://schema.org")
+```
+
+(Recall that compacting just replaces URIs and any type declarations with short names given by the context).  This is somewhat analagous to `join` operations in relational data, or nesting and unnesting functions in `tidyr`.  However, when working with RDF, the beautiful thing is that the differences between these two representations (nested or flattened) are purely aesthetic.  Both representations have precisely the same semantic meaning, and are thus presisely the same thing in RDF world.  We will never have to orchestrate a join on a foreign key before we can perform desired operations like select and filter on the data.  We don't have to think about how our data is organized, because it is always in the same molten triple format, whatever it is, and however nested it might be.  
+
+Just as we saw `gather` could provide a relatively generic way of transforming a data.frame into RDF triples, JSON-LD defines a relatively simple convention for getting nested data (e.g. lists) into RDF triples.  This convention simply treats JSON `{}` objects as `subjects` (often assigning blank node ids, as we saw with row ids), and key-value pairs (or in R-speak, list names and values) as predicates and objects, respectively.  Any raw JSON file can be treated as JSON-LD, ideally by specifying an appropriate `context`, which serves to map terms into URIs as we saw with data.frames. `JSON-LD` is then already a valid RDF format that we can parse with `rdflib`.  
+
+For instance, here is a simple function for coercing list objects into RDF with a specified context:
+
+```{r}
+as_rdf.list <- function(x, context = "http://schema.org"){
+  if(length(x) == 1) x <- x[[1]]
+  x[["@context"]] <- context
+  json <- jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE, force = TRUE)
+  rdflib::rdf_parse(json, "jsonld")
+}
+```
+
+Here we set a default context (http://schema.org), and map a few R terms to corresponding schema terms
+
+```{r}
+context <- list("http://schema.org", 
+                list(schema = "http://schema.org/",
+                     given = "givenName",
+                     family = "familyName",
+                     title = "name",
+                     year = "datePublished",
+                     note = "softwareVersion",
+                     comment = "identifier",
+                     role = "http://www.loc.gov/marc/relators/relaterm.html"))
+
+```
+
+
+We can now apply our function on arbitrary R `list` objects, such as the `bibentry` class object returned by the `citation()` function:
+
+```{r}
+options(rdf_print_format = "nquads") # go back to the default
+
+
+R <- citation("rdflib")
+rdf <- as_rdf.list(R, context)
+rdf  
+```
+
+
+## SPARQL: A Graph Query Language
+
+So far, we have spent a lot of words describing how to transform data into RDF
+
 
 
 ```{r}
@@ -224,22 +357,6 @@ source(system.file("examples/as_rdf.R", package="rdflib"))
  rdf <- c(x1,x2)
 ```
 
-
-```{r}
-rdf_serialize(x1, "iris.json", "jsonld")
-json <- jsonld::jsonld_compact("iris.json", 
-                               context = 
-'{
-  "Petal.Width": {"@id": "iris:Petal.Width", 
-  "@type": "http://www.w3.org/2001/XMLSchema#decimal" },
-  "Petal.Length": {"@id": "iris:Petal.Length", 
-  "@type": "http://www.w3.org/2001/XMLSchema#decimal" },
-  "Sepal.Length": {"@id": "iris:Sepal.Length", 
-  "@type": "http://www.w3.org/2001/XMLSchema#decimal" },
-  "Sepal.Width": {"@id": "iris:Sepal.Width", 
-  "@type": "http://www.w3.org/2001/XMLSchema#decimal" }
-}')
-```
 
 ## SPARQL: Getting back to Tidy Tables!
 
@@ -267,12 +384,6 @@ sparql <- tidy_schema("Species",  "Sepal.Length", "Sepal.Width", prefix = "iris"
 cat(sparql)
 #rdf_query(rdf, sparql)
 ```
-
-
-## From tables to Graphs
-
-So far we have considered examples where the data could be represented in tabular for and the object. This is where RDF at last begins to come into its own.  
-
 
 
 # Going further
