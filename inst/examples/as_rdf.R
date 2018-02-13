@@ -25,9 +25,11 @@ as_rdf.data.frame <- function(df, base_uri = NULL){
   rdf
 }
 
-
-
-as_rdf.list <- function(x){
+as_rdf.list <- function(x, context = "http://schema.org"){
+  if(length(x) == 1) x <- x[[1]]
+  x[["@context"]] <- context
+  json <- jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE, force = TRUE)
+  rdflib::rdf_parse(json, "jsonld")
 }
 
 
