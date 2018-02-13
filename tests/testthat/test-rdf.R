@@ -13,6 +13,14 @@ testthat::test_that("We can initialize and free rdf objects", {
   testthat::expect_is(rdf$storage, "Storage")
   
   rdf_free(rdf)
+  
+  ## Confirm `rdf` has been removed from the workspace
+  testthat::expect_false("rdf" %in% ls())
+  
+  RDF_graph <- rdf()
+  testthat::expect_true("RDF_graph" %in% ls())
+  rdf_free(RDF_graph)
+  testthat::expect_false("RDF_graph" %in% ls())
 })
 
 testthat::test_that("We warn if we cannot use disk-based storage", {

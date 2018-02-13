@@ -4,10 +4,14 @@
 \alias{rdf_free}
 \title{Free Memory Associated with RDF object}
 \usage{
-rdf_free(rdf)
+rdf_free(rdf, env = parent.frame())
 }
 \arguments{
 \item{rdf}{an rdf object}
+
+\item{rm}{logical, default TRUE. Remove pointer from parent.frame()?
+Usually a good idea since referring to a pointer after it has been
+removed can crash R.}
 }
 \description{
 Free Memory Associated with RDF object
@@ -15,10 +19,7 @@ Free Memory Associated with RDF object
 \details{
 Free all pointers associated with an rdf object.
 Frees memory associated with the storage, world, and model
-objects. After this a user should remove the rdf object
-from the environment as well with \code{rm}, since attempting
-to reference an object after it has been removed can crash
-R!
+objects.
 }
 \examples{
 rdf <- rdf()

@@ -1,6 +1,6 @@
 Package: rdflib
 Title: Tools to Manipulate and Query Semantic Data
-Version: 0.0.3
+Version: 0.0.4
 Authors@R: person("Carl", "Boettiger", 
                   email = "cboettig@gmail.com", 
                   role = c("aut", "cre", "cph"),
@@ -20,6 +20,7 @@ Description: The Resource Description Framework, or 'RDF' is a widely used
              'JSON-LD' format through the 'jsonld' package. The package
              interface takes inspiration from the Python 'rdflib' library.
 License: MIT + file LICENSE
+Date: 2018-02-12
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/cboettig/rdflib
