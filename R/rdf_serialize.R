@@ -5,7 +5,7 @@
 #' @param doc file path to write out to
 #' @param namespace string giving the namespace to set
 #' @param prefix string giving the prefix associated with the namespace
-#'
+#' @param ... additional arguments to \code{\link{redland::serializeToFile}}
 #' @return rdf_serialize returns the output file path `doc` invisibly.
 #'   This makes it easier to use rdf_serialize in pipe chains with
 #'   \code{\link{rdf_parse}}.
@@ -61,13 +61,14 @@ rdf_serialize <- function(rdf,
   }
   
   status <-
-    redland::serializeToFile(serializer, rdf$world, rdf$model, doc)
+    redland::serializeToFile(serializer, rdf$world, rdf$model, doc, ...)
   
   if(jsonld_output){
     txt <- paste(readLines(doc), collapse = "\n")
     if(length(txt) > 0){ ## don't attempt to write empty file into json
       json <- jsonld::jsonld_from_rdf(txt)
-      writeLines(json, doc)
+      compact_json <- jsonld_compact(json, "{}")
+      writeLines(compact_json, doc)
     }
   }
   

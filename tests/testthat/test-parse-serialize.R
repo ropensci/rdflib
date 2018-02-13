@@ -73,6 +73,32 @@ testthat::test_that("we can parse and serialize rdfxml", {
 
 ################################################################
 
+testthat::test_that("we can serialize turtle with a baseUri", {
+  ex <- system.file("extdata/person.nq", package="rdflib")
+  rdf <- rdf_parse(ex, "nquads")
+  rdf_serialize(rdf, out, "turtle", baseUri = "http://schema.org/")
+  roundtrip <- rdf_parse(out, "turtle")
+  testthat::expect_is(roundtrip, "rdf")
+  rdf_free(rdf)
+})
+
+  
+  
+  
+  
+testthat::test_that("we can parse into an existing rdf model", {
+    rdf1 <- rdf_parse(system.file("extdata/ex.xml", package = "rdflib"))
+    rdf2 <- rdf_parse(system.file("extdata/ex2.xml", package = "rdflib"), rdf = rdf1)
+    
+    testthat::expect_is(rdf1, "rdf")
+    testthat::expect_is(rdf2, "rdf")
+    testthat::expect_identical(rdf1, rdf2)
+    rdf_free(rdf1)
+    
+    ## NOTE: rdf is same pointer as rdf1, not a new pointer.  cannot free twice
+})
+  
+  
 
 testthat::test_that("we can parse from a url", {
   # CRAN seems okay with tests requiring an internet connection
