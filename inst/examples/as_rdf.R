@@ -10,7 +10,8 @@ as_rdf.data.frame <- function(df, base_uri = NULL){
   )
   
   ## gather looses col-classes
-  col_classes <- data.frame(datatype = vapply(df, rdflib:::xs_class, character(1)))
+  col_classes <- data.frame(datatype = 
+                              vapply(df, rdflib:::xs_class, character(1)))
   col_classes <- tibble::rownames_to_column(col_classes, "predicate")
   x <- dplyr::inner_join(x, col_classes, "predicate")
   

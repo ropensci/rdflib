@@ -90,7 +90,9 @@ testthat::test_that("SPARQL handles data types", {
   
   testthat::expect_is(match, "data.frame")
   
-  match <- rdf_query(rdf, 'SELECT ?s ?p ?o WHERE { ?s ?p ?o }', data.frame=FALSE)
+  match <- rdf_query(rdf, 
+                     'SELECT ?s ?p ?o WHERE { ?s ?p ?o }',
+                     data.frame=FALSE)
   testthat::expect_is(match, "list")
   
   rdf_free(rdf)

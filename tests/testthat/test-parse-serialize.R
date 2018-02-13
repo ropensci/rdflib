@@ -88,7 +88,8 @@ testthat::test_that("we can serialize turtle with a baseUri", {
   
 testthat::test_that("we can parse into an existing rdf model", {
     rdf1 <- rdf_parse(system.file("extdata/ex.xml", package = "rdflib"))
-    rdf2 <- rdf_parse(system.file("extdata/ex2.xml", package = "rdflib"), rdf = rdf1)
+    rdf2 <- rdf_parse(system.file("extdata/ex2.xml", package = "rdflib"),
+                      rdf = rdf1)
     
     testthat::expect_is(rdf1, "rdf")
     testthat::expect_is(rdf2, "rdf")
