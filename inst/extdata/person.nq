@@ -1,0 +1,9 @@
+_:b0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/PostalAddress> .
+<https://orcid.org/0000-0002-1642-628X> <http://schema.org/givenName> "Carl" .
+_:b0 <http://schema.org/addressLocality> "Berkeley" .
+<https://orcid.org/0000-0002-1642-628X> <http://schema.org/address> _:b0 .
+_:b0 <http://schema.org/streetAddress> "130 Mulford Hall #3114" .
+<https://orcid.org/0000-0002-1642-628X> <http://schema.org/familyName> "Boettiger" .
+_:b0 <http://schema.org/postalCode> "94720-3114" .
+_:b0 <http://schema.org/addressRegion> "CA" .
+<https://orcid.org/0000-0002-1642-628X> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Person> .

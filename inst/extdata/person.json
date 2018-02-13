@@ -1,0 +1,14 @@
+{
+  "@context": "http://schema.org",
+  "@type": "Person",
+  "@id": "https://orcid.org/0000-0002-1642-628X",
+  "givenName": "Carl",
+  "familyName": "Boettiger",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "130 Mulford Hall #3114",
+    "addressLocality": "Berkeley",
+    "addressRegion": "CA",
+    "postalCode": "94720-3114"
+  }
+}
