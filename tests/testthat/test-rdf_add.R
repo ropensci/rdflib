@@ -1,7 +1,6 @@
-
+testthat::context("RDF Add")
 
 testthat::test_that("we can print.rdf UTF-8", {
-  
   r <- rdf()
   rdf_add(r,
           subject="", 

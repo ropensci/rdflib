@@ -1,8 +1,12 @@
+testthat::context("SPARQL Queries")
+
 doc <- system.file("extdata/example.rdf", package="redland")
 out <- "testing.rdf"
 
 testthat::test_that("we can make CONSTRUCT queries", {
 
+  testthat::skip("No test for SPARQL CONSTRUCT")
+  
   ## No errors but no return either, not sure 
   ## what the correct construction is.  
   ## currently registers as a skipped test.  
@@ -47,30 +51,31 @@ testthat::test_that("SPARQL handles data types", {
   rdf_add(rdf, "", "ex:factor", as.factor("text"))
   rdf_add(rdf, "", "ex:string", "text")
   
+  ## Select ?s as well to avoid silly warning
   testthat::expect_is(rdf, "rdf")
-  match <- rdf_query(rdf, 'SELECT ?o WHERE { ?s <ex:Date> ?o }')
+  match <- rdf_query(rdf, 'SELECT ?o ?s WHERE { ?s <ex:Date> ?o }')
   testthat::expect_type(match$o[[1]], "double")
   testthat::expect_is(match$o[[1]], "Date")
   
-  match <- rdf_query(rdf, 'SELECT ?o WHERE { ?s <ex:POSIXct> ?o }')
+  match <- rdf_query(rdf, 'SELECT ?o ?s WHERE { ?s <ex:POSIXct> ?o }')
   testthat::expect_is(match$o[[1]], "POSIXct")
   testthat::expect_type(match$o[[1]], "double")
   
-  match <- rdf_query(rdf, 'SELECT ?o WHERE { ?s <ex:decimal> ?o }')
+  match <- rdf_query(rdf, 'SELECT ?o ?s WHERE { ?s <ex:decimal> ?o }')
   testthat::expect_is(match$o[[1]], "numeric")
   testthat::expect_type(match$o[[1]], "double")
   
-  match <- rdf_query(rdf, 'SELECT ?o WHERE { ?s <ex:logical> ?o }')
+  match <- rdf_query(rdf, 'SELECT ?o ?s WHERE { ?s <ex:logical> ?o }')
   testthat::expect_is(match$o[[1]], "logical")
   testthat::expect_type(match$o[[1]], "logical")
   
   
-  match <- rdf_query(rdf, 'SELECT ?o WHERE { ?s <ex:integer> ?o }')
+  match <- rdf_query(rdf, 'SELECT ?o ?s WHERE { ?s <ex:integer> ?o }')
   testthat::expect_is(match$o[[1]], "integer")
   testthat::expect_type(match$o[[1]], "integer")
   
   
-  match <- rdf_query(rdf, 'SELECT ?o WHERE { ?s <ex:string> ?o }')
+  match <- rdf_query(rdf, 'SELECT ?o ?s WHERE { ?s <ex:string> ?o }')
   testthat::expect_is(match$o[[1]], "character")
   testthat::expect_type(match$o[[1]], "character")
   
@@ -80,12 +85,12 @@ testthat::test_that("SPARQL handles data types", {
   
   ## Matching mixed type results in all types treated as character
   # vector, since o is a single column....
-  match <- rdf_query(rdf, 'SELECT ?p ?o WHERE { ?s ?p ?o }')
+  match <- rdf_query(rdf, 'SELECT ?s ?p ?o WHERE { ?s ?p ?o }')
   testthat::expect_is(match$o, "character")
   
   testthat::expect_is(match, "data.frame")
   
-  match <- rdf_query(rdf, 'SELECT ?p ?o WHERE { ?s ?p ?o }', data.frame=FALSE)
+  match <- rdf_query(rdf, 'SELECT ?s ?p ?o WHERE { ?s ?p ?o }', data.frame=FALSE)
   testthat::expect_is(match, "list")
   
   rdf_free(rdf)
