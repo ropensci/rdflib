@@ -21,7 +21,7 @@ or "jsonld"}
 
 \item{prefix}{string giving the prefix associated with the namespace}
 
-\item{...}{additional arguments to \code{\link{redland::serializeToFile}}}
+\item{...}{additional arguments to \code{redland::serializeToFile}}
 }
 \value{
 rdf_serialize returns the output file path \code{doc} invisibly.

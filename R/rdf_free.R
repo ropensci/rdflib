@@ -13,7 +13,7 @@
 #' rdf <- rdf()
 #' rdf_free(rdf)
 #' rm(rdf)
-rdf_free <- function(rdf, env = parent.frame()){
+rdf_free <- function(rdf, rm = TRUE){
   redland::freeModel(rdf$model)
   redland::freeStorage(rdf$storage)
   redland::freeWorld(rdf$world)
@@ -21,8 +21,9 @@ rdf_free <- function(rdf, env = parent.frame()){
   ## Remove pointer if possible
   ## Since referring to this pointer after it has been
   ## freed would otherwise just crash R.
-  rm(list = deparse(substitute(rdf)), envir = parent.frame())
-
+  if(rm){
+    rm(list = deparse(substitute(rdf)), envir = parent.frame())
+  }
 }
 
 

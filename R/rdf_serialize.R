@@ -5,7 +5,7 @@
 #' @param doc file path to write out to
 #' @param namespace string giving the namespace to set
 #' @param prefix string giving the prefix associated with the namespace
-#' @param ... additional arguments to \code{\link{redland::serializeToFile}}
+#' @param ... additional arguments to \code{redland::serializeToFile}
 #' @return rdf_serialize returns the output file path `doc` invisibly.
 #'   This makes it easier to use rdf_serialize in pipe chains with
 #'   \code{\link{rdf_parse}}.

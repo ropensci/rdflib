@@ -4,7 +4,7 @@
 \alias{rdf_free}
 \title{Free Memory Associated with RDF object}
 \usage{
-rdf_free(rdf, env = parent.frame())
+rdf_free(rdf, rm = TRUE)
 }
 \arguments{
 \item{rdf}{an rdf object}
