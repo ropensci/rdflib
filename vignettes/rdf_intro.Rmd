@@ -343,9 +343,10 @@ rdf
 
 ## SPARQL: A Graph Query Language
 
-So far, we have spent a lot of words describing how to transform data into RDF
+So far, we have spent a lot of words describing how to transform data into RDF, and not much actually _doing anything_ cool with said data. 
 
 
+_Still working on writing this section_
 
 ```{r}
 source(system.file("examples/as_rdf.R", package="rdflib"))
@@ -386,6 +387,14 @@ cat(sparql)
 ```
 
 
+### Automatic joins with RDF
+
+(Add example with a multi-table RDB, like nyflights examples from R4DS book. Show we can import all tables into a single RDF graph, and then show SPARQL queries that return the desired data we would otherwise need to use joins etc to get.)
+
+
+Do we add the helper functions in `inst/examples/as_rdf.R` as first-class functions? Can they be made more general / robust?
+
+
 # Going further
 
 ```{r}
@@ -395,3 +404,4 @@ options("rdf_print_format" =  "jsonld")
 
 ## Database backends
 
+Examples using BDB
