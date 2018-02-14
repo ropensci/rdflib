@@ -52,7 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -62,6 +62,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/rdf_intro.html">An tidyverse lover's introduction to RDF</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -91,9 +103,79 @@
     </div>
 
     <div class="contents">
-    <div id="rdflib-0-0-2" class="section level1">
+    <div id="rdflib-0-1-0" class="section level1">
 <h1 class="hasAnchor">
-<a href="#rdflib-0-0-2" class="anchor"></a>rdflib 0.0.2</h1>
+<a href="#rdflib-0-1-0" class="anchor"></a>rdflib 0.1.0</h1>
+<div id="new-features" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>New Features</h2>
+<ul>
+<li>adds <code>c()</code> method to concatenate <code>rdf</code> objects</li>
+<li>
+<code><a href="../reference/rdf.html">rdf()</a></code> supports BDB backend for disk-based storage for large triplestores <a href="https://github.com/cboettig/rdflib/issues/6">#6</a>
+</li>
+<li>
+<code><a href="../reference/rdf_parse.html">rdf_parse()</a></code> gains an argument <code>rdf</code> to append triples to existing graph</li>
+</ul>
+</div>
+<div id="minor-improvements" class="section level2">
+<h2 class="hasAnchor">
+<a href="#minor-improvements" class="anchor"></a>Minor Improvements</h2>
+<ul>
+<li>
+<code>rdf_add</code> argument for <code>object</code> can now take all atomic types (numeric, integer, string, Date, POSIX, logical) and will automatically declare the appropriate <code>datatype_uri</code> if the user has not manually specified this.</li>
+<li>Numerous improvements to documentation from rOpenSci onboarding feedback, see <a href="https://github.com/cboettig/rdflib/issues/9">#9</a> and <a href="https://github.com/cboettig/rdflib/issues/10">#10</a>
+</li>
+<li>both functions and unit tests are broken out into separate files in their respective directories.</li>
+<li>additional example RDF data added in <code>extdata</code>
+</li>
+<li>
+<code>rdf_serialize</code> passes <code>...</code> arguments to serializeToFile (e.g. to set a <code>baseUri</code>)</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug Fixes</h2>
+<ul>
+<li>
+<code><a href="../reference/rdf_free.html">rdf_free()</a></code> will also remove the object from the parent frame, reducing the potential for crashing R by referring to a freed pointer.</li>
+<li>fix encoding with UTF-8 characters (coming from nquads &amp; ntriples)</li>
+<li>
+<code><a href="../reference/rdf_query.html">rdf_query()</a></code> now coerces data into appropriate type if it recognizes the data URI and can match that to an R type (a few XMLSchema types are recognized, otherwise still defaults to character string)</li>
+<li>Memory management: All methods free memory from any temporary objects they initialize, tests free memory. (e.g. parsers, serializers, query, statement)</li>
+<li>extend unit tests to cover new features, check UTF-8</li>
+<li>
+<code>turtle</code> parser/serializer fixed</li>
+</ul>
+</div>
+<div id="deprecated" class="section level2">
+<h2 class="hasAnchor">
+<a href="#deprecated" class="anchor"></a>Deprecated</h2>
+<ul>
+<li>
+<code>trig</code> support removed (not working in redland without optional libraries and alternative compile configuration)</li>
+</ul>
+</div>
+</div>
+    <div id="rdflib-0-0-3-2018-01-02" class="section level1">
+<h1 class="hasAnchor">
+<a href="#rdflib-0-0-3-2018-01-02" class="anchor"></a>rdflib 0.0.3 (2018-01-02)</h1>
+<div id="bug-fixes-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes-1" class="anchor"></a>Bug Fixes</h2>
+<ul>
+<li>add paper.md</li>
+<li>add package level documentation</li>
+<li>set base uri when serializing json-ld to rdf (<a href="https://github.com/cboettig/rdflib/issues/5">#5</a>)</li>
+</ul>
+</div>
+</div>
+    <div id="rdflib-0-0-2-2018-01-02" class="section level1">
+<h1 class="hasAnchor">
+<a href="#rdflib-0-0-2-2018-01-02" class="anchor"></a>rdflib 0.0.2 (2018-01-02)</h1>
+<div id="new-features-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features-1" class="anchor"></a>New Features</h2>
 <ul>
 <li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
 <li>sparql query returns a data.frame format</li>
@@ -101,9 +183,10 @@
 <li>added pkgdown website for vignette</li>
 </ul>
 </div>
-    <div id="rdflib-0-0-1" class="section level1">
+</div>
+    <div id="rdflib-0-0-1-2017-12-09" class="section level1">
 <h1 class="hasAnchor">
-<a href="#rdflib-0-0-1" class="anchor"></a>rdflib 0.0.1</h1>
+<a href="#rdflib-0-0-1-2017-12-09" class="anchor"></a>rdflib 0.0.1 (2017-12-09)</h1>
 <ul>
 <li>Initial prototype</li>
 </ul>
@@ -115,8 +198,10 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#rdflib-0-0-2">0.0.2</a></li>
-        <li><a href="#rdflib-0-0-1">0.0.1</a></li>
+        <li><a href="#rdflib-0-1-0">0.1.0</a></li>
+        <li><a href="#rdflib-0-0-3-2018-01-02">0.0.3</a></li>
+        <li><a href="#rdflib-0-0-2-2018-01-02">0.0.2</a></li>
+        <li><a href="#rdflib-0-0-1-2017-12-09">0.0.1</a></li>
       </ul>
     </div>
   </div>
@@ -129,7 +214,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

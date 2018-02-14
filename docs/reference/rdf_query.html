@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SPARQL query — rdf_query • rdflib</title>
+<title>Perform a SPARQL Query — rdf_query • rdflib</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -52,7 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -62,6 +62,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/rdf_intro.html">An tidyverse lover's introduction to RDF</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -86,25 +98,29 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>SPARQL query</h1>
+    <h1>Perform a SPARQL Query</h1>
     </div>
 
     
-    <p>SPARQL query</p>
+    <p>Perform a SPARQL Query</p>
     
 
-    <pre class="usage"><span class='fu'>rdf_query</span>(<span class='no'>x</span>, <span class='no'>query</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>rdf_query</span>(<span class='no'>rdf</span>, <span class='no'>query</span>, <span class='kw'>data.frame</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>an rdf object (e.g. from <code>parse</code>)</p></td>
+      <th>rdf</th>
+      <td><p>an rdf object (e.g. from <code><a href='rdf_parse.html'>rdf_parse</a></code>)</p></td>
     </tr>
     <tr>
       <th>query</th>
       <td><p>a SPARQL query, as text string</p></td>
+    </tr>
+    <tr>
+      <th>data.frame</th>
+      <td><p>logical, should the resutls be returned as a data.frame?</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -114,7 +130,14 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a list of all query results</p>
+    <p>a data.frame of all query results (default.)  Columns will
+be named according to variable names in the SPARQL query. Returned
+object values will be coerced to match the corresponding R type
+to any associated datatype URI, if provided. If a column would
+result in mixed classes (e.g. strings and numerics), all types
+in the column will be coerced to character strings. If <code>data.frame</code>
+is false, results will be returned as a list with each element
+typed by its data URI.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -149,7 +172,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

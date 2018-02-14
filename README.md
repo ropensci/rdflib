@@ -74,16 +74,10 @@ Change the default display format (`nquads`) for graph objects:
 ``` r
 options(rdf_print_format = "jsonld")
 x
-#> [
-#>   {
-#>     "@id": "http://www.dajobe.org/",
-#>     "http://purl.org/dc/elements/1.1/language": [
-#>       {
-#>         "@value": "en"
-#>       }
-#>     ]
-#>   }
-#> ]
+#> {
+#>   "@id": "http://www.dajobe.org/",
+#>   "http://purl.org/dc/elements/1.1/language": "en"
+#> }
 ```
 
 JSON-LD
@@ -95,16 +89,39 @@ We can also work with the JSON-LD format through additional functions provided i
 out <- tempfile()
 rdf_serialize(x, out, "jsonld")
 rdf_parse(out, format = "jsonld")
-#> [
-#>   {
-#>     "@id": "http://www.dajobe.org/",
-#>     "http://purl.org/dc/elements/1.1/language": [
-#>       {
-#>         "@value": "en"
-#>       }
-#>     ]
-#>   }
-#> ]
+#> {
+#>   "@id": "http://www.dajobe.org/",
+#>   "http://purl.org/dc/elements/1.1/language": "en"
+#> }
 ```
 
 For more information on the JSON-LD RDF API, see <https://json-ld.org/spec/latest/json-ld-rdf/>.
+
+------------------------------------------------------------------------
+
+Citing rdflib
+-------------
+
+``` r
+citation("rdflib")
+```
+
+To cite package 'rdflib' in publications use:
+
+Carl Boettiger (2018). rdflib: Tools to Manipulate and Query Semantic Data. R package version 0.0.3. <https://github.com/cboettig/rdflib>
+
+A BibTeX entry for LaTeX users is
+
+@Manual{, title = {rdflib: Tools to Manipulate and Query Semantic Data}, author = {Carl Boettiger}, year = {2018}, note = {R package version 0.0.3}, url = {<https://github.com/cboettig/rdflib>}, }
+
+Please also cite the underlying `redland` library:
+
+``` r
+citation("redland")
+```
+
+Jones M, Slaughter P, Ooms J, Boettiger C and Chamberlain S (2016). *redland: RDF Library Bindings in R*. doi: 10.5063/F1VM496B (URL: <http://doi.org/10.5063/F1VM496B>), R package version 1.0.17-9, &lt;URL: <https://github.com/ropensci/redland-bindings/tree/master/R/redland>&gt;.
+
+A BibTeX entry for LaTeX users is
+
+@Manual{, title = {{redland}: RDF Library Bindings in R}, author = {Matthew B. Jones and Peter Slaughter and Jeroen Ooms and Carl Boettiger and Scott Chamberlain}, year = {2016}, note = {R package version 1.0.17-9}, url = {<https://github.com/ropensci/redland-bindings/tree/master/R/redland>}, doi = {10.5063/F1VM496B}, }

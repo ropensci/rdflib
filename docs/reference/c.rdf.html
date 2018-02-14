@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>rdflib: Tools to Manipulate and Query Semantic Data — rdflib-package • rdflib</title>
+<title>Concatenate rdf Objects. — c.rdf • rdflib</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -98,55 +98,33 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>rdflib: Tools to Manipulate and Query Semantic Data</h1>
+    <h1>Concatenate rdf Objects.</h1>
     </div>
 
     
-    <p>The Resource Description Framework, or RDF is a widely used
-data representation model that forms the cornerstone of the
-Semantic Web. 'RDF' represents data as a graph rather than
-the familiar data table or rectangle of relational databases.</p>
+    <p>All subsequent rdf objects will be appended to the first rdf object
+Note: this does not free memory from any of the individual rdf objects</p>
     
 
-        
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>It has three main goals:</p><ul>
-<li><p>Easily read, write, and convert between all major RDF serialization formats</p></li>
-<li><p>Support SPARQL queries to extract data from an RDF graph into a data.frame</p></li>
-<li><p>Support JSON-LD format as a first-class citizen in RDF manipulations</p></li>
-</ul>
-    <p>For more information, see the Wikipedia pages for RDF, SPARQL, and JSON-LD:</p>
-<p>#'</p><ul>
-<li><p><a href='https://en.wikipedia.org/wiki/Resource_Description_Framework'>https://en.wikipedia.org/wiki/Resource_Description_Framework</a></p></li>
-<li><p><a href='https://en.wikipedia.org/wiki/SPARQL'>https://en.wikipedia.org/wiki/SPARQL</a></p></li>
-<li><p><a href='https://en.wikipedia.org/wiki/JSON-LD'>https://en.wikipedia.org/wiki/JSON-LD</a></p></li>
-</ul>
-    <p>To learn more about rdflib, start with the vignettes:
-<code>browseVignettes(package = "rdflib")</code></p>
+    <pre class="usage"><span class='co'># S3 method for rdf</span>
+<span class='fu'>c</span>(<span class='no'>...</span>)</pre>
     
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <p>Useful links:</p><ul>
-<li><p><a href='https://github.com/cboettig/rdflib'>https://github.com/cboettig/rdflib</a></p></li>
-<li><p>Report bugs at <a href='https://github.com/cboettig/rdflib/issues'>https://github.com/cboettig/rdflib/issues</a></p></li>
-</ul>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>...</th>
+      <td><p>objects to be concatenated</p></td>
+    </tr>
+    </table>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-          </ul>
-
-    <h2>Author</h2>
-    
-<strong>Maintainer</strong>: Carl Boettiger <a href='mailto:cboettig@gmail.com'>cboettig@gmail.com</a> (0000-0002-1642-628X) [copyright holder]
-
+      <li><a href="#arguments">Arguments</a></li>
+                </ul>
 
   </div>
 </div>

@@ -1,0 +1,6 @@
+{
+  "@id": "http://www.johnsmith.com/",
+  "http://purl.org/dc/elements/1.1/creator": "John Smith",
+  "http://purl.org/dc/elements/1.1/description": "The generic home page of John Smith",
+  "http://purl.org/dc/elements/1.1/title": "John Smith's Home Page"
+}

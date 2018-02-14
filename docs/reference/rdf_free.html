@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>rdflib: Tools to Manipulate and Query Semantic Data — rdflib-package • rdflib</title>
+<title>Free Memory Associated with RDF object — rdf_free • rdflib</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -98,55 +98,51 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>rdflib: Tools to Manipulate and Query Semantic Data</h1>
+    <h1>Free Memory Associated with RDF object</h1>
     </div>
 
     
-    <p>The Resource Description Framework, or RDF is a widely used
-data representation model that forms the cornerstone of the
-Semantic Web. 'RDF' represents data as a graph rather than
-the familiar data table or rectangle of relational databases.</p>
+    <p>Free Memory Associated with RDF object</p>
     
 
-        
+    <pre class="usage"><span class='fu'>rdf_free</span>(<span class='no'>rdf</span>, <span class='kw'>rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>rdf</th>
+      <td><p>an rdf object</p></td>
+    </tr>
+    <tr>
+      <th>rm</th>
+      <td><p>logical, default TRUE. Remove pointer from parent.frame()?
+Usually a good idea since referring to a pointer after it has been
+removed can crash R.</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>It has three main goals:</p><ul>
-<li><p>Easily read, write, and convert between all major RDF serialization formats</p></li>
-<li><p>Support SPARQL queries to extract data from an RDF graph into a data.frame</p></li>
-<li><p>Support JSON-LD format as a first-class citizen in RDF manipulations</p></li>
-</ul>
-    <p>For more information, see the Wikipedia pages for RDF, SPARQL, and JSON-LD:</p>
-<p>#'</p><ul>
-<li><p><a href='https://en.wikipedia.org/wiki/Resource_Description_Framework'>https://en.wikipedia.org/wiki/Resource_Description_Framework</a></p></li>
-<li><p><a href='https://en.wikipedia.org/wiki/SPARQL'>https://en.wikipedia.org/wiki/SPARQL</a></p></li>
-<li><p><a href='https://en.wikipedia.org/wiki/JSON-LD'>https://en.wikipedia.org/wiki/JSON-LD</a></p></li>
-</ul>
-    <p>To learn more about rdflib, start with the vignettes:
-<code>browseVignettes(package = "rdflib")</code></p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <p>Useful links:</p><ul>
-<li><p><a href='https://github.com/cboettig/rdflib'>https://github.com/cboettig/rdflib</a></p></li>
-<li><p>Report bugs at <a href='https://github.com/cboettig/rdflib/issues'>https://github.com/cboettig/rdflib/issues</a></p></li>
-</ul>
+    <p>Free all pointers associated with an rdf object.
+Frees memory associated with the storage, world, and model
+objects.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>rdf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rdf.html'>rdf</a></span>()
+<span class='fu'>rdf_free</span>(<span class='no'>rdf</span>)
+<span class='fu'>rm</span>(<span class='no'>rdf</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: object 'rdf' not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-          </ul>
-
-    <h2>Author</h2>
-    
-<strong>Maintainer</strong>: Carl Boettiger <a href='mailto:cboettig@gmail.com'>cboettig@gmail.com</a> (0000-0002-1642-628X) [copyright holder]
-
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
