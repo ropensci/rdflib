@@ -1,5 +1,5 @@
 ---
-title: "An tidyverse lover's introduction to RDF"
+title: "A tidyverse lover's intro to RDF"
 author: "Carl Boettiger"
 date: "`r Sys.Date()`"
 output: 
