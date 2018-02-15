@@ -82,8 +82,55 @@ testthat::test_that("we can serialize turtle with a baseUri", {
   rdf_free(rdf)
 })
 
+
+## JSON-LD tests with default base uri
+
+  testthat::test_that("@id is not a URI, we should get localhost", {
+    ex <- '{
+      "@context": "http://schema.org/",
+      "@id": "person_id",
+      "name": "Jane Doe"
+    }'
+    
+    rdf <- rdf_parse(ex, "jsonld")
+    testthat::expect_output(cat(format(rdf, "nquads")), "localhost")
+    rdf_free(rdf)
+  })
+
+  testthat::test_that("@id is a URI, we should not get localhost", {
+    ex <- '{
+      "@context": "http://schema.org/",
+      "@id": "uri:person_id",
+      "name": "Jane Doe"
+    }'
+    rdf <- rdf_parse(ex, "jsonld")
+    testthat::expect_false(grepl("localhost", format(rdf, "nquads")))
+    rdf_free(rdf)
+  })  
+  
+  testthat::test_that("we can alter the base URI", {
+    ex <- '{
+      "@id": "person_id",
+      "schema:name": "Jane Doe"
+    }'
+    options(rdflib_base_uri = "http://example.com/")
+    rdf <- rdf_parse(ex, "jsonld")
+    testthat::expect_output(cat(format(rdf, "nquads")), "http://example.com")
+    rdf_free(rdf)
+    
+    
+    options(rdflib_base_uri = "")
+    rdf <- rdf_parse(ex, "jsonld")
+    testthat::expect_silent(cat(format(rdf, "nquads")))
+    rdf_free(rdf)
+    
+    options(rdflib_base_uri = NULL)
+  })
   
   
+  
+  
+
   
   
 testthat::test_that("we can parse into an existing rdf model", {

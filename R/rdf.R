@@ -25,6 +25,18 @@
 #' Typical use will be simply to initialize a container to which
 #' the user would manually add triples using \code{\link{rdf_add}}.
 #'
+#' Overview of configuration options
+#' rdflib_storage:
+#'   - NULL or "memory" for in memory storage. (default)
+#'   - "BDB" for disk-based storage in Berkeley Database
+#' rdflib_print_format: 
+#'   - NULL or "nquads" (default)
+#'   - any valid serializer name: e.g. "rdfxml", "jsonld", "turtle",  "ntriples"
+#' rdflib_base_uri:
+#'   - Default base URI to use (when serializing JSON-LD only at this time)
+#'     default is "localhost://"
+#'
+#'
 #'
 #' @importClassesFrom redland World Model Storage
 #' @importMethodsFrom redland freeWorld freeModel freeStorage

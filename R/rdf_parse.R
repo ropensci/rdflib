@@ -37,8 +37,11 @@ rdf_parse <- function(doc,
   ## be a read-only task!
   if(format == "jsonld"){
     tmp <- tempfile()
-    tmp <- add_base_uri(doc, tmp)
-    x <- jsonld::jsonld_to_rdf(tmp)
+    #tmp <- add_base_uri(doc, tmp)
+    x <- jsonld::jsonld_to_rdf(doc, 
+                               options = 
+           list(base = getOption("rdflib_base_uri", "localhost://"),
+                format = "application/nquads"))
     writeLines(x, tmp)
     format <- "nquads"
     doc <- tmp
@@ -56,24 +59,6 @@ rdf_parse <- function(doc,
   rdf
 }
 
-# Whenever we convert JSON-LD to RDF we should set a @base if not set.
-# https://json-ld.org/playground does this (with it's own url) 
-# but jsonld R package does not.
-# For details, see https://github.com/cboettig/rdflib/issues/5
-#
-#' @importFrom jsonld jsonld_expand jsonld_compact
-add_base_uri <- function(doc, tmp = tempfile()){
-  
-  ## Cannot assume it has context, may already be expanded 
-  ## (e.g. from rdf_serialize).  Expanding will also make 
-  ## any preset @base context take precedence 
-  expanded <- jsonld::jsonld_expand(doc)
-  base <- getOption("rdflib_base_uri", "localhost://")
-  context <- paste0('{"@base": "', base, '"}')
-  compact <- jsonld::jsonld_compact(expanded, context)
-  writeLines(compact, tmp)
-  tmp
-}
 
 
 # rdf functions like working with local files
