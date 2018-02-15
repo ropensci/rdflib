@@ -1,19 +1,33 @@
-as_rdf <- function(df, base_uri = NULL) UseMethod("as_rdf")
+as_rdf <- function(df, key = NULL, base_uri = NULL) UseMethod("as_rdf")
+
 
 
 ## tidy data to rdf
-as_rdf.data.frame <- function(df, base_uri = NULL){
+as_rdf.data.frame <- function(df, key = NULL, base_uri = NULL){
   
-  x <- tibble::rowid_to_column(df, "subject")
+  x <- df
+  if(is.null(key)){
+    x <- tibble::rowid_to_column(x, "subject")
+  } else {
+    names(x)[names(x) == key] <- "subject"
+  }
   suppressWarnings(
     x <- tidyr::gather(x, key = predicate, value = object, -subject)
   )
   
-  ## gather looses col-classes
+  ## gather looses col-classes, so pre-compute them (with base R)
   col_classes <- data.frame(datatype = 
-                              vapply(df, rdflib:::xs_class, character(1)))
-  col_classes <- tibble::rownames_to_column(col_classes, "predicate")
-  x <- dplyr::inner_join(x, col_classes, "predicate")
+                              vapply(df, rdflib:::xs_class, character(1)),
+                            stringsAsFactors = FALSE)
+  col_classes$predicate <- rownames(col_classes)
+  rownames(col_classes) <- NULL
+  
+  
+  x <- merge(x, col_classes, by = "predicate")
+  
+  ## NA to blank string
+  x$object[is.na(x$object)] <- ""
+  x$subject[is.na(x$subject)] <- ""
   
   rdf <- rdf()
   for(i in seq_along(x$subject)){

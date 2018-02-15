@@ -350,14 +350,45 @@ _Still working on writing this section_
 
 ```{r}
 source(system.file("examples/as_rdf.R", package="rdflib"))
-## Testing: Digest some data.frames into RDF and extract back
- library(tidyverse)
- cars <- mtcars %>% rownames_to_column("Model")
- x1 <- as_rdf(iris, "iris:")
- x2 <- as_rdf(cars, "mtcars:")
- rdf <- c(x1,x2)
 ```
 
+Note: looping over `rdf_add` can be a slow way to add hundreds of thousands of triples.  Coercing into RDF via JSON-LD might be much faster.
+
+```{r}
+library(nycflights13)
+library(tidyverse)
+
+df <- flights %>% 
+  left_join(airlines) %>%
+  left_join(planes, by="tailnum") %>% 
+  select(carrier, manufacturer, model)
+  
+```
+
+
+```{r}
+x1 <- as_rdf(airlines, "carrier", "x:")
+x2 <- as_rdf(airports,  "faa", "x:")
+x3 <- as_rdf(planes, "tailnum", "x:")
+system.time(
+x4 <- as_rdf(flights, NULL, "x:")
+)
+
+rdf <- c(x1,x2,x3)
+```
+
+
+```{r}
+sparql <-
+  'SELECT  ?carrier ?manufacturer ?model 
+WHERE {
+ ?s <x:carrier>  ?carrier .
+ ?s <x:manufacturer>  ?manufacturer .
+ ?s <x:model>  ?model . 
+}'
+
+iris2 <- rdf_query(rdf, sparql)
+```
 
 ## SPARQL: Getting back to Tidy Tables!
 
