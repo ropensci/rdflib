@@ -40,14 +40,14 @@ as_rdf.data.frame <- function(df, key = NULL, base_uri = NULL){
   rdf
 }
 
-as_rdf.list <- function(x, context = "http://schema.org"){
-  if(length(x) == 1) x <- x[[1]]
-  x[["@context"]] <- context
+
+as_rdf.list <- function(x, context = '"@vocab": "x:"'){
+  if(is(x, "list") && length(x) == 1) x <- x[[1]]
   json <- jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE, force = TRUE)
-  rdflib::rdf_parse(json, "jsonld")
+  json2 <- paste0('{\n"@context": {', context, '},\n',  '"@graph": ', json,  '}')
+  rdf <- rdflib::rdf_parse(json2, "jsonld")
+  rdf
 }
-
-
 
 #' Tidy Schema
 #' 
