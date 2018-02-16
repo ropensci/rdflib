@@ -92,26 +92,3 @@ rdf_add <- function(rdf, subject, predicate, object,
   invisible(rdf)
 }
 
-
-## Don't explicitly type characters as strings, since this is default
-xs_class <- function(x){
-  type <- 
-       switch(class(x)[[1]],
-              "numeric" = "xs:decimal",
-#              "character" = "xs:string",
-              "factor" = "xs:string",
-              "logical" = "xs:boolean",
-              "integer" = "xs:integer",
-              "Date" = "xs:date",
-              "POSIXct" = "xs:dateTime",
-              NULL
-       )
-  string <- gsub("^xs:", 
-       "http://www.w3.org/2001/XMLSchema#",
-        type)
-  ## consistent return length, character(1)
-  if(length(string) == 0){
-    string <- as.character(NA)
-  }
-  string
-}

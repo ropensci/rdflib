@@ -1,3 +1,41 @@
+
+## Don't explicitly type characters as strings, since this is default
+xs_class <- function(x, explicit_strings = FALSE){
+  if(explicit_strings){
+  type <- switch(class(x)[[1]],
+           "numeric" = "xs:decimal",
+           "character" = "xs:string",
+           "factor" = "xs:string",
+           "logical" = "xs:boolean",
+           "integer" = "xs:integer",
+           "Date" = "xs:date",
+           "POSIXct" = "xs:dateTime",
+           NULL
+    )
+  } else {
+    type <- switch(class(x)[[1]],
+                   "numeric" = "xs:decimal",
+                   "factor" = "xs:string",
+                   "logical" = "xs:boolean",
+                   "integer" = "xs:integer",
+                   "Date" = "xs:date",
+                   "POSIXct" = "xs:dateTime",
+                   NULL
+    )
+  }
+  
+  string <- gsub("^xs:", 
+                 "http://www.w3.org/2001/XMLSchema#",
+                 type)
+  ## consistent return length, character(1)
+  if(length(string) == 0){
+    string <- as.character(NA)
+  }
+  string
+}
+
+
+
 #' @importFrom methods as
 type_by_datauri <- function(x){
   types <- get_types(x)
