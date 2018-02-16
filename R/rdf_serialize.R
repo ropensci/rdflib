@@ -12,6 +12,7 @@
 #' @importFrom methods new
 #' @importClassesFrom redland Serializer
 #' @importMethodsFrom redland setNameSpace serializeToFile freeSerializer
+#' @importFrom jsonld jsonld_compact
 #'
 #' @export
 #' @examples
