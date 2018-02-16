@@ -75,6 +75,31 @@ as_rdf.data.frame <- function(df, key = NULL, base_uri = NULL, loc = tempfile())
 }
 
 
+
+
+
+## tidy data to rdf
+add_df_to_rdf <- function(df, key = NULL, base_uri = NULL, loc = tempfile()){
+  
+  ## FIXME: Iterate over data.frame, but do not gather!  
+  ## Just treat key as subject, column name as predicate, cell as object
+
+  #x$object[is.na(x$object)] <- ""
+  #x$subject[is.na(x$subject)] <- ""
+  #rdf <- rdf()
+  #for(i in seq_along(x$subject)){
+  #  rdf <- rdf_add(rdf, 
+  #                 subject = paste0(base_uri, as.character(x$subject[[i]])),
+  #                 predicate = paste0(base_uri, x$predicate[[i]]),
+  #                 object = x$object[[i]],
+  #                 datatype_uri = x$datatype[[i]])
+  #}
+  
+  rdf
+}
+
+
+
 as_rdf.list <- function(x, context = '"@vocab": "x:"'){
   if(is(x, "list") && length(x) == 1) x <- x[[1]]
   json <- jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE, force = TRUE)

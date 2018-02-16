@@ -1,0 +1,211 @@
+
+```{r}
+library(nycflights13)
+library(tidyverse)
+library(rdflib)
+```
+
+
+
+```{r}
+source(system.file("examples/as_rdf.R", package="rdflib"))
+```
+
+
+We need to set `rdflib` option to use disk-based rather than in-memory storage,
+or it appears that `redland` throws an error (even when the machine has sufficient memory!?)
+when importing the 336,776 rows of the `flights` table.  
+
+Note: if BDB is not available (e.g. `berkeley-db` libraries were not found when `redland` was built from source),
+then this will fallback on in-memory storage and this vignette will use an abridged version of the flights table.
+
+```{r}
+options(rdflib_storage = "BDB")
+```
+
+
+## Tidyverse Style
+
+Operations in `dplyr` on the `nyflights13` dataset are easy to write and fast to execute, (in memory or on disk):  
+
+```{r}
+df <- flights %>% 
+  left_join(airlines) %>%
+  left_join(planes, by="tailnum") %>% 
+  select(carrier, manufacturer, model)
+```
+
+
+
+Use a smaller dataset if we do not have a BDB backend: 
+
+```{r}
+if(!rdf_has_bdb()){
+flights <- flights %>% 
+  filter(distance > 2500) # try smaller dataset
+}
+```
+
+
+Keys, including foreign keys, must be represented as URIs and not literal strings.  
+
+```{r}
+as_uri <- function(x, base_uri = "x:") paste0("<", base_uri, x, ">")
+
+flights <- flights %>% 
+  mutate(tailnum = as_uri(tailnum),
+         carrier = as_uri(carrier)) -> flights
+```
+
+
+
+# RDF Serialization Strategies for large data.frames
+
+We consider a variety of strategies for actually importing `data.frames` into RDF:
+
+- **Via `rdf_add()`**: Iterate over each row/cell with calls to `rdf_add`
+- **Via JSON-LD**: Coerce the `data.frame` to JSON (via `jsonlite::toJSON(force=TRUE)`), and parse as JSON-LD
+- **Via write.table()**` we `tidyr::gather()` and then hack such that we can call `write.table` on a `data.frame` to get an `nquads` text file
+
+As we'll see, only the third solution has adequate performance here. `rdf_add()` requires an initializer call inside each `redland::addStatement`,
+which takes a considerable fraction of a second.  Multiply that by the number of cells in the `data.frame` and things do not scale.
+
+`jsonlite` can convert even the large `data.frame`s into JSON reasonably quickly. 
+`jsonld::jsonld_to_rdf()` is then also acceptably fast (despite being Javascript) at converting this to `nquads`,
+but unfortunately fails dramatically (i.e. `segfault`) when attempting to serialize the flights data.  (Recall we can only get into redland RDF model from JSON-LD via nquads).
+Perhaps that is due to some particular data in `flights` table, but it's not obvious.  
+Otherwise, this approach has lots to recommend it.  One nice feature about this approach is that it applies to almost 
+any R object (e.g. any list object), though some care should be taken with names and URIs, as always. Another nice
+feature is that it handles the basic data types automatically -- JSON already has types for logical, double, integer, 
+and string, and these will get automatically encoded with the datatype URIs by the built-in `jsonld_to_rdf` algorithm.
+
+
+The third approach is something of a poor-man's hack to the second approach.  A single call to `rdf_parse()` results in only
+a single call through the redland C API to acually read in all the triples -- so unlike the `rdf_add()` approach, all the work
+is being done at the C level -- the amount of R code involved doesn't at all depend on the number of triples. This is still
+not nearly as fast as reading in large data.frames with `readr` or even with `read.table()`, but is probably as fast as we can get.
+The trick then is to serialize the data.frame into an RDF format as quickly as possible.  We can write large `data.frame`s to text
+files rather quickly with good ol `write.table()`, and after all `nquads` looks a lot like a space separated, four-column text file,
+modulo a little markup to identify URIs and datatypes.  (`readr::write_delim` might be faster, but it's automatic quoting rules appear 
+to be incompatible with the `nquads` use of quotations.)  We're left manually encoding the URI strings and the datatypes onto our 
+`data.frame` in advance (which requires more nuiance to handle default data types, blank nodes and missing values than I've currently
+implemented), but as a proof of principle here this approach is sufficiently fast, as we will now see.  
+
+
+```{r}
+## generic list-based conversion via JSON-LD 
+rdf_planes_from_list <- as_rdf.list(planes)
+```
+
+
+Let's do the smaller tables first.  We declare which column is the `key` (i.e. `subject`), 
+and we define a `base_uri` prefix which we use to make sure column names and subjects are treated as URIs.
+With tables that have only tens of thousands of cells (triples) this is pretty fast:
+
+```{r}
+x1 <- as_rdf(airlines, "carrier", "x:")
+x2 <- as_rdf(airports, "faa", "x:") ## a few funny chars, UTF8 issues?
+x3 <- as_rdf(planes,  "tailnum", "x:")
+```
+
+
+SPARQL queries on the resulting data are also pretty fast:
+
+```{r}
+sparql <-
+  'SELECT  ?seats ?model ?tailnum
+WHERE {
+ ?tailnum <x:seats>  ?seats .
+ ?tailnum <x:model>  ?model .
+}'
+
+out <- rdf_query(x3, sparql)
+head(out)
+```
+
+Big table via poor-man's `nquads` 165 seconds if this is the full table:
+
+```{r}
+system.time(
+    x4 <- as_rdf(flights, NULL, "x:")
+)
+```
+
+
+The json-ld approach just appears to crash, so we won't run that:
+
+```{r}
+## nope, the jsonld method appears to crash R...
+#system.time(
+#  x4 <- as_rdf.list(na.omit(flights))
+#)
+```
+
+
+## we can join all of these:  
+rdf <- c(x4,x1,x2,x3)
+
+#}
+```
+
+
+Separate queries: Very slow on the full data!
+  
+```{r}
+sparql <-
+'SELECT  ?tailnum ?dep_delay ?carrier
+WHERE { 
+  ?flight <x:tailnum>  ?tailnum .
+  ?flight <x:dep_delay>  ?dep_delay .
+  ?flight <x:carrier>  ?carrier 
+}'
+f1 <- rdf_query(rdf, sparql)
+```
+
+```{r}
+sparql <-
+  'SELECT  ?tailnum ?model ?manufacturer
+WHERE {
+?tailnum <x:manufacturer> ?manufacturer .
+?tailnum <x:model> ?model
+}'
+f2 <- rdf_query(rdf, sparql)
+
+tmp <- inner_join(f1,f2)
+```
+
+
+Can we get this to work in one single sparql Query?
+Why not working?
+
+
+```{r}
+s <- 
+  'SELECT  ?dep_delay ?tailnum ?manufacturer
+WHERE {
+?flight <x:tailnum>  ?tailnum .
+?tailnum <x:manufacturer> ?manufacturer .
+?tailnum <x:model> ?model 
+?flight <x:dep_delay>  ?dep_delay .
+}'
+
+out2 <- rdf_query(rdf, s)
+out2
+```
+
+### DEBUG
+
+
+```{r}
+s <- 
+'SELECT ?tailnum
+WHERE {
+  ?flight <x:tailnum>  ?tailnum .
+  ?flight <x:dep_delay>  11 
+}'
+
+rdf_query(rdf, s)
+
+
+```
+
