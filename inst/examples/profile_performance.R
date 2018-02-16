@@ -28,18 +28,34 @@ system.time(
 #3 ~ none of which is calls to the low level librdf_* C calls
 
 
-## New method, poor-mans-quads, much faster
+## New method, poor-mans-quads, < 0.5s, mostly gather
 system.time(
 x3 <- as_rdf(planes,  "tailnum", "x:")
 )
 
-
-
 x1 <- as_rdf(airlines, "carrier", "x:")
-x2 <- as_rdf(airports, "faa", "x:", loc = "quickquads.nq")
 
+
+x2 <- as_rdf(airports, "faa", "x:") ## a few funny chars, UTF8 issues?
+
+
+
+sparql <-
+  'SELECT  ?seats ?model ?tailnum
+WHERE {
+ ?tailnum <x:seats>  ?seats .
+ ?tailnum <x:model>  ?model .
+}'
+
+profvis::profvis(
+  out <- rdf_query(x3, sparql)
+)
+
+
+
+# 165 seconds
 system.time(
-    x4 <- as_rdf(flights, NULL, "x:", loc = "quickquads.nq")
+    x4 <- as_rdf(flights, NULL, "x:")
 )
 
 ## Nope, appears to crash R...
@@ -47,4 +63,23 @@ system.time(
 #  x4 <- as_rdf.list(na.omit(flights))
 #)
 
-rdf <- c(x1,x2,x3)
+rdf <- c(x4,x1,x2,x3)
+
+## FIXME: foreign keys must be URIs
+
+
+
+
+sparql <-
+'SELECT  ?carrier ?tailnum ?dep_delay
+WHERE {
+ ?s <x:tailnum>  ?tailnum .
+ ?s <x:dep_delay>  ?dep_delay .
+ ?s <x:carrier>  ?carrier 
+
+}'
+
+system.time(
+#out <- rdf_query(x4, sparql)
+)
+dim(out)
