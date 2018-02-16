@@ -40,10 +40,10 @@ df <- flights %>%
 Use a smaller dataset if we do not have a BDB backend: 
 
 ```{r}
-if(!rdf_has_bdb()){
+#if(!rdf_has_bdb()){
 flights <- flights %>% 
   filter(distance > 2500) # try smaller dataset
-}
+#}
 ```
 
 
@@ -142,14 +142,14 @@ The json-ld approach just appears to crash, so we won't run that:
 ```
 
 
-## we can join all of these:  
-rdf <- c(x4,x1,x2,x3)
+We can join all of these:  
 
-#}
+```{r}
+rdf <- c(x4,x1,x2,x3)
 ```
 
 
-Separate queries: Very slow on the full data!
+Separate queries: This proves very slow on the full data!
   
 ```{r}
 sparql <-
@@ -159,7 +159,10 @@ WHERE {
   ?flight <x:dep_delay>  ?dep_delay .
   ?flight <x:carrier>  ?carrier 
 }'
+
+profvis::profvis(
 f1 <- rdf_query(rdf, sparql)
+)
 ```
 
 ```{r}
