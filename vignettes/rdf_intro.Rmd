@@ -376,18 +376,25 @@ WHERE {
 iris2 <- rdf_query(rdf, sparql)
 ```
 
-```{r}
+```{r echo=FALSE}
 DT::datatable(iris2)
 ```
 
+
+We can automatically create the a SPARQL query that returns "tidy data".  Tidy data has predicates as columns, objects as values, subjects as rows.  
+
 ```{r}
 sparql <- tidy_schema("Species",  "Sepal.Length", "Sepal.Width", prefix = "iris")
-cat(sparql)
-#rdf_query(rdf, sparql)
+
+rdf_query(rdf, sparql)
 ```
 
 
-### Automatic joins with RDF
+### Graph queries and multi-table queries
+
+
+
+### The Data Lake analogy and schema-on-read
 
 (Add example with a multi-table RDB, like nyflights examples from R4DS book. Show we can import all tables into a single RDF graph, and then show SPARQL queries that return the desired data we would otherwise need to use joins etc to get.)
 

@@ -39,12 +39,17 @@ as_rdf.data.frame <- function(df, key = NULL, base_uri = NULL, loc = tempfile())
   #x$subject[is.na(x$subject)] <- ""
   
   
-  
   ## A poor man's serializtion of a data.frame into nquads
+  ## Assumes URI, not blank node for subject
   x$subject = paste0("<", base_uri, x$subject, ">")
+  ## Predicate is always a URI
   x$predicate = paste0("<", base_uri, x$predicate, ">")
+  ## assumes datatype is not empty (e.g. string)
   x$object = paste0('\"', x$object, '\"^^<', x$datatype, ">")
+  ## quads needs a graph column
   x$graph = "."
+  
+  ## drop datatype
   x <- x[c("subject", "predicate", "object", "graph")]       
   write.table(x, loc, col.names = FALSE, quote = FALSE, row.names = FALSE)     
   
