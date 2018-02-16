@@ -1,9 +1,9 @@
-as_rdf <- function(df, key = NULL, base_uri = NULL) UseMethod("as_rdf")
+as_rdf <- function(df, key = NULL, base_uri = NULL, loc = NULL) UseMethod("as_rdf")
 
 
 
 ## tidy data to rdf
-as_rdf.data.frame <- function(df, key = NULL, base_uri = NULL){
+as_rdf.data.frame <- function(df, key = NULL, base_uri = NULL, loc = tempfile()){
   
   x <- df
   if(is.null(key)){
@@ -11,32 +11,61 @@ as_rdf.data.frame <- function(df, key = NULL, base_uri = NULL){
   } else {
     names(x)[names(x) == key] <- "subject"
   }
+  
+  ## FIXME consider taking an already-gathered table to avoid dependency?
   suppressWarnings(
     x <- tidyr::gather(x, key = predicate, value = object, -subject)
   )
   
+  
+  
   ## gather looses col-classes, so pre-compute them (with base R)
   col_classes <- data.frame(datatype = 
-                              vapply(df, rdflib:::xs_class, character(1)),
+                              vapply(df, 
+                                     rdflib:::xs_class, 
+                                     character(1), 
+                                     explicit_strings = TRUE),
                             stringsAsFactors = FALSE)
   col_classes$predicate <- rownames(col_classes)
   rownames(col_classes) <- NULL
   
-  
   x <- merge(x, col_classes, by = "predicate")
   
-  ## NA to blank string
-  x$object[is.na(x$object)] <- ""
-  x$subject[is.na(x$subject)] <- ""
+  ## DROP NA triples -- fixme, these should be blank nodes
+  x <- na.omit(x)
   
-  rdf <- rdf()
-  for(i in seq_along(x$subject)){
-    rdf <- rdf_add(rdf, 
-                   subject = paste0(base_uri, as.character(x$subject[[i]])),
-                   predicate = paste0(base_uri, x$predicate[[i]]),
-                   object = x$object[[i]],
-                   datatype_uri = x$datatype[[i]])
-  }
+  ## NA needs to become a unique blank node number, could do uuid or _:r<rownum>
+  #x$object[is.na(x$object)] <- ""
+  #x$subject[is.na(x$subject)] <- ""
+  
+  
+  
+  ## A poor man's serializtion of a data.frame into nquads
+  x$subject = paste0("<", base_uri, x$subject, ">")
+  x$predicate = paste0("<", base_uri, x$predicate, ">")
+  x$object = paste0('\"', x$object, '\"^^<', x$datatype, ">")
+  x$graph = "."
+  x <- x[c("subject", "predicate", "object", "graph")]       
+  write.table(x, loc, col.names = FALSE, quote = FALSE, row.names = FALSE)     
+  
+  ## And parse text file.  Way faster than adding row by row!
+  rdf <- rdf_parse(loc, "nquads")
+  
+  
+  ## readr would probably be faster but has incompatible auto-quoting rules
+  ##readr::write.delim(x, path = loc, col_names = FALSE)
+  ## NA to blank string 
+  #x$object[is.na(x$object)] <- ""
+  #x$subject[is.na(x$subject)] <- ""
+  #rdf <- rdf()
+  #for(i in seq_along(x$subject)){
+  #  rdf <- rdf_add(rdf, 
+  #                 subject = paste0(base_uri, as.character(x$subject[[i]])),
+  #                 predicate = paste0(base_uri, x$predicate[[i]]),
+  #                 object = x$object[[i]],
+  #                 datatype_uri = x$datatype[[i]])
+  #}
+  
   rdf
 }
 
@@ -107,4 +136,7 @@ tidy_schema <- function(..., columns = NULL, prefix=NULL, na.rm = TRUE){
 #sparql <- table_schema(columns=names(iris), prefix="iris")
 #rdf_query(rdf, sparql) %>% as_tibble()
 
-
+quick_quads <- function(df, prefix = "a:"){
+  #stopifnot(names(df) == c("subject", "predicate", "object"))
+  mutate(subject = paste0(prefix, subject), predicate = )
+}
