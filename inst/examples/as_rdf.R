@@ -29,7 +29,10 @@ as_rdf.data.frame <- function(df, key = NULL, base_uri = NULL, loc = tempfile())
   col_classes$predicate <- rownames(col_classes)
   rownames(col_classes) <- NULL
   
-  x <- merge(x, col_classes, by = "predicate")
+  ## merge is Slow! ~ 5 seconds for 800K triples
+  #x <- merge(x, col_classes, by = "predicate")
+  x <- dplyr::left_join(x, col_classes, by = "predicate")
+  
   
   ## DROP NA triples -- fixme, these should be blank nodes
   x <- na.omit(x)
@@ -38,6 +41,7 @@ as_rdf.data.frame <- function(df, key = NULL, base_uri = NULL, loc = tempfile())
   #x$object[is.na(x$object)] <- ""
   #x$subject[is.na(x$subject)] <- ""
   
+  ## paste0 is a little slow ~ 1 s on 800K triples
   
   ## A poor man's serializtion of a data.frame into nquads
   ## Assumes URI, not blank node for subject
@@ -49,27 +53,15 @@ as_rdf.data.frame <- function(df, key = NULL, base_uri = NULL, loc = tempfile())
   ## quads needs a graph column
   x$graph = "."
   
+  ## write table is a little slow, ~ 1s on 800K triples
+  
   ## drop datatype
   x <- x[c("subject", "predicate", "object", "graph")]       
   write.table(x, loc, col.names = FALSE, quote = FALSE, row.names = FALSE)     
   
   ## And parse text file.  Way faster than adding row by row!
+  ## but still about 8 s on 800K triples, all in the C layer
   rdf <- rdf_parse(loc, "nquads")
-  
-  
-  ## readr would probably be faster but has incompatible auto-quoting rules
-  ##readr::write.delim(x, path = loc, col_names = FALSE)
-  ## NA to blank string 
-  #x$object[is.na(x$object)] <- ""
-  #x$subject[is.na(x$subject)] <- ""
-  #rdf <- rdf()
-  #for(i in seq_along(x$subject)){
-  #  rdf <- rdf_add(rdf, 
-  #                 subject = paste0(base_uri, as.character(x$subject[[i]])),
-  #                 predicate = paste0(base_uri, x$predicate[[i]]),
-  #                 object = x$object[[i]],
-  #                 datatype_uri = x$datatype[[i]])
-  #}
   
   rdf
 }

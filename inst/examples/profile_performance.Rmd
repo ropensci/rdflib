@@ -42,7 +42,7 @@ Use a smaller dataset if we do not have a BDB backend:
 ```{r}
 #if(!rdf_has_bdb()){
 flights <- flights %>% 
-  filter(distance > 2500) # try smaller dataset
+  filter(distance > 2400) # try smaller dataset
 #}
 ```
 
@@ -123,10 +123,10 @@ out <- rdf_query(x3, sparql)
 head(out)
 ```
 
-Big table via poor-man's `nquads` 165 seconds if this is the full table:
+Big table via poor-man's `nquads` 165 seconds if this is the full table, mostly executing the C parser command.
 
 ```{r}
-system.time(
+profvis::profvis(
     x4 <- as_rdf(flights, NULL, "x:")
 )
 ```
