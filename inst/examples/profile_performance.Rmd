@@ -21,6 +21,7 @@ then this will fallback on in-memory storage and this vignette will use an abrid
 
 ```{r}
 options(rdflib_storage = "BDB")
+options(rdflib_storage = "memory")
 ```
 
 
@@ -42,7 +43,7 @@ Use a smaller dataset if we do not have a BDB backend:
 ```{r}
 #if(!rdf_has_bdb()){
 flights <- flights %>% 
-  filter(distance > 2400) # try smaller dataset
+  filter(distance > 3000) # try smaller dataset
 #}
 ```
 
@@ -126,7 +127,7 @@ head(out)
 Big table via poor-man's `nquads` 165 seconds if this is the full table, mostly executing the C parser command.
 
 ```{r}
-profvis::profvis(
+system.time(
     x4 <- as_rdf(flights, NULL, "x:")
 )
 ```
@@ -145,11 +146,11 @@ The json-ld approach just appears to crash, so we won't run that:
 We can join all of these:  
 
 ```{r}
-rdf <- c(x4,x1,x2,x3)
+rdf <- c(rdf(), x1,x2,x3,x4)
 ```
 
 
-Separate queries: This proves very slow on the full data!
+Separate queries:
   
 ```{r}
 sparql <-
@@ -160,8 +161,8 @@ WHERE {
   ?flight <x:carrier>  ?carrier 
 }'
 
-profvis::profvis(
-f1 <- rdf_query(rdf, sparql)
+system.time(
+f1 <- rdf_query(x4, sparql)
 )
 ```
 
@@ -200,6 +201,7 @@ out2
 
 
 ```{r}
+
 s <- 
 'SELECT ?tailnum
 WHERE {
@@ -207,8 +209,9 @@ WHERE {
   ?flight <x:dep_delay>  11 
 }'
 
-rdf_query(rdf, s)
-
+profvis::profvis( 
+  rdf_query(rdf, s)
+)
 
 ```
 
