@@ -78,6 +78,8 @@ as_rdf.data.frame <- function(df, key = NULL, base_uri = NULL, loc = tempfile())
   ## And parse text file.  Way faster than adding row by row!
   ## but still about 8 s on 800K triples, all in the C layer
   rdf <- rdf_parse(loc, "nquads")
+  unlink(loc)
+  
   
   rdf
 }
