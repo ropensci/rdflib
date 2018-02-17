@@ -23,12 +23,12 @@ options(rdflib_storage = "memory")
 
 
 
-```{r include = FALSE}
+```{r}
 # Use a smaller dataset if we do not have a BDB backend: 
-#if(!rdf_has_bdb()){
+if(getOption("rdflib_storage") != "BDB"){
 flights <- flights %>% 
   filter(distance > 2600) # try smaller dataset
-#}
+}
 ```
 
 
@@ -118,6 +118,8 @@ f <- system.file("extdata/gh_repos.json", package="repurrrsive")
 gh_data <- jsonlite::read_json(f)
 ```
 
+## Tidyverse style
+
 ```{r}
 gh_flat <- gh_data %>% flatten()  # abandon nested structure and hope we didn't need it
 
@@ -129,34 +131,44 @@ gh_tibble <- tibble(
   owner =    gh_flat %>% map_chr(c("owner", "login"))
 )
 
-gh_tibble %>% arrange(name)
+gh_tibble %>% arrange(name) %>% head()
+```
+
+## RDF on non-tabular data
+
+```{r gh_add}
+gh_rdf <- as_rdf.list(gh_data, '"@vocab": "gh:"')
 ```
 
 
+We can add it to the lake just for kicks:
 
 ```{r}
-gh_rdf <- as_rdf.list(gh_data)
-```
-
-```{r}
-rdf_serialize(gh_rdf, "test.json", "jsonld")
-names(gh_tibble)
+system.time(
+rdf <- c(rdf, gh_rdf)
+)
 ```
 
 
-```{r query}
+And we can query it back out of the lake
+
+```{r gh_query}
 s <- 
   'SELECT ?name ?issues ?wiki ?homepage ?owner
 WHERE {
-?repo <x:homepage>  ?homepage .
-?repo <x:has_wiki> ?wiki .
-?repo <x:open_issues_count> ?issues .
-?repo <x:name> ?name .
-?repo <x:owner> ?owner_id .
-?owner_id <x:login>  ?owner 
+?repo <gh:homepage>  ?homepage .
+?repo <gh:has_wiki> ?wiki .
+?repo <gh:open_issues_count> ?issues .
+?repo <gh:name> ?name .
+?repo <gh:owner> ?owner_id .
+?owner_id <gh:login>  ?owner 
 }'
+
+system.time(
 rdf_tibble <- rdf_query(rdf, s)
-rdf_tibble %>% arrange(name) 
+)
+
+head(rdf_tibble)
 ```
 
 
