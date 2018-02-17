@@ -14,7 +14,9 @@ c.rdf <- function(...){
     f <- file.path(loc,paste0(i, ".rdf"))
     rdf_serialize(rdfs[[i]],f) 
     rdf_parse(f, rdf = rdf)
+    file.remove(f)
   }
+  unlink(loc)
   rdf
 }
 
