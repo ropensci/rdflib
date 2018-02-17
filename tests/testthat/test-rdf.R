@@ -41,6 +41,10 @@ testthat::test_that("We can use BDB storage", {
   testthat::expect_is(rdf, "rdf")
   options(rdflib_storage = "memory")
   rdf_free(rdf)
+  
+  unlink("rdflib-po2s.db")
+  unlink("rdflib-so2p.db")
+  unlink("rdflib-sp2o.db")
 })
 
 
