@@ -110,3 +110,53 @@ e.g. `manufacturer` is a property of a `tailnum` (corresponding to a particular 
 This is reminiscent of  the way in which these data are organized in the relational database tables to begin with: we find `deb_delay` in the `flights` table and `manufacturer` in the `planes` table. Good relational design encourages this, but to work with the data the user is often left having to do the required joins, which also creates tables where these semantics are less clear.  
 
 Tabular formats can often be sloppy about what is a key and what is a literal value, and also whether a column with the same name in different tables means the same thing in both.  Both of these things pose challenges for later use when joining data.  RDF representation encourages greater discipline through the use of URIs (though we've run a bit roughshod over that with the cavilier use of `x:` here.)
+
+## Non-tabular data
+
+```{r}
+f <- system.file("extdata/gh_repos.json", package="repurrrsive")
+gh_data <- jsonlite::read_json(f)
+```
+
+```{r}
+gh_flat <- gh_data %>% flatten()  # abandon nested structure and hope we didn't need it
+
+gh_tibble <- tibble(
+  name =     gh_flat %>% map_chr("name"),
+  issues =   gh_flat %>% map_int("open_issues_count"),
+  wiki =     gh_flat %>% map_lgl("has_wiki"),
+  homepage = gh_flat %>% map_chr("homepage", .default = ""),
+  owner =    gh_flat %>% map_chr(c("owner", "login"))
+)
+
+gh_tibble %>% arrange(name)
+```
+
+
+
+```{r}
+gh_rdf <- as_rdf.list(gh_data)
+```
+
+```{r}
+rdf_serialize(gh_rdf, "test.json", "jsonld")
+names(gh_tibble)
+```
+
+
+```{r query}
+s <- 
+  'SELECT ?name ?issues ?wiki ?homepage ?owner
+WHERE {
+?repo <x:homepage>  ?homepage .
+?repo <x:has_wiki> ?wiki .
+?repo <x:open_issues_count> ?issues .
+?repo <x:name> ?name .
+?repo <x:owner> ?owner_id .
+?owner_id <x:login>  ?owner 
+}'
+rdf_tibble <- rdf_query(rdf, s)
+rdf_tibble %>% arrange(name) 
+```
+
+
