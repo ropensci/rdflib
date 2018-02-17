@@ -34,32 +34,50 @@ rdf_query <- function(rdf, query, data.frame = TRUE, ...){
   queryObj <- new("Query", rdf$world, query, ...)
   # ... defaults are: base_uri=NULL, query_language="sparql", query_uri=NULL)
   queryResult <- redland::executeQuery(queryObj, rdf$model)
+  out <- getResults(queryResult)
+  
+  #iter_getNextResult(queryResult)
+  # out <- rectangularize_query_results(out)
+  redland::freeQueryResults(queryResult)
+  redland::freeQuery(queryObj)
+  
+  out
+}
 
+## Notes
+## readr does a pretty good job guessing types returned from sparql
+## character, numeric, integer, Dates, POSIXct work fine
+## logicals are denoted `true` and `false`, which readr mistakes for characters
+
+## Redland only exports the getNextResult parser, which is extremely slow on large returns
+
+#' @importFrom readr read_csv
+getResults <- function(queryResult, format = "csv", ...){
+  mimetype <- switch(format,
+                     "csv" = "text/csv; charset=utf-8",
+                     NULL)
+  readr::read_csv(redland:::librdf_query_results_to_string2(
+                            queryResult@librdf_query_results, 
+                            format, mimetype, NULL, NULL), 
+                  ...)
+}
+
+
+
+
+
+## Deprecate this strategy in favor of direct result
+## also means we can deprecate type_by_datauri and other utilities
+iter_getNextResult <- function(queryResult){
   out <- list()
   result <- redland::getNextResult(queryResult)
   out <- c(out, result)
   while(!is.null(result)){
     result <- redland::getNextResult(queryResult)
     out <- c(out, result)
-    
-  }
-  redland::freeQueryResults(queryResult)
-  redland::freeQuery(queryObj)
-  
-  if(data.frame){
-    out <- rectangularize_query_results(out)
-  } else {
-    ## group by query variable 
-#    vars <- unique(names(out))
-#    out <- lapply(vars, function(v){ 
-#      contents <- as.character(out[names(out) == v ])
-#      type_by_datauri(contents)  
-#      })
-#  names(out) <- vars
   }
   out
 }
-
 
 rectangularize_query_results <- function(out){
   vars <- unique(names(out))
@@ -74,7 +92,7 @@ rectangularize_query_results <- function(out){
     if(length(u) == 1){
       values <- unlist(values)
       if(u %in% c("Date", "POSIXct"))
-      class(values) <- unique(types) # Restore date class
+        class(values) <- unique(types) # Restore date class
     } else {
       values <- vapply(values, as.character, character(1))
     }
@@ -85,5 +103,3 @@ rectangularize_query_results <- function(out){
   ## Or we could use tibble::as_data_frame for list columns w/ mixed type..
   as.data.frame(X, stringsAsFactors=FALSE)
 }
-
-
