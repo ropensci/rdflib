@@ -1,6 +1,13 @@
 as_rdf <- function(df, key = NULL, base_uri = NULL, loc = NULL) UseMethod("as_rdf")
 
-
+# test2 <- tibble(
+#   age = 5L,
+#   name = "bob",
+#   height = 1.9,
+#   address = "x:address",
+#   knows = NA
+# )
+# as_rdf.data.frame(test2, NULL, "x:", "test2.nquads")
 
 ## tidy data to rdf
 as_rdf.data.frame <- function(df, key = NULL, base_uri = NULL, loc = tempfile()){
@@ -23,8 +30,7 @@ as_rdf.data.frame <- function(df, key = NULL, base_uri = NULL, loc = tempfile())
   col_classes <- data.frame(datatype = 
                               vapply(df, 
                                      rdflib:::xs_class, 
-                                     character(1), 
-                                     explicit_strings = TRUE),
+                                     character(1)),
                             stringsAsFactors = FALSE)
   col_classes$predicate <- rownames(col_classes)
   rownames(col_classes) <- NULL
@@ -32,24 +38,34 @@ as_rdf.data.frame <- function(df, key = NULL, base_uri = NULL, loc = tempfile())
   ## merge is Slow! ~ 5 seconds for 800K triples
   #x <- merge(x, col_classes, by = "predicate")
   x <- dplyr::left_join(x, col_classes, by = "predicate")
-  
-  
-  ## DROP NA triples -- fixme, these should be blank nodes
-  x <- na.omit(x)
-  
-  ## NA needs to become a unique blank node number, could do uuid or _:r<rownum>
-  #x$object[is.na(x$object)] <- ""
-  #x$subject[is.na(x$subject)] <- ""
-  
+ 
   ## paste0 is a little slow ~ 1 s on 800K triples
   
-  ## A poor man's serializtion of a data.frame into nquads
-  ## Assumes URI, not blank node for subject
+  ## A POOR MAN'S NQUAD writer
+  
+  ## NA needs to become a unique blank node number, could do uuid or _:r<rownum>
+  x$object[is.na(x$object)] <- paste0("_:r", which(is.na(x$object)))
+  x$subject[is.na(x$subject)] <- paste0("_:r", which(is.na(x$subject)))
+  
+  ## strings and URIs do not get a datatype
+  needs_type <- !is.na(x$datatype)
+  
   x$subject = paste0("<", base_uri, x$subject, ">")
   ## Predicate is always a URI
   x$predicate = paste0("<", base_uri, x$predicate, ">")
+  
+  ## Strings should be quoted
+  is_string <- !grepl("\\w+:\\w.*", x$object) & !needs_type
+  x$object[is_string] <- paste0('\"', x$object[is_string] , '\"')
+  
+  ## URIs should be <> instead
+  x$object <- gsub("(^\\w+:\\w.*$)", "<\\1>", x$object)
+  
   ## assumes datatype is not empty (e.g. string)
-  x$object = paste0('\"', x$object, '\"^^<', x$datatype, ">")
+  x$object[needs_type] = paste0('\"', x$object[needs_type], 
+                                '\"^^<', x$datatype[needs_type], ">")
+  
+  
   ## quads needs a graph column
   x$graph = "."
   

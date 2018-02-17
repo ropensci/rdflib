@@ -33,7 +33,9 @@ Operations in `dplyr` on the `nyflights13` dataset are easy to write and fast to
 df <- flights %>% 
   left_join(airlines) %>%
   left_join(planes, by="tailnum") %>% 
-  select(carrier, manufacturer, model)
+  select(carrier, name, manufacturer, model) %>% 
+  distinct()
+head(df)
 ```
 
 
@@ -51,11 +53,13 @@ flights <- flights %>%
 Keys, including foreign keys, must be represented as URIs and not literal strings.  
 
 ```{r}
-as_uri <- function(x, base_uri = "x:") paste0("<", base_uri, x, ">")
+as_uri <- function(x, base_uri = "x:") paste0(base_uri, x)
 
-flights <- flights %>% 
+uri_flights <- flights %>% 
   mutate(tailnum = as_uri(tailnum),
-         carrier = as_uri(carrier)) -> flights
+         carrier = as_uri(carrier))
+
+
 ```
 
 
@@ -107,28 +111,36 @@ With tables that have only tens of thousands of cells (triples) this is pretty f
 x1 <- as_rdf(airlines, "carrier", "x:")
 x2 <- as_rdf(airports, "faa", "x:") ## a few funny chars, UTF8 issues?
 x3 <- as_rdf(planes,  "tailnum", "x:")
+
+x <- c(rdf(), x1,x2,x3)
 ```
 
 
 SPARQL queries on the resulting data are also pretty fast:
 
+
+
+
 ```{r}
 sparql <-
-  'SELECT  ?seats ?model ?tailnum
+  'SELECT   ?model
 WHERE {
- ?tailnum <x:seats>  ?seats .
- ?tailnum <x:model>  ?model .
+ ?tailnum <x:carrier> ?carrier .
+ ?tailnum <x:model>  ?model 
 }'
 
-out <- rdf_query(x3, sparql)
+out <- rdf_query(x1, sparql)
 head(out)
 ```
 
-Big table via poor-man's `nquads` 165 seconds if this is the full table, mostly executing the C parser command.
+
+
+
+Big table via poor-man's `nquads` 165 seconds if this is the full table:
 
 ```{r}
 system.time(
-    x4 <- as_rdf(flights, NULL, "x:")
+    x4 <- as_rdf(uri_flights, NULL, "x:")
 )
 ```
 
@@ -150,8 +162,9 @@ rdf <- c(rdf(), x1,x2,x3,x4)
 ```
 
 
-Separate queries:
-  
+
+Separate queries: This proves very slow on the full data! Would be much faster if we did not have to iterate over getNextResult but could parse all results as a document.  Hopefully this change is coming to `redland` R library soon!
+
 ```{r}
 sparql <-
 'SELECT  ?tailnum ?dep_delay ?carrier
@@ -162,7 +175,8 @@ WHERE {
 }'
 
 system.time(
-f1 <- rdf_query(x4, sparql)
+
+f1 <- rdf_query(rdf, sparql)
 )
 ```
 
@@ -179,39 +193,20 @@ tmp <- inner_join(f1,f2)
 ```
 
 
-Can we get this to work in one single sparql Query?
-Why not working?
 
 
 ```{r}
 s <- 
-  'SELECT  ?dep_delay ?tailnum ?manufacturer
+  'SELECT  ?carrier ?name ?manufacturer ?model
 WHERE {
 ?flight <x:tailnum>  ?tailnum .
 ?tailnum <x:manufacturer> ?manufacturer .
-?tailnum <x:model> ?model 
-?flight <x:dep_delay>  ?dep_delay .
+?tailnum <x:model> ?model .
+?flight <x:carrier>  ?carrier .
+?carrier <x:name> ?name
 }'
 
 out2 <- rdf_query(rdf, s)
-out2
-```
-
-### DEBUG
-
-
-```{r}
-
-s <- 
-'SELECT ?tailnum
-WHERE {
-  ?flight <x:tailnum>  ?tailnum .
-  ?flight <x:dep_delay>  11 
-}'
-
-profvis::profvis( 
-  rdf_query(rdf, s)
-)
-
+head(out2)
 ```
 
