@@ -12,13 +12,16 @@ library(nycflights13)
 library(tidyverse)
 library(rdflib)
 
+library(jsonlite)
+library(repurrrsive)
+
 ## experimental methods
 source(system.file("examples/as_rdf.R", package="rdflib"))
 ```
 
 ```{r options}
-#options(rdflib_storage = "BDB") ## may also be much slower...
-options(rdflib_storage = "memory") 
+options(rdflib_storage = "BDB") 
+#options(rdflib_storage = "memory") 
 ```
 
 
@@ -56,7 +59,7 @@ This can serve as a very effective means of data integration (provided a reasona
 
 Okay, let's dump the `nyflights13` into the data lake. First, the foreign keys in any table must be represented as URIs and not literal strings: 
 
-```{r}
+```{r as_uri}
 as_uri <- function(x, base_uri = "x:") paste0(base_uri, x)
 uri_flights <- flights %>% 
   mutate(tailnum = as_uri(tailnum),
@@ -67,7 +70,7 @@ uri_flights <- flights %>%
 Similiarly, when reading into RDF we have to declare the key column for the table,
 and again establish a `base_uri` which will allow RDF methods to distinguish between URIs (subjects, predicates, and foreign keys) and literal strings.  
 
-```{r write_rdf, results='hide', message=FALSE, warning=FALSE}
+```{r write_rdf}
 system.time(
   
 rdf <- c(
@@ -120,8 +123,8 @@ gh_data <- jsonlite::read_json(f)
 
 ## Tidyverse style
 
-```{r}
-gh_flat <- gh_data %>% flatten()  # abandon nested structure and hope we didn't need it
+```{r }
+gh_flat <- gh_data %>% purrr::flatten()  # abandon nested structure and hope we didn't need it
 
 gh_tibble <- tibble(
   name =     gh_flat %>% map_chr("name"),
