@@ -48,5 +48,6 @@ Suggests: magrittr,
     httr,
     xml2,
     jsonlite,
-    repurrrsive
+    repurrrsive,
+    nycflights13
 VignetteBuilder: knitr
