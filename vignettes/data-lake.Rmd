@@ -1,0 +1,229 @@
+---
+title: The Data Lake and Schema On Read
+author: Carl Boettiger
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{The Data Lake and Schema On Read}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  
+---
+
+
+```{r include = FALSE}
+knitr::opts_chunk$set(message=FALSE, warning = FALSE)
+```
+
+
+A provocative recent analogy (e.g. [Archer, 2017](https://www.w3.org/blog/2017/04/dive-into-the-semantic-data-lake/)) for thinking about RDF is that of the Data Lake.  Whereas adding new data to a traditional relational database frequently involves laborious wrangling into the an existing rigid data *schema* of tables and columns, RDF can enable a far more simple approach of just 'tossing everything into the data lake.' While this may sound like a recipe for a terrible mess down the road, RDF gives the promise of *schema-on-read*: rather than dictating the shape of your data when first adding it to the database (i.e. schema-on-write), a SPARQL query auto-magically reaches into the lake and retrieves all the relevant data, returning it in exactly the schema you ask for; that is, as a nice single table containing only the requested columns.  
+
+This can serve as a very effective means of data integration (provided a reasonably consistent and diligent use of URIs in identifying subjects and properties (predicates)), since just about any data can be added to the lake without worrying about whether it comes in a schema that matches the existing architecture of the database.  It is this flexibility not to have to define your database schema at the start that is the primary strength of the RDF approach. 
+
+A key advantage of this approach is that it is equally as easy to extract your desired data.frame from non-rectangular data as it is from tables or relational database systems. While the previous vignette focused on simple examples including data from single `data.frames` or small JSON files, this vignette showcases the Data Lake approach on a more complex relational database organized over several tables (`nyflights13` data, used to teach `joins` and other relational data in [Grolemund & Wickham, 2017](http://r4ds.had.co.nz)), and also in a large non-tabular file returned from the GitHub API (e.g. as used in [Bryan & Wickham, 2017 ](https://dcl-2017-04.github.io/curriculum/rectangling.html) to teach data rectangling.) 
+
+Load the necessary libraries to get started: 
+
+```{r libraries}
+## Data 
+library(nycflights13)
+library(repurrrsive)
+
+## for comparison approaches
+library(tidyverse)
+library(jsonlite)
+
+## Our focal package:
+library(rdflib)
+## experimental functions for rdflib package
+source(system.file("examples/as_rdf.R", package="rdflib"))
+```
+
+Configure RDF storage:
+
+```{r options, include = TRUE}
+#options(rdflib_storage = "BDB") 
+options(rdflib_storage = "memory") 
+
+# Use a smaller dataset if we do not have a BDB backend: 
+if(getOption("rdflib_storage") != "BDB"){
+flights <- flights %>% 
+  filter(distance > 2800) # try smaller dataset
+}
+```
+
+# Relational data
+
+
+## The `tidyverse` approach
+
+`tidyverse` operations are incredibly effective for working with relational data.  These `dplyr` on the `nyflights13` dataset are easy to write and fast to execute:
+
+```{r tidyverse}
+df <- flights %>% 
+  left_join(airlines) %>%
+  left_join(planes, by="tailnum") %>% 
+  select(carrier, name, manufacturer, model) %>% 
+  distinct()
+head(df)
+```
+ 
+Still, joins are often a challenge in data preparation.  Tabular formats can often be sloppy about what is a key column and what is a literal value, and also whether a column with the same name in different tables means the same thing in both.  Both of these things pose challenges for later use when joining data.  RDF representation encourages greater discipline through the use of URIs (though we'll run a bit roughshod over that with the caviler use of `x:` here.)  
+
+This example uses only data that is already part of the relational database.  Adding additional information to the database is frequently more tricky, and can result in a rapidly expanding number of tables that can become difficult to work across.
+ 
+
+## RDF approach
+
+Okay, now let's dump the `nyflights13` into the data lake. Foreign keys in any table must be represented as URIs and not literal strings: 
+
+```{r as_uri}
+as_uri <- function(x, base_uri = "x:") paste0(base_uri, x)
+uri_flights <- flights %>% 
+  mutate(tailnum = as_uri(tailnum),
+         carrier = as_uri(carrier))
+```
+
+Similarly, when reading into RDF we have to declare the key column for the table,
+and again establish a `base_uri` which will allow RDF methods to distinguish between URIs (subjects, predicates, and foreign keys) and literal strings.  
+
+```{r write_rdf}
+system.time(
+  
+rdf <- c(
+  as_rdf(airlines, "carrier", "x:"),
+  as_rdf(planes,  "tailnum", "x:"),
+  as_rdf(uri_flights, NULL, "x:"))
+
+)
+```
+
+Note that flights does not have a natural key (somewhat surprisingly, `flight` number is not a unique key for this table, as the same flight number is reused on the same route at different times.)  So, we will treat each row as a unique anonymous key by setting the key to `NULL`.
+
+## Schema on read
+
+We simply define the columns we want and we immediately get back the desired `data.frame`:
+
+
+```{r query}
+s <- 
+  'SELECT  ?carrier ?name ?manufacturer ?model ?dep_delay
+WHERE {
+?flight <x:tailnum>  ?tailnum .
+?flight <x:carrier>  ?carrier .
+?flight <x:dep_delay>  ?dep_delay .
+?tailnum <x:manufacturer> ?manufacturer .
+?tailnum <x:model> ?model .
+?carrier <x:name> ?name
+}'
+
+system.time(
+df <- rdf_query(rdf, s)
+)
+
+head(df)
+```
+
+
+
+Note that in place of joins, we give more semantically meaningful statements about the data:
+e.g. `manufacturer` is a property of a `tailnum` (corresponding to a particular physical aircraft), not of a `flight` number.  Departure delay `dep_delay` is a property of a flight, not of an aircraft (`tailnum`).  
+
+This is reminiscent of  the way in which these data are organized in the relational database tables to begin with: we find `deb_delay` in the `flights` table and `manufacturer` in the `planes` table. Good relational design encourages this, but to work with the data the user is often left having to do the required joins, which also creates tables where these semantics are less clear.  
+
+
+
+
+# Non-tabular data
+
+## The `tidyverse` approach
+
+We start with data from [Bryan & Wickham, 2017 ](https://dcl-2017-04.github.io/curriculum/rectangling.html) lesson on data rectangling:
+
+```{r}
+f <- system.file("extdata/gh_repos.json", package="repurrrsive")
+gh_data <- jsonlite::read_json(f)
+```
+
+
+The original lesson illustrates the power and reasonably concise syntax of the `tidyverse` package, `purrr`, to iterate over this complex structure to extract the necessary data.  In this approach, nesting of the data is largely a nuisance to overcome rather than an asset to the data analyst:
+
+```{r }
+gh_flat <- gh_data %>% purrr::flatten()  # abandon nested structure and hope we didn't need it
+
+gh_tibble <- tibble(
+  name =     gh_flat %>% map_chr("name"),
+  issues =   gh_flat %>% map_int("open_issues_count"),
+  wiki =     gh_flat %>% map_lgl("has_wiki"),
+  homepage = gh_flat %>% map_chr("homepage", .default = ""),
+  owner =    gh_flat %>% map_chr(c("owner", "login"))
+)
+
+gh_tibble %>% arrange(name) %>% head()
+```
+
+## RDF on non-tabular data
+
+The RDF approach merely treats JSON as JSON-LD within a given vocabulary.  In this context, nesting implicitly provides important semantic information about relationships between the data, which are captured in the RDF triples. Here, we import the JSON data as RDF:
+
+```{r gh_add}
+gh_rdf <- as_rdf.list(gh_data, '"@vocab": "gh:"')
+```
+
+
+We can add it to the existing data lake just for kicks:
+
+```{r}
+system.time(
+rdf <- c(rdf, gh_rdf)
+)
+```
+
+
+And we can query it back out of the lake just by selecting the columns of interest. 
+
+```{r gh_query}
+s <- 
+  'SELECT ?name ?issues ?wiki ?homepage ?owner
+WHERE {
+?repo <gh:homepage>  ?homepage .
+?repo <gh:has_wiki> ?wiki .
+?repo <gh:open_issues_count> ?issues .
+?repo <gh:name> ?name .
+?repo <gh:owner> ?owner_id .
+?owner_id <gh:login>  ?owner 
+}'
+
+system.time(
+rdf_tibble <- rdf_query(rdf, s)
+)
+
+head(rdf_tibble)
+```
+
+## Going further: A `dplyr`-style syntax for SPARQL?
+
+`dplyr` provides a reasonably intuitive, powerful, and concise interface for many common SQL commands.  Indeed, `dplyr` function calls are literally serialized to the corresponding SQL query when working with a relational database back-end (via `dbplyr`).  Can a similar API be developed for SPARQL queries?
+
+SPARQL syntax is obviously inspired by SQL syntax, and includes many of the same operations found in SQL and `dplyr` (e.g. SELECT, WHERE, FILTER, DISTINCT) as well as other more RDF specific queries. 
+
+If we are willing to make some assumptions about the most common queries, we can start to make some simplifying functions.  For instance, in the above patterns, the variables being returned are always objects from the triples, with columns being named using the corresponding predicate.  Assuming some additional convention to define the prefixes and indicate graph traversal (i.e. nested values), we could have constructed the above query from a call:
+
+```r
+tidy_schema(name, open_issues_count, has_wiki, homepage owner.login)
+```
+
+Though to generalize to arbitrary labels and predicates this might need to support something like:
+
+```r
+tidy_schema(list = list(name = "gh:name", 
+                        issues = "gh:open_issues_count", 
+                        wiki = "gh:has_wiki", 
+                        homepage = "gh:homepage",
+                        owner = list("gh:owner", login = "gh:login")))
+```
+
+
+
+
