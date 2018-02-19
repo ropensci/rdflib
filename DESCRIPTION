@@ -46,5 +46,6 @@ Suggests: magrittr,
     tidyverse,
     dplyr,
     tidyr,
-    tibble
+    tibble,
+    repurrrsive
 VignetteBuilder: knitr
