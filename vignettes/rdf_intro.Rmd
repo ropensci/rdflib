@@ -350,6 +350,8 @@ _Still working on writing this section_
 
 ```{r}
 source(system.file("examples/as_rdf.R", package="rdflib"))
+source(system.file("examples/tidy_schema.R", package="rdflib"))
+
 ## Testing: Digest some data.frames into RDF and extract back
  library(tidyverse)
  cars <- mtcars %>% rownames_to_column("Model")

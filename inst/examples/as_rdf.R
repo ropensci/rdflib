@@ -12,27 +12,35 @@
 as_rdf <- function(x, 
                    rdf = rdf(),
                    vocab = NULL, 
-                   base = getOption("rdflib_base_uri"), 
+                   base = getOption("rdflib_base_uri", "localhost://"), 
                    context = NULL, 
                    ...) UseMethod("as_rdf")
 
 as_rdf.list <- function(x, 
+                        rdf = NULL,
                         vocab = NULL, 
-                        base = getOption("rdflib_base_uri"), 
+                        base = getOption("rdflib_base_uri", "localhost://"), 
                         context = NULL){
   
+  if(is.null(rdf)){
+    rdf <- rdf()  
+  }
   ## unbox length-1 lists so we can apply a context successfully
   if(is(x, "list") && length(x) == 1) x <- x[[1]]
   
   json <- jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE, force = TRUE)
   jsonld_context <- json_context(vocab, base, context)
   json2 <- paste0('{\n"@context":', jsonld_context, ',\n',  '"@graph": ', json,  '}')
-  rdf <- rdflib::rdf_parse(json2, "jsonld", rdf = rdf)
+  rdflib::rdf_parse(json2, "jsonld", rdf = rdf)
   rdf
 }
+
+
 # helper function (identical to plyr::compact)
 compact <- function (l) Filter(Negate(is.null), l)
-json_context <- function(vocab = NULL, base = getOption("rdflib_base_uri"), context = NULL){
+json_context <- function(vocab = NULL, 
+                         base = getOption("rdflib_base_uri", "localhost://"), 
+                         context = NULL){
   jsonlite::toJSON(
     compact(c(list("@vocab" = vocab,
                    "@base" = base),
@@ -52,11 +60,14 @@ json_context <- function(vocab = NULL, base = getOption("rdflib_base_uri"), cont
 
 ## tidy data to rdf
 as_rdf.data.frame <- function(df,  
-                              rdf = rdf(), 
+                              rdf = NULL, 
                               vocab = NULL, 
-                              base = getOption("rdflib_base_uri"), 
+                              base = getOption("rdflib_base_uri", "localhost://"), 
                               context = NULL, 
                               key = NULL){
+  if(is.null(rdf)){
+    rdf <- rdf()  
+  }
   
   ## gather looses col-classes, so pre-compute them (with base R)
   col_classes <- data.frame(datatype = 
@@ -86,7 +97,7 @@ as_rdf.data.frame <- function(df,
   ## And parse text file.  Way faster than adding row by row!
   ## but still about 8 s on 800K triples, all in the C layer
   
-  rdf <- rdf_parse(loc, "nquads")
+  rdf <- rdf_parse(loc, rdf = rdf, format = "nquads")
   unlink(loc)
   
   rdf
@@ -103,23 +114,30 @@ poor_mans_nquads <- function(x, loc, vocab){
   ## However, this seems to be fast enough that it is rarely the bottleneck
   
   ## NOTE: paste0 is a little slow ~ 1 s on 800K triples
+  ## No datatype on blank (missing) nodes
+  
+  blank_object <-is.na(x$object)
+  blank_subject <- is.na(x$subject)
+  
+  x$datatype[blank_object] <- as.character(NA)
   ## NA needs to become a unique blank node number, could do uuid or _:r<rownum>
-  x$object[is.na(x$object)] <- paste0("_:r", which(is.na(x$object)))
-  x$subject[is.na(x$subject)] <- paste0("_:r", which(is.na(x$subject)))
+  x$object[blank_object] <- paste0("_:r", which(blank_object))
+  x$subject[blank_subject] <- paste0("_:r", which(blank_subject))
   
   ## strings and URIs do not get a datatype
   needs_type <- !is.na(x$datatype)
   
-  x$subject = paste0("<", vocab, x$subject, ">")
+  ## URIs that are not blank nodes need <>
+  x$subject[!blank_subject] = paste0("<", vocab, x$subject[!blank_subject], ">")
   ## Predicate is always a URI
   x$predicate = paste0("<", vocab, x$predicate, ">")
   
   ## Strings should be quoted
-  is_string <- !grepl("\\w+:\\w.*", x$object) & !needs_type
+  is_string <- !grepl("\\w+:\\w.*", x$object) & !needs_type & !blank_object
   x$object[is_string] <- paste0('\"', x$object[is_string] , '\"')
   
-  ## URIs should be <> instead
-  x$object <- gsub("(^\\w+:\\w.*$)", "<\\1>", x$object)
+  ## URIs should be <> instead, but not blanks!
+  x$object[!blank_object] <- gsub("(^\\w+:\\w.*$)", "<\\1>", x$object[!blank_object])
   
   ## assumes datatype is not empty (e.g. string)
   x$object[needs_type] = paste0('\"', x$object[needs_type], 

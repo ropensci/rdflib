@@ -5,7 +5,8 @@
 \title{Parse RDF Files}
 \usage{
 rdf_parse(doc, format = c("guess", "rdfxml", "nquads", "ntriples", "turtle",
-  "jsonld"), rdf = NULL, ...)
+  "jsonld"), rdf = NULL, base = getOption("rdflib_base_uri",
+  "localhost://"), ...)
 }
 \arguments{
 \item{doc}{path, URL, or literal string of the rdf document to parse}
@@ -17,6 +18,8 @@ on file extension and fall back on rdfxml.}
 
 \item{rdf}{an existing rdf triplestore to extend with triples from
 the parsed file.  Default will create a new rdf object.}
+
+\item{base}{the base URI to assume for any relative URIs (blank nodes)}
 
 \item{...}{additional parameters (not implemented)}
 }

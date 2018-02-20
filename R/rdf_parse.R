@@ -7,6 +7,7 @@
 #' on file extension and fall back on rdfxml.
 #' @param rdf an existing rdf triplestore to extend with triples from
 #' the parsed file.  Default will create a new rdf object.
+#' @param base the base URI to assume for any relative URIs (blank nodes)
 #' @param ... additional parameters (not implemented)
 #'
 #' @return an rdf object, containing the redland world
@@ -28,6 +29,7 @@ rdf_parse <- function(doc,
                                  "turtle",
                                  "jsonld"),
                       rdf = NULL,
+                      base = getOption("rdflib_base_uri", "localhost://"),
                       ...){
   
   format <- match.arg(format)
@@ -63,7 +65,7 @@ rdf_parse <- function(doc,
     
   mimetype <- unname(rdf_mimetypes[format])
   parser <- new("Parser", rdf$world, name = format, mimeType = mimetype)
-  redland::parseFileIntoModel(parser, rdf$world, doc, rdf$model)
+  redland::parseFileIntoModel(parser, rdf$world, doc, rdf$model, baseUri = base)
   
   redland::freeParser(parser)
   unlink(tmp_string)

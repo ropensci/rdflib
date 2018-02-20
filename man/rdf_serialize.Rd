@@ -6,7 +6,7 @@
 \usage{
 rdf_serialize(rdf, doc = NULL, format = c("guess", "rdfxml", "nquads",
   "ntriples", "turtle", "jsonld"), namespace = NULL, prefix = NULL,
-  base = getOption("rdflib_base_uri", as.character(NA)), ...)
+  base = getOption("rdflib_base_uri", "localhost://"), ...)
 }
 \arguments{
 \item{rdf}{an existing rdf triplestore to extend with triples from
@@ -22,6 +22,8 @@ on file extension and fall back on rdfxml.}
 \item{namespace}{string giving the namespace to set}
 
 \item{prefix}{string giving the prefix associated with the namespace}
+
+\item{base}{the base URI to assume for any relative URIs (blank nodes)}
 
 \item{...}{additional arguments to \code{redland::serializeToFile}}
 }

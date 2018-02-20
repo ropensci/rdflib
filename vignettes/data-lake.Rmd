@@ -38,6 +38,8 @@ library(jsonlite)
 library(rdflib)
 ## experimental functions for rdflib package
 source(system.file("examples/as_rdf.R", package="rdflib"))
+source(system.file("examples/tidy_schema.R", package="rdflib"))
+
 ```
 
 Configure RDF storage:
@@ -48,8 +50,7 @@ options(rdflib_storage = "memory")
 
 # Use a smaller dataset if we do not have a BDB backend: 
 if(getOption("rdflib_storage") != "BDB"){
-#flights <- flights %>% 
-#  filter(distance > 2500) # try smaller dataset
+  flights <- flights[1:1e3,]
 }
 ```
 
@@ -89,14 +90,15 @@ Similarly, when reading into RDF we have to declare the key column for the table
 and again establish a `base_uri` which will allow RDF methods to distinguish between URIs (subjects, predicates, and foreign keys) and literal strings.  
 
 ```{r write_rdf}
-system.time(
+system.time({
   
-rdf <- c(
-  as_rdf(airlines, key = "carrier", vocab = "x:"),
-  as_rdf(planes,  key = "tailnum", vocab = "x:"),
-  as_rdf(uri_flights, key = NULL, vocab = "x:"))
+rdf <- rdf()
 
-)
+as_rdf(airlines, rdf = rdf, key = "carrier", vocab = "x:")
+as_rdf(planes,  rdf = rdf, key = "tailnum", vocab = "x:")
+as_rdf(uri_flights, rdf = rdf, key = NULL, vocab = "x:")
+
+})
 ```
 
 Note that flights does not have a natural key (somewhat surprisingly, `flight` number is not a unique key for this table, as the same flight number is reused on the same route at different times.)  So, we will treat each row as a unique anonymous key by setting the key to `NULL`.

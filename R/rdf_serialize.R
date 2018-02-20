@@ -38,7 +38,7 @@ rdf_serialize <- function(rdf,
                                      "jsonld"),
                           namespace = NULL,
                           prefix = NULL,
-                          base = getOption("rdflib_base_uri", as.character(NA)),
+                          base = getOption("rdflib_base_uri", "localhost://"),
                           ...){
   
   format <- match.arg(format)
