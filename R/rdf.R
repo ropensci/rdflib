@@ -2,7 +2,8 @@
 #'
 #' @param path where should local database to store RDF triples be created, if
 #' configured for disk-based storage; see details.
-#'
+#' @param new_db logical, default TRUE. should we create a new database on disk
+#' or attempt to connect to an existing database (at the path specified)?
 #' @return an rdf object
 #' @details an rdf Object is a list of class 'rdf', consisting of
 #' three pointers to external C objects managed by the redland library.
@@ -33,14 +34,18 @@
 #' @examples
 #' x <- rdf()
 #' 
-rdf <- function(path = "."){
+rdf <- function(path = ".", new_db = TRUE){
   world <- new("World")
   
   ## Handle storage type
   if(getOption("rdflib_storage", "memory") == "BDB"){
     if(rdf_has_bdb()){
       ## Store in Berkeley DB
-      options <- paste0("new='yes',hash-type='bdb',dir='", path, "'") 
+      if(new_db){
+        options <- paste0("new='yes',hash-type='bdb',dir='", path, "'") 
+      } else {
+        options <- paste0("hash-type='bdb',dir='", path, "'") 
+      }
     } else {
       warning("BDB driver not found. Falling back on in-memory storage")
       options <- "hash-type='memory'"

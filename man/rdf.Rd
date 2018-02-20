@@ -4,11 +4,14 @@
 \alias{rdf}
 \title{Initialize an \code{rdf} Object}
 \usage{
-rdf(path = ".")
+rdf(path = ".", new_db = TRUE)
 }
 \arguments{
 \item{path}{where should local database to store RDF triples be created, if
 configured for disk-based storage; see details.}
+
+\item{new_db}{logical, default TRUE. should we create a new database on disk
+or attempt to connect to an existing database (at the path specified)?}
 }
 \value{
 an rdf object
