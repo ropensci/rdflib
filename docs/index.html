@@ -35,9 +35,6 @@
   </a>
 </li>
 <li>
-  <a href="articles/rdflib.html">Get Started</a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -48,7 +45,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/rdf_intro.html">An tidyverse lover's introduction to RDF</a>
+      <a href="articles/data-lake.html">The Data Lake and Schema On Read</a>
+    </li>
+    <li>
+      <a href="articles/rdf_intro.html">A tidyverse lover's intro to RDF</a>
     </li>
   </ul>
 </li>
@@ -118,8 +118,10 @@ rdf
 
 
 rdf <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/rdf_query.html">rdf_query</a></span>(sparql)
-<span class="co">#&gt;                          a            c</span>
-<span class="co">#&gt; 1 &lt;http://www.dajobe.org/&gt; Dave Beckett</span></code></pre></div>
+<span class="co">#&gt; # A tibble: 1 x 2</span>
+<span class="co">#&gt;   a                      c           </span>
+<span class="co">#&gt;   &lt;chr&gt;                  &lt;chr&gt;       </span>
+<span class="co">#&gt; 1 http://www.dajobe.org/ Dave Beckett</span></code></pre></div>
 <p>Initialize graph a new object or add triples statements to an existing graph:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/rdf.html">rdf</a></span>()
 x &lt;-<span class="st"> </span><span class="kw"><a href="reference/rdf_add.html">rdf_add</a></span>(x, 
@@ -153,11 +155,15 @@ x
 <div id="citing-rdflib" class="section level2">
 <h2 class="hasAnchor">
 <a href="#citing-rdflib" class="anchor"></a>Citing rdflib</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">citation</span>(<span class="st">"rdflib"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">citation</span>(<span class="st">"rdflib"</span>)
+<span class="co">#&gt; Warning in citation("rdflib"): no date field in DESCRIPTION file of package</span>
+<span class="co">#&gt; 'rdflib'</span>
+<span class="co">#&gt; Warning in citation("rdflib"): could not determine year for 'rdflib' from</span>
+<span class="co">#&gt; package DESCRIPTION file</span></code></pre></div>
 <p>To cite package ‘rdflib’ in publications use:</p>
-<p>Carl Boettiger (2018). rdflib: Tools to Manipulate and Query Semantic Data. R package version 0.0.3. <a href="https://github.com/cboettig/rdflib" class="uri">https://github.com/cboettig/rdflib</a></p>
+<p>Carl Boettiger (NA). rdflib: Tools to Manipulate and Query Semantic Data. R package version 0.0.4. <a href="https://github.com/cboettig/rdflib" class="uri">https://github.com/cboettig/rdflib</a></p>
 <p>A BibTeX entry for LaTeX users is</p>
-<p><span class="citation">@Manual</span>{, title = {rdflib: Tools to Manipulate and Query Semantic Data}, author = {Carl Boettiger}, year = {2018}, note = {R package version 0.0.3}, url = {<a href="https://github.com/cboettig/rdflib" class="uri">https://github.com/cboettig/rdflib</a>}, }</p>
+<p><span class="citation">@Manual</span>{, title = {rdflib: Tools to Manipulate and Query Semantic Data}, author = {Carl Boettiger}, note = {R package version 0.0.4}, url = {<a href="https://github.com/cboettig/rdflib" class="uri">https://github.com/cboettig/rdflib</a>}, }</p>
 <p>Please also cite the underlying <code>redland</code> library:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">citation</span>(<span class="st">"redland"</span>)</code></pre></div>
 <p>Jones M, Slaughter P, Ooms J, Boettiger C and Chamberlain S (2016). <em>redland: RDF Library Bindings in R</em>. doi: 10.5063/F1VM496B (URL: <a href="http://doi.org/10.5063/F1VM496B" class="uri">http://doi.org/10.5063/F1VM496B</a>), R package version 1.0.17-9, &lt;URL: <a href="https://github.com/ropensci/redland-bindings/tree/master/R/redland" class="uri">https://github.com/ropensci/redland-bindings/tree/master/R/redland</a>&gt;.</p>

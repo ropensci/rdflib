@@ -4,22 +4,26 @@
 \alias{rdf_serialize}
 \title{Serialize an RDF Document}
 \usage{
-rdf_serialize(rdf, doc, format = c("rdfxml", "nquads", "ntriples", "turtle",
-  "jsonld"), namespace = NULL, prefix = NULL, ...)
+rdf_serialize(rdf, doc = NULL, format = c("guess", "rdfxml", "nquads",
+  "ntriples", "turtle", "jsonld"), namespace = NULL, prefix = NULL,
+  base = getOption("rdflib_base_uri", "localhost://"), ...)
 }
 \arguments{
 \item{rdf}{an existing rdf triplestore to extend with triples from
 the parsed file.  Default will create a new rdf object.}
 
-\item{doc}{file path to write out to}
+\item{doc}{file path to write out to. If null, will write to character.}
 
 \item{format}{rdf serialization format of the doc,
 one of "rdfxml", "nquads", "ntriples", "turtle"
-or "jsonld"}
+or "jsonld". If not provided, will try to guess based
+on file extension and fall back on rdfxml.}
 
 \item{namespace}{string giving the namespace to set}
 
 \item{prefix}{string giving the prefix associated with the namespace}
+
+\item{base}{the base URI to assume for any relative URIs (blank nodes)}
 
 \item{...}{additional arguments to \code{redland::serializeToFile}}
 }

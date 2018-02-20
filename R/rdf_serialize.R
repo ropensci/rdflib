@@ -2,7 +2,7 @@
 #'
 #' @inheritParams rdf_parse
 #' @inheritParams rdf_query
-#' @param doc file path to write out to
+#' @param doc file path to write out to. If null, will write to character.
 #' @param namespace string giving the namespace to set
 #' @param prefix string giving the prefix associated with the namespace
 #' @param ... additional arguments to \code{redland::serializeToFile}
@@ -29,17 +29,22 @@
 #'           prefix = "dc")
 #'
 rdf_serialize <- function(rdf,
-                          doc,
-                          format = c("rdfxml",
+                          doc = NULL,
+                          format = c("guess",
+                                     "rdfxml",
                                      "nquads",
                                      "ntriples",
                                      "turtle",
                                      "jsonld"),
                           namespace = NULL,
                           prefix = NULL,
+                          base = getOption("rdflib_base_uri", "localhost://"),
                           ...){
   
   format <- match.arg(format)
+  if(format == "guess"){
+    format <- guess_format(doc)
+  }
   
   
   ## redlands doesn't support jsonld. So write as nquads and then transform
@@ -61,13 +66,22 @@ rdf_serialize <- function(rdf,
                           prefix = prefix)
   }
   
-  status <-
-    redland::serializeToFile(serializer, rdf$world, rdf$model, doc, ...)
+  if(is.null(doc)){
+    doc <- redland::serializeToCharacter(serializer, rdf$world, 
+                                         rdf$model, baseUri = base, ...)
+  } else {
+    status <-
+      redland::serializeToFile(serializer, rdf$world, 
+                               rdf$model, doc, baseUri = base, ...)
+  }
   
   if(jsonld_output){
     txt <- paste(readLines(doc), collapse = "\n")
     if(length(txt) > 0){ ## don't attempt to write empty file into json
-      json <- jsonld::jsonld_from_rdf(txt)
+      json <- jsonld::jsonld_from_rdf(txt,
+                                      options = list(
+                                        base = base,
+                                        format = "application/nquads"))
       compact_json <- jsonld_compact(json, "{}")
       writeLines(compact_json, doc)
     }

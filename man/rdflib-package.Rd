@@ -22,7 +22,7 @@ It has three main goals:
 
 For more information, see the Wikipedia pages for RDF, SPARQL, and JSON-LD:
 
-#' \itemize{
+\itemize{
 \item \url{https://en.wikipedia.org/wiki/Resource_Description_Framework}
 \item \url{https://en.wikipedia.org/wiki/SPARQL}
 \item \url{https://en.wikipedia.org/wiki/JSON-LD}
@@ -30,6 +30,20 @@ For more information, see the Wikipedia pages for RDF, SPARQL, and JSON-LD:
 
 To learn more about rdflib, start with the vignettes:
 \code{browseVignettes(package = "rdflib")}
+
+Configurations via \code{options()}
+
+\code{rdflib_print_format}:
+\itemize{
+\item NULL or "nquads" (default)
+\item any valid serializer name: e.g. "rdfxml", "jsonld", "turtle",  "ntriples"
+}
+
+\code{rdflib_base_uri}:
+\itemize{
+\item Default base URI to use (when serializing JSON-LD only at this time)
+default is "localhost://"
+}
 }
 \seealso{
 Useful links:

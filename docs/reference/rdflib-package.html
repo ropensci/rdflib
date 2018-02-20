@@ -58,9 +58,6 @@
   </a>
 </li>
 <li>
-  <a href="../articles/rdflib.html">Get Started</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -71,7 +68,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/rdf_intro.html">An tidyverse lover's introduction to RDF</a>
+      <a href="../articles/data-lake.html">The Data Lake and Schema On Read</a>
+    </li>
+    <li>
+      <a href="../articles/rdf_intro.html">A tidyverse lover's intro to RDF</a>
     </li>
   </ul>
 </li>
@@ -116,14 +116,21 @@ the familiar data table or rectangle of relational databases.</p>
 <li><p>Support SPARQL queries to extract data from an RDF graph into a data.frame</p></li>
 <li><p>Support JSON-LD format as a first-class citizen in RDF manipulations</p></li>
 </ul>
-    <p>For more information, see the Wikipedia pages for RDF, SPARQL, and JSON-LD:</p>
-<p>#'</p><ul>
+    <p>For more information, see the Wikipedia pages for RDF, SPARQL, and JSON-LD:</p><ul>
 <li><p><a href='https://en.wikipedia.org/wiki/Resource_Description_Framework'>https://en.wikipedia.org/wiki/Resource_Description_Framework</a></p></li>
 <li><p><a href='https://en.wikipedia.org/wiki/SPARQL'>https://en.wikipedia.org/wiki/SPARQL</a></p></li>
 <li><p><a href='https://en.wikipedia.org/wiki/JSON-LD'>https://en.wikipedia.org/wiki/JSON-LD</a></p></li>
 </ul>
     <p>To learn more about rdflib, start with the vignettes:
 <code>browseVignettes(package = "rdflib")</code></p>
+<p>Configurations via <code>options()</code>
+    <code>rdflib_print_format</code>:</p><ul>
+<li><p>NULL or "nquads" (default)</p></li>
+<li><p>any valid serializer name: e.g. "rdfxml", "jsonld", "turtle",  "ntriples"</p></li>
+</ul><p><code>rdflib_base_uri</code>:</p><ul>
+<li><p>Default base URI to use (when serializing JSON-LD only at this time)
+default is "localhost://"</p></li>
+</ul>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 

@@ -58,9 +58,6 @@
   </a>
 </li>
 <li>
-  <a href="../articles/rdflib.html">Get Started</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -71,7 +68,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/rdf_intro.html">An tidyverse lover's introduction to RDF</a>
+      <a href="../articles/data-lake.html">The Data Lake and Schema On Read</a>
+    </li>
+    <li>
+      <a href="../articles/rdf_intro.html">A tidyverse lover's intro to RDF</a>
     </li>
   </ul>
 </li>
@@ -105,15 +105,24 @@
     <p>Initialize an <code>rdf</code> Object</p>
     
 
-    <pre class="usage"><span class='fu'>rdf</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"."</span>)</pre>
+    <pre class="usage"><span class='fu'>rdf</span>(<span class='kw'>storage</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"memory"</span>, <span class='st'>"BDB"</span>), <span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>new_db</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>storage</th>
+      <td><p>Use in-memory hashes ("memory"), or disk based storage ("BDB")?</p></td>
+    </tr>
+    <tr>
       <th>path</th>
       <td><p>where should local database to store RDF triples be created, if
 configured for disk-based storage; see details.</p></td>
+    </tr>
+    <tr>
+      <th>new_db</th>
+      <td><p>logical, default FALSE. should we create a new database on disk
+or attempt to connect to an existing database (at the path specified)?</p></td>
     </tr>
     </table>
     
@@ -130,8 +139,7 @@ all RDF models, and a <code>model</code> object: a collection of RDF statements,
 and a <code>storage</code> object, indicating how these statements are stored.
     <code>rdflib</code> defaults to an in-memory hash-based storage structure.
 which should be best for most use cases. For very large triplestores,
-disk-based storage will be necessary.  Enable this by setting the option
-<code>options(rdflib_storage = "BDB")</code> before calling <code>rdf()</code> to use disk-based
+disk-based storage will be necessary. set <code>storage="BDB"</code> to use disk-based
 storage. Specify a path with the optional <code>path</code> argument, default uses
 the current working directory. Disk-based storage requires redland package
 to be installed from source with support for the Berkeley DB

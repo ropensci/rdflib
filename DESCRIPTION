@@ -28,7 +28,8 @@ Imports: redland,
     jsonld,
     methods,
     utils,
-    stringi
+    stringi,
+    readr
 RoxygenNote: 6.0.1
 Roxygen: list(markdown = TRUE)
 Suggests: magrittr,
@@ -36,15 +37,17 @@ Suggests: magrittr,
     testthat,
     knitr,
     rmarkdown,
-    jsonlite,
-    httr,
-    xml2,
     jqr,
-    lubridate,
     DT,
     tidyverse,
-    readr,
     dplyr,
     tidyr,
-    tibble
+    tibble,
+    purrr,
+    lubridate,
+    httr,
+    xml2,
+    jsonlite,
+    repurrrsive,
+    nycflights13
 VignetteBuilder: knitr

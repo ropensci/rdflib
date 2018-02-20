@@ -4,6 +4,16 @@ doc <- system.file("extdata/example.rdf", package="redland")
 out <- "testing.rdf"
 
 
+
+testthat::test_that("we can serialize to character", {
+                      rdf <- rdf_parse(doc) 
+                      txt <- rdf_serialize(rdf, format = "nquads")
+                      testthat::expect_is(txt, "character")
+                      testthat::expect_match(txt, "John Smith")
+                      rdf_free(rdf)
+                      })
+
+
 testthat::test_that("we can parse (in rdfxml)
                     and serialize (in nquads) a simple rdf graph", {
                       rdf <- rdf_parse(doc) 
@@ -33,50 +43,77 @@ testthat::test_that("we can add a namespace on serializing", {
 
 testthat::test_that("we can parse and serialize json-ld", {
   rdf <- rdf_parse(doc)
-  rdf_serialize(rdf, out, "jsonld")
-  roundtrip <- rdf_parse(out, "jsonld")
+  rdf_serialize(rdf, "out.json")
+  roundtrip <- rdf_parse("out.json")
   testthat::expect_is(roundtrip, "rdf")
+  rdf_serialize(rdf, "out.jsonld")
+  unlink("out.json")
+  unlink("out.jsonld")
   rdf_free(rdf)
   
 })
 
 testthat::test_that("we can parse and serialize nquads", {
   rdf <- rdf_parse(doc)
-  rdf_serialize(rdf, out, "nquads")
-  roundtrip <- rdf_parse(out, "nquads")
+  rdf_serialize(rdf, "out.nquads")
+  roundtrip <- rdf_parse("out.nquads")
   testthat::expect_is(roundtrip, "rdf")
+  unlink("nquads")
   rdf_free(rdf)
   
 })
 testthat::test_that("we can parse and serialize ntriples", {
   rdf <- rdf_parse(doc)
-  rdf_serialize(rdf, out, "ntriples")
-  roundtrip <- rdf_parse(out, "ntriples")
+  rdf_serialize(rdf, "out.nt")
+  roundtrip <- rdf_parse("out.nt")
   testthat::expect_is(roundtrip, "rdf")
+  unlink("out.nt")
+  rdf_serialize(rdf, "out.ntriples")
+  unlink("out.ntriples")
   rdf_free(rdf)
   
 })
 testthat::test_that("we can parse and serialize tutle", {
   rdf <- rdf_parse(doc)
-  rdf_serialize(rdf, out, "turtle")
-  roundtrip <- rdf_parse(out, "turtle")
+  rdf_serialize(rdf, "out.ttl")
+  roundtrip <- rdf_parse("out.ttl")
   testthat::expect_is(roundtrip, "rdf")
+  unlink("out.ttl")
+  rdf_serialize(rdf, "out.turtle")
+  unlink("out.turtle")
+  
   rdf_free(rdf)
 })
 testthat::test_that("we can parse and serialize rdfxml", {
   rdf <- rdf_parse(doc)
-  rdf_serialize(rdf, out, "rdfxml")
-  roundtrip <- rdf_parse(out, "rdfxml")
+  rdf_serialize(rdf, "out.rdf")
+  roundtrip <- rdf_parse("out.rdf")
   testthat::expect_is(roundtrip, "rdf")
+
+  unlink("out.rdf")
+  rdf_serialize(rdf, "out.xml")
+  unlink("out.xml")
   rdf_free(rdf)
 })
 
 ################################################################
 
+
+testthat::test_that("we can parse by guessing on the file extension", {
+  ex <- system.file("extdata/person.nq", package="rdflib")
+  rdf <- rdf_parse(ex)
+  rdf_serialize(rdf, "tmp.nq", base = "http://schema.org/")
+  roundtrip <- rdf_parse("tmp.nq", "turtle")
+  testthat::expect_is(roundtrip, "rdf")
+  unlink("tmp.nq")
+  rdf_free(rdf)
+})
+
+
 testthat::test_that("we can serialize turtle with a baseUri", {
   ex <- system.file("extdata/person.nq", package="rdflib")
   rdf <- rdf_parse(ex, "nquads")
-  rdf_serialize(rdf, out, "turtle", baseUri = "http://schema.org/")
+  rdf_serialize(rdf, out, "turtle", base = "http://schema.org/")
   roundtrip <- rdf_parse(out, "turtle")
   testthat::expect_is(roundtrip, "rdf")
   rdf_free(rdf)
