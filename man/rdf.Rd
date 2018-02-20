@@ -36,19 +36,6 @@ support with the function \code{rdf_has_bdb()}.
 
 Typical use will be simply to initialize a container to which
 the user would manually add triples using \code{\link{rdf_add}}.
-
-Overview of configuration options
-rdflib_storage:
-\itemize{
-\item NULL or "memory" for in memory storage. (default)
-\item "BDB" for disk-based storage in Berkeley Database
-rdflib_print_format:
-\item NULL or "nquads" (default)
-\item any valid serializer name: e.g. "rdfxml", "jsonld", "turtle",  "ntriples"
-rdflib_base_uri:
-\item Default base URI to use (when serializing JSON-LD only at this time)
-default is "localhost://"
-}
 }
 \examples{
 x <- rdf()

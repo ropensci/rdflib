@@ -25,19 +25,6 @@
 #' Typical use will be simply to initialize a container to which
 #' the user would manually add triples using \code{\link{rdf_add}}.
 #'
-#' Overview of configuration options
-#' rdflib_storage:
-#'   - NULL or "memory" for in memory storage. (default)
-#'   - "BDB" for disk-based storage in Berkeley Database
-#' rdflib_print_format: 
-#'   - NULL or "nquads" (default)
-#'   - any valid serializer name: e.g. "rdfxml", "jsonld", "turtle",  "ntriples"
-#' rdflib_base_uri:
-#'   - Default base URI to use (when serializing JSON-LD only at this time)
-#'     default is "localhost://"
-#'
-#'
-#'
 #' @importClassesFrom redland World Model Storage
 #' @importMethodsFrom redland freeWorld freeModel freeStorage
 #' @importFrom utils capture.output
@@ -91,7 +78,7 @@ rdf <- function(path = "."){
 #'
 #' For more information, see the Wikipedia pages for RDF, SPARQL, and JSON-LD:
 #' 
-#' #' \itemize{
+#' \itemize{
 #' \item \url{https://en.wikipedia.org/wiki/Resource_Description_Framework}
 #' \item \url{https://en.wikipedia.org/wiki/SPARQL}
 #' \item \url{https://en.wikipedia.org/wiki/JSON-LD}
@@ -99,6 +86,24 @@ rdf <- function(path = "."){
 #'
 #' To learn more about rdflib, start with the vignettes:
 #' `browseVignettes(package = "rdflib")`
+#'
+#'  Configurations via `options()`
+#'
+#' `rdflib_storage`:
+#' 
+#' - NULL or "memory" for in memory storage. (default)
+#' - "BDB" for disk-based storage in Berkeley Database
+#' 
+#' `rdflib_print_format`:
+#'  
+#' - NULL or "nquads" (default)
+#' - any valid serializer name: e.g. "rdfxml", "jsonld", "turtle",  "ntriples"
+#'   
+#' `rdflib_base_uri`:
+#' 
+#' - Default base URI to use (when serializing JSON-LD only at this time)
+#'     default is "localhost://"
+#'
 #'
 #'
 "_PACKAGE"

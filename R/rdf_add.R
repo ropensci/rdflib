@@ -28,7 +28,8 @@
 #'  typed as resource nodes, otherwise as literals.  An empty object `""`
 #'  will be treated as blank node.  Set `subjectType` or `objectType` 
 #'  explicitly to override this behavior, e.g. to treat an object URI
-#'  as a literal string.  See examples.  
+#'  as a literal string.  NAs are also treated as blank nodes in subject
+#'  or ojbect.  See examples for details.
 #' 
 #' @references <https://en.wikipedia.org/wiki/Uniform_Resource_Identifier>
 #' @importClassesFrom redland Statement
@@ -79,6 +80,14 @@ rdf_add <- function(rdf, subject, predicate, object,
   ## based on the R object class, if no datatype has been provided.
   if(is.na(datatype_uri)){
     datatype_uri <- xs_class(object)
+  }
+  
+  ## predicate as blank node
+  if(is.na(subject)){
+    subject <- ""
+  }
+  if(is.na(object)){
+    object <- ""
   }
 
   
