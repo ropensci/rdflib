@@ -58,9 +58,6 @@
   </a>
 </li>
 <li>
-  <a href="../articles/rdflib.html">Get Started</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -71,7 +68,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/rdf_intro.html">An tidyverse lover's introduction to RDF</a>
+      <a href="../articles/data-lake.html">The Data Lake and Schema On Read</a>
+    </li>
+    <li>
+      <a href="../articles/rdf_intro.html">A tidyverse lover's intro to RDF</a>
     </li>
   </ul>
 </li>
@@ -105,8 +105,9 @@
     <p>Parse RDF Files</p>
     
 
-    <pre class="usage"><span class='fu'>rdf_parse</span>(<span class='no'>doc</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"rdfxml"</span>, <span class='st'>"nquads"</span>, <span class='st'>"ntriples"</span>, <span class='st'>"turtle"</span>, <span class='st'>"jsonld"</span>),
-  <span class='kw'>rdf</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>rdf_parse</span>(<span class='no'>doc</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"guess"</span>, <span class='st'>"rdfxml"</span>, <span class='st'>"nquads"</span>, <span class='st'>"ntriples"</span>, <span class='st'>"turtle"</span>,
+  <span class='st'>"jsonld"</span>), <span class='kw'>rdf</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>base</span> <span class='kw'>=</span> <span class='fu'>getOption</span>(<span class='st'>"rdflib_base_uri"</span>,
+  <span class='st'>"localhost://"</span>), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -119,12 +120,17 @@
       <th>format</th>
       <td><p>rdf serialization format of the doc,
 one of "rdfxml", "nquads", "ntriples", "turtle"
-or "jsonld"</p></td>
+or "jsonld". If not provided, will try to guess based
+on file extension and fall back on rdfxml.</p></td>
     </tr>
     <tr>
       <th>rdf</th>
       <td><p>an existing rdf triplestore to extend with triples from
 the parsed file.  Default will create a new rdf object.</p></td>
+    </tr>
+    <tr>
+      <th>base</th>
+      <td><p>the base URI to assume for any relative URIs (blank nodes)</p></td>
     </tr>
     <tr>
       <th>...</th>

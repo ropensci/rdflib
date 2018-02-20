@@ -28,3 +28,4 @@ rdf_has_bdb <- function(){
   
   out
 }
+

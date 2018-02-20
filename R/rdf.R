@@ -1,8 +1,10 @@
 #' Initialize an `rdf` Object
 #'
+#'@param storage Use in-memory hashes ("memory"), or disk based storage ("BDB")? 
 #' @param path where should local database to store RDF triples be created, if
 #' configured for disk-based storage; see details.
-#'
+#' @param new_db logical, default FALSE. should we create a new database on disk
+#' or attempt to connect to an existing database (at the path specified)?
 #' @return an rdf object
 #' @details an rdf Object is a list of class 'rdf', consisting of
 #' three pointers to external C objects managed by the redland library.
@@ -12,8 +14,7 @@
 #' 
 #' `rdflib` defaults to an in-memory hash-based storage structure. 
 #' which should be best for most use cases. For very large triplestores,
-#' disk-based storage will be necessary.  Enable this by setting the option
-#' `options(rdflib_storage = "BDB")` before calling `rdf()` to use disk-based
+#' disk-based storage will be necessary. set `storage="BDB"` to use disk-based
 #' storage. Specify a path with the optional `path` argument, default uses
 #' the current working directory. Disk-based storage requires redland package
 #' to be installed from source with support for the Berkeley DB 
@@ -25,19 +26,6 @@
 #' Typical use will be simply to initialize a container to which
 #' the user would manually add triples using \code{\link{rdf_add}}.
 #'
-#' Overview of configuration options
-#' rdflib_storage:
-#'   - NULL or "memory" for in memory storage. (default)
-#'   - "BDB" for disk-based storage in Berkeley Database
-#' rdflib_print_format: 
-#'   - NULL or "nquads" (default)
-#'   - any valid serializer name: e.g. "rdfxml", "jsonld", "turtle",  "ntriples"
-#' rdflib_base_uri:
-#'   - Default base URI to use (when serializing JSON-LD only at this time)
-#'     default is "localhost://"
-#'
-#'
-#'
 #' @importClassesFrom redland World Model Storage
 #' @importMethodsFrom redland freeWorld freeModel freeStorage
 #' @importFrom utils capture.output
@@ -46,14 +34,20 @@
 #' @examples
 #' x <- rdf()
 #' 
-rdf <- function(path = "."){
+rdf <- function(storage = c("memory", "BDB"), path = ".", new_db = FALSE){
   world <- new("World")
   
+  
   ## Handle storage type
-  if(getOption("rdflib_storage", "memory") == "BDB"){
+  storage <- match.arg(storage)
+  if(storage == "BDB"){
     if(rdf_has_bdb()){
       ## Store in Berkeley DB
-      options <- paste0("new='yes',hash-type='bdb',dir='", path, "'") 
+      if(new_db){
+        options <- paste0("new='yes',hash-type='bdb',dir='", path, "'") 
+      } else {
+        options <- paste0("hash-type='bdb',dir='", path, "'") 
+      }
     } else {
       warning("BDB driver not found. Falling back on in-memory storage")
       options <- "hash-type='memory'"
@@ -91,7 +85,7 @@ rdf <- function(path = "."){
 #'
 #' For more information, see the Wikipedia pages for RDF, SPARQL, and JSON-LD:
 #' 
-#' #' \itemize{
+#' \itemize{
 #' \item \url{https://en.wikipedia.org/wiki/Resource_Description_Framework}
 #' \item \url{https://en.wikipedia.org/wiki/SPARQL}
 #' \item \url{https://en.wikipedia.org/wiki/JSON-LD}
@@ -99,6 +93,19 @@ rdf <- function(path = "."){
 #'
 #' To learn more about rdflib, start with the vignettes:
 #' `browseVignettes(package = "rdflib")`
+#'
+#'  Configurations via `options()`
+#' 
+#' `rdflib_print_format`:
+#'  
+#' - NULL or "nquads" (default)
+#' - any valid serializer name: e.g. "rdfxml", "jsonld", "turtle",  "ntriples"
+#'   
+#' `rdflib_base_uri`:
+#' 
+#' - Default base URI to use (when serializing JSON-LD only at this time)
+#'     default is "localhost://"
+#'
 #'
 #'
 "_PACKAGE"

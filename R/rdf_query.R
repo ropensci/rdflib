@@ -32,58 +32,32 @@
 #'
 rdf_query <- function(rdf, query, data.frame = TRUE, ...){
   queryObj <- new("Query", rdf$world, query, ...)
-  # ... defaults are: base_uri=NULL, query_language="sparql", query_uri=NULL)
+  
+  # ... defaults are: base_uri=NULL, query_language="sparql", query_uri=NULL
+  
   queryResult <- redland::executeQuery(queryObj, rdf$model)
-
-  out <- list()
-  result <- redland::getNextResult(queryResult)
-  out <- c(out, result)
-  while(!is.null(result)){
-    result <- redland::getNextResult(queryResult)
-    out <- c(out, result)
-    
-  }
+  out <- getResults(queryResult)
   redland::freeQueryResults(queryResult)
   redland::freeQuery(queryObj)
   
-  if(data.frame){
-    out <- rectangularize_query_results(out)
-  } else {
-    ## group by query variable 
-#    vars <- unique(names(out))
-#    out <- lapply(vars, function(v){ 
-#      contents <- as.character(out[names(out) == v ])
-#      type_by_datauri(contents)  
-#      })
-#  names(out) <- vars
-  }
   out
 }
 
+## Notes
+## readr does a pretty good job guessing types returned from sparql
+## character, numeric, integer, Dates, POSIXct work fine
+## logicals are denoted `true` and `false`, which readr mistakes for characters
 
-rectangularize_query_results <- function(out){
-  vars <- unique(names(out))
-  
-  X <- lapply(vars, function(v){ 
-    contents <- as.character(out[names(out) == v ])
-    values <- type_by_datauri(contents)
-    
-    ## use "character" if mixed type column
-    types <- vapply(values, function(x) class(x)[[1]], character(1))
-    u <- unique(types)
-    if(length(u) == 1){
-      values <- unlist(values)
-      if(u %in% c("Date", "POSIXct"))
-      class(values) <- unique(types) # Restore date class
-    } else {
-      values <- vapply(values, as.character, character(1))
-    }
-    values
-  })
-  
-  names(X) <- vars
-  ## Or we could use tibble::as_data_frame for list columns w/ mixed type..
-  as.data.frame(X, stringsAsFactors=FALSE)
+## Redland only exports the getNextResult parser, which is extremely slow on large returns
+
+#' @importFrom readr read_csv
+getResults <- function(queryResult, format = "csv", ...){
+  mimetype <- switch(format,
+                     "csv" = "text/csv; charset=utf-8",
+                     NULL)
+  readr::read_csv(redland:::librdf_query_results_to_string2(
+                            queryResult@librdf_query_results, 
+                            format, mimetype, NULL, NULL), 
+                  ...)
 }
-
 

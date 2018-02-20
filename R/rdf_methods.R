@@ -12,9 +12,11 @@ c.rdf <- function(...){
   rdf <- rdfs[[1]]
   for(i in seq_along(rdfs)){
     f <- file.path(loc,paste0(i, ".rdf"))
-    rdf_serialize(rdfs[[i]],f) 
-    rdf_parse(f, rdf = rdf)
+    rdf_serialize(rdfs[[i]],f, format = "turtle") 
+    rdf_parse(f, rdf = rdf, format = "turtle")
+    file.remove(f)
   }
+  unlink(loc)
   rdf
 }
 
@@ -22,7 +24,7 @@ c.rdf <- function(...){
 
 #' @export
 print.rdf <- function(x, ...){
-  cat(format.rdf(x), sep = "\n")
+  cat(format.rdf(x, ...), sep = "\n")
 }
 
 
@@ -34,7 +36,8 @@ format.rdf <- function(x,
   tmp <- tempfile()
   rdf_serialize(x, 
                 tmp,
-                format = format)
+                format = format,
+                ...)
   ## Fix encoding on nquads, ntriples 
   txt <- stringi::stri_unescape_unicode(
     paste(readLines(tmp), collapse = "\n"))

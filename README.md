@@ -53,8 +53,10 @@ rdf
 
 
 rdf %>% rdf_query(sparql)
-#>                          a            c
-#> 1 <http://www.dajobe.org/> Dave Beckett
+#> # A tibble: 1 x 2
+#>   a                      c           
+#>   <chr>                  <chr>       
+#> 1 http://www.dajobe.org/ Dave Beckett
 ```
 
 Initialize graph a new object or add triples statements to an existing graph:
@@ -104,15 +106,19 @@ Citing rdflib
 
 ``` r
 citation("rdflib")
+#> Warning in citation("rdflib"): no date field in DESCRIPTION file of package
+#> 'rdflib'
+#> Warning in citation("rdflib"): could not determine year for 'rdflib' from
+#> package DESCRIPTION file
 ```
 
 To cite package 'rdflib' in publications use:
 
-Carl Boettiger (2018). rdflib: Tools to Manipulate and Query Semantic Data. R package version 0.0.3. <https://github.com/cboettig/rdflib>
+Carl Boettiger (NA). rdflib: Tools to Manipulate and Query Semantic Data. R package version 0.0.4. <https://github.com/cboettig/rdflib>
 
 A BibTeX entry for LaTeX users is
 
-@Manual{, title = {rdflib: Tools to Manipulate and Query Semantic Data}, author = {Carl Boettiger}, year = {2018}, note = {R package version 0.0.3}, url = {<https://github.com/cboettig/rdflib>}, }
+@Manual{, title = {rdflib: Tools to Manipulate and Query Semantic Data}, author = {Carl Boettiger}, note = {R package version 0.0.4}, url = {<https://github.com/cboettig/rdflib>}, }
 
 Please also cite the underlying `redland` library:
 
