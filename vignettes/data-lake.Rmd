@@ -48,8 +48,8 @@ options(rdflib_storage = "memory")
 
 # Use a smaller dataset if we do not have a BDB backend: 
 if(getOption("rdflib_storage") != "BDB"){
-flights <- flights %>% 
-  filter(distance > 2800) # try smaller dataset
+#flights <- flights %>% 
+#  filter(distance > 2500) # try smaller dataset
 }
 ```
 
@@ -92,9 +92,9 @@ and again establish a `base_uri` which will allow RDF methods to distinguish bet
 system.time(
   
 rdf <- c(
-  as_rdf(airlines, "carrier", "x:"),
-  as_rdf(planes,  "tailnum", "x:"),
-  as_rdf(uri_flights, NULL, "x:"))
+  as_rdf(airlines, key = "carrier", vocab = "x:"),
+  as_rdf(planes,  key = "tailnum", vocab = "x:"),
+  as_rdf(uri_flights, key = NULL, vocab = "x:"))
 
 )
 ```
@@ -168,7 +168,7 @@ gh_tibble %>% arrange(name) %>% head()
 The RDF approach merely treats JSON as JSON-LD within a given vocabulary.  In this context, nesting implicitly provides important semantic information about relationships between the data, which are captured in the RDF triples. Here, we import the JSON data as RDF:
 
 ```{r gh_add}
-gh_rdf <- as_rdf.list(gh_data, '"@vocab": "gh:"')
+gh_rdf <- as_rdf.list(gh_data, vocab = "gh:")
 ```
 
 
