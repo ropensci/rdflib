@@ -3,7 +3,8 @@
 #' @param doc path, URL, or literal string of the rdf document to parse
 #' @param format rdf serialization format of the doc,
 #' one of "rdfxml", "nquads", "ntriples", "turtle"
-#' or "jsonld"
+#' or "jsonld". If not provided, will try to guess based
+#' on file extension and fall back on rdfxml.
 #' @param rdf an existing rdf triplestore to extend with triples from
 #' the parsed file.  Default will create a new rdf object.
 #' @param ... additional parameters (not implemented)
@@ -20,14 +21,19 @@
 #' rdf <- rdf_parse(doc)
 #'
 rdf_parse <- function(doc,
-                      format = c("rdfxml",
+                      format = c("guess",
+                                 "rdfxml",
                                  "nquads",
                                  "ntriples",
                                  "turtle",
                                  "jsonld"),
                       rdf = NULL,
                       ...){
+  
   format <- match.arg(format)
+  if(format == "guess"){
+    format <- guess_format(doc)
+  }
   
   ## if we get a string as input, we'll store it in tmp file here
   ## which we can later be sure to clean up.

@@ -1,3 +1,17 @@
+guess_format <- function(doc){
+  switch(gsub(".*\\.(\\w+)$", "\\1", basename(doc)),
+         "xml" = "rdfxml",
+         "rdf" = "rdfxml",
+         "json" = "jsonld",
+         "nq" = "nquads",
+         "nt" = "ntriples",
+         "ttl" = "turtle",
+         "jsonld" = "jsonld",
+         "quads" = "nquads",
+         "turtle" = "turtle",
+         "rdfxml")
+}
+
 
 ## Don't explicitly type characters as strings, since this is default
 xs_class <- function(x, explicit_strings = FALSE){

@@ -4,15 +4,16 @@
 \alias{rdf_parse}
 \title{Parse RDF Files}
 \usage{
-rdf_parse(doc, format = c("rdfxml", "nquads", "ntriples", "turtle", "jsonld"),
-  rdf = NULL, ...)
+rdf_parse(doc, format = c("guess", "rdfxml", "nquads", "ntriples", "turtle",
+  "jsonld"), rdf = NULL, ...)
 }
 \arguments{
 \item{doc}{path, URL, or literal string of the rdf document to parse}
 
 \item{format}{rdf serialization format of the doc,
 one of "rdfxml", "nquads", "ntriples", "turtle"
-or "jsonld"}
+or "jsonld". If not provided, will try to guess based
+on file extension and fall back on rdfxml.}
 
 \item{rdf}{an existing rdf triplestore to extend with triples from
 the parsed file.  Default will create a new rdf object.}
