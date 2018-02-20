@@ -30,7 +30,8 @@ as_rdf.list <- function(x,
   
   json <- jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE, force = TRUE)
   jsonld_context <- json_context(vocab, base, context)
-  json2 <- paste0('{\n"@context":', jsonld_context, ',\n',  '"@graph": ', json,  '}')
+  json2 <- paste0('{\n"@context":', jsonld_context, 
+                  ',\n',  '"@graph": ', json,  '}')
   rdflib::rdf_parse(json2, "jsonld", rdf = rdf)
   rdf
 }
@@ -62,7 +63,8 @@ json_context <- function(vocab = NULL,
 as_rdf.data.frame <- function(df,  
                               rdf = NULL, 
                               vocab = NULL, 
-                              base = getOption("rdflib_base_uri", "localhost://"), 
+                              base = getOption("rdflib_base_uri",
+                                               "localhost://"), 
                               context = NULL, 
                               key = NULL){
   if(is.null(rdf)){
@@ -86,9 +88,11 @@ as_rdf.data.frame <- function(df,
   }
   ## FIXME consider taking an already-gathered table to avoid dependency?
   suppressWarnings(
-    x <- tidyr::gather(x, key = predicate, value = object, -subject))
+    x <- tidyr::gather(x, key = predicate, 
+                       value = object, -subject))
   
-  ## merge is Slow! ~ 5 seconds for 800K triples (almost as much time as rdf_parse)
+  ## merge is Slow! ~ 5 seconds for 800K triples 
+  ## (almost as much time as rdf_parse)
   #x <- merge(x, col_classes, by = "predicate")
   x <- dplyr::left_join(x, col_classes, by = "predicate")
   
@@ -128,23 +132,25 @@ poor_mans_nquads <- function(x, loc, vocab){
   needs_type <- !is.na(x$datatype)
   
   ## URIs that are not blank nodes need <>
-  x$subject[!blank_subject] = paste0("<", vocab, x$subject[!blank_subject], ">")
+  x$subject[!blank_subject] <- paste0("<", vocab, x$subject[!blank_subject], ">")
   ## Predicate is always a URI
-  x$predicate = paste0("<", vocab, x$predicate, ">")
+  x$predicate <- paste0("<", vocab, x$predicate, ">")
   
   ## Strings should be quoted
-  is_string <- !grepl("\\w+:\\w.*", x$object) & !needs_type & !blank_object
+  is_string <- !grepl("\\w+:\\w.*", x$object) &
+    !needs_type & !blank_object
   x$object[is_string] <- paste0('\"', x$object[is_string] , '\"')
   
   ## URIs should be <> instead, but not blanks!
-  x$object[!blank_object] <- gsub("(^\\w+:\\w.*$)", "<\\1>", x$object[!blank_object])
+  x$object[!blank_object] <- gsub("(^\\w+:\\w.*$)", "<\\1>", 
+                                  x$object[!blank_object])
   
   ## assumes datatype is not empty (e.g. string)
-  x$object[needs_type] = paste0('\"', x$object[needs_type], 
+  x$object[needs_type] <- paste0('\"', x$object[needs_type], 
                                 '\"^^<', x$datatype[needs_type], ">")
   
   ## quads needs a graph column
-  x$graph = "."
+  x$graph <- "."
   
   ## write table is a little slow, ~ 1s on 800K triples
   

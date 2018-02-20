@@ -55,9 +55,10 @@ testthat::test_that("we can parse and serialize json-ld", {
 
 testthat::test_that("we can parse and serialize nquads", {
   rdf <- rdf_parse(doc)
-  rdf_serialize(rdf, out, "nquads")
-  roundtrip <- rdf_parse(out, "nquads")
+  rdf_serialize(rdf, "out.nquads")
+  roundtrip <- rdf_parse("out.nquads")
   testthat::expect_is(roundtrip, "rdf")
+  unlink("nquads")
   rdf_free(rdf)
   
 })

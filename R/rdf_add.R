@@ -88,7 +88,7 @@ rdf_add <- function(rdf, subject, predicate, object,
   }
   if(is.na(object)){
     object <- ""
-    datatype_uri = as.character(NA)
+    datatype_uri <- as.character(NA)
   }
 
   

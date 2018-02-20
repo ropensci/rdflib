@@ -67,10 +67,12 @@ rdf_serialize <- function(rdf,
   }
   
   if(is.null(doc)){
-    doc <- redland::serializeToCharacter(serializer, rdf$world, rdf$model, baseUri = base, ...)
+    doc <- redland::serializeToCharacter(serializer, rdf$world, 
+                                         rdf$model, baseUri = base, ...)
   } else {
     status <-
-      redland::serializeToFile(serializer, rdf$world, rdf$model, doc, baseUri = base, ...)
+      redland::serializeToFile(serializer, rdf$world, 
+                               rdf$model, doc, baseUri = base, ...)
   }
   
   if(jsonld_output){
