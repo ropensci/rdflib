@@ -43,9 +43,12 @@ testthat::test_that("we can add a namespace on serializing", {
 
 testthat::test_that("we can parse and serialize json-ld", {
   rdf <- rdf_parse(doc)
-  rdf_serialize(rdf, out, "jsonld")
-  roundtrip <- rdf_parse(out, "jsonld")
+  rdf_serialize(rdf, "out.json")
+  roundtrip <- rdf_parse("out.json")
   testthat::expect_is(roundtrip, "rdf")
+  rdf_serialize(rdf, "out.jsonld")
+  unlink("out.json")
+  unlink("out.jsonld")
   rdf_free(rdf)
   
 })
@@ -60,24 +63,35 @@ testthat::test_that("we can parse and serialize nquads", {
 })
 testthat::test_that("we can parse and serialize ntriples", {
   rdf <- rdf_parse(doc)
-  rdf_serialize(rdf, out, "ntriples")
-  roundtrip <- rdf_parse(out, "ntriples")
+  rdf_serialize(rdf, "out.nt")
+  roundtrip <- rdf_parse("out.nt")
   testthat::expect_is(roundtrip, "rdf")
+  unlink("out.nt")
+  rdf_serialize(rdf, "out.ntriples")
+  unlink("out.ntriples")
   rdf_free(rdf)
   
 })
 testthat::test_that("we can parse and serialize tutle", {
   rdf <- rdf_parse(doc)
-  rdf_serialize(rdf, out, "turtle")
-  roundtrip <- rdf_parse(out, "turtle")
+  rdf_serialize(rdf, "out.ttl")
+  roundtrip <- rdf_parse("out.ttl")
   testthat::expect_is(roundtrip, "rdf")
+  unlink("out.ttl")
+  rdf_serialize(rdf, "out.turtle")
+  unlink("out.turtle")
+  
   rdf_free(rdf)
 })
 testthat::test_that("we can parse and serialize rdfxml", {
   rdf <- rdf_parse(doc)
-  rdf_serialize(rdf, out, "rdfxml")
-  roundtrip <- rdf_parse(out, "rdfxml")
+  rdf_serialize(rdf, "out.rdf")
+  roundtrip <- rdf_parse("out.rdf")
   testthat::expect_is(roundtrip, "rdf")
+
+  unlink("out.rdf")
+  rdf_serialize(rdf, "out.xml")
+  unlink("out.xml")
   rdf_free(rdf)
 })
 

@@ -34,7 +34,7 @@ testthat::test_that("We warn if we cannot use disk-based storage", {
 
 testthat::test_that("We can use BDB storage", {
   testthat::skip_if_not(rdf_has_bdb())
-  testthat::expect_silent(rdf <- rdf(storage="BDB"))
+  testthat::expect_silent(rdf <- rdf(storage="BDB", new_db = TRUE))
   
   rdf_add(rdf, "", "dc:name", "bob")
   expect_match(format(rdf, "nquads"), "bob")
