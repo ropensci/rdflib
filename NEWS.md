@@ -2,13 +2,21 @@
 
 ## New Features
 
-* adds `c()` method to concatenate `rdf` objects
+
 * `rdf()` supports BDB backend for disk-based storage for large
    triplestores [#6](https://github.com/cboettig/rdflib/issues/6)
 * `rdf_parse()` gains an argument `rdf` to append triples to existing graph
+* adds `c()` method to concatenate `rdf` objects
+* Performance improvements make it possible to handle triplestores with millions of triples
+* Two new vignettes better introduce RDF and package functions.
 
 ## Minor Improvements
 
+* `rdf_query` now bypasses the the very slow iteration over `getNextResult`
+   approach and uses an internal redland function call to access all results
+   at once in csv format.
+* experimental `as_rdf` method now uses a poor-man's nquad serializer to
+  rapidly generate rdf (instead of slowly iterating over `add_rdf`).  
 
 * `rdf_add` argument for `object` can now take all atomic types
    (numeric, integer, string, Date, POSIX, logical) and 

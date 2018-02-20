@@ -58,9 +58,6 @@
   </a>
 </li>
 <li>
-  <a href="../articles/rdflib.html">Get Started</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -71,7 +68,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/rdf_intro.html">An tidyverse lover's introduction to RDF</a>
+      <a href="../articles/data-lake.html">The Data Lake and Schema On Read</a>
+    </li>
+    <li>
+      <a href="../articles/rdf_intro.html">A tidyverse lover's intro to RDF</a>
     </li>
   </ul>
 </li>
@@ -149,8 +149,10 @@ typed by its data URI.</p>
  WHERE { ?a dc:creator ?c . }'</span>
 
 <span class='no'>rdf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rdf_parse.html'>rdf_parse</a></span>(<span class='no'>doc</span>)
-<span class='fu'>rdf_query</span>(<span class='no'>rdf</span>, <span class='no'>sparql</span>)</div><div class='output co'>#&gt;                          a            c
-#&gt; 1 &lt;http://www.dajobe.org/&gt; Dave Beckett</div><div class='input'>
+<span class='fu'>rdf_query</span>(<span class='no'>rdf</span>, <span class='no'>sparql</span>)</div><div class='output co'>#&gt; # A tibble: 1 x 2
+#&gt;   a                      c           
+#&gt;   &lt;chr&gt;                  &lt;chr&gt;       
+#&gt; 1 http://www.dajobe.org/ Dave Beckett</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
