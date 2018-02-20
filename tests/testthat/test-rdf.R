@@ -25,22 +25,26 @@ testthat::test_that("We can initialize and free rdf objects", {
 
 testthat::test_that("We warn if we cannot use disk-based storage", {
   testthat::skip_if(rdf_has_bdb())
-  options(rdflib_storage = "BDB")
-  testthat::expect_warning(rdf <- rdf(), "BDB driver not found")
+  testthat::expect_warning(rdf <- rdf(storage = "BDB"), "BDB driver not found")
   ## Falls back on memory-based storage, still creates rdf
   testthat::expect_is(rdf, "rdf")
-  options(rdflib_storage = "memory")
   rdf_free(rdf)
   
 })
 
 testthat::test_that("We can use BDB storage", {
   testthat::skip_if_not(rdf_has_bdb())
-  options(rdflib_storage = "BDB")
-  testthat::expect_silent(rdf <- rdf())
+  testthat::expect_silent(rdf <- rdf(storage="BDB"))
+  
+  rdf_add(rdf, "", "dc:name", "bob")
+  expect_match(format(rdf, "nquads"), "bob")
   testthat::expect_is(rdf, "rdf")
-  options(rdflib_storage = "memory")
   rdf_free(rdf)
+  
+  ## We can reconnect to disk based storage after freeing
+  rdf2 <- rdf(storage = "BDB", new_db = FALSE)
+  expect_match(format(rdf2, "nquads"), "bob")
+  rdf_free(rdf2)
   
   unlink("rdflib-po2s.db")
   unlink("rdflib-so2p.db")

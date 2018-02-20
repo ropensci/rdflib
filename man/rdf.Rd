@@ -4,13 +4,15 @@
 \alias{rdf}
 \title{Initialize an \code{rdf} Object}
 \usage{
-rdf(path = ".", new_db = TRUE)
+rdf(storage = c("memory", "BDB"), path = ".", new_db = FALSE)
 }
 \arguments{
+\item{storage}{Use in-memory hashes ("memory"), or disk based storage ("BDB")?}
+
 \item{path}{where should local database to store RDF triples be created, if
 configured for disk-based storage; see details.}
 
-\item{new_db}{logical, default TRUE. should we create a new database on disk
+\item{new_db}{logical, default FALSE. should we create a new database on disk
 or attempt to connect to an existing database (at the path specified)?}
 }
 \value{
@@ -28,8 +30,7 @@ and a \code{storage} object, indicating how these statements are stored.
 
 \code{rdflib} defaults to an in-memory hash-based storage structure.
 which should be best for most use cases. For very large triplestores,
-disk-based storage will be necessary.  Enable this by setting the option
-\code{options(rdflib_storage = "BDB")} before calling \code{rdf()} to use disk-based
+disk-based storage will be necessary. set \code{storage="BDB"} to use disk-based
 storage. Specify a path with the optional \code{path} argument, default uses
 the current working directory. Disk-based storage requires redland package
 to be installed from source with support for the Berkeley DB

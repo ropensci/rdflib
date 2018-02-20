@@ -33,12 +33,6 @@ To learn more about rdflib, start with the vignettes:
 
 Configurations via \code{options()}
 
-\code{rdflib_storage}:
-\itemize{
-\item NULL or "memory" for in memory storage. (default)
-\item "BDB" for disk-based storage in Berkeley Database
-}
-
 \code{rdflib_print_format}:
 \itemize{
 \item NULL or "nquads" (default)

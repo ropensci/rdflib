@@ -81,7 +81,6 @@ r_class <- function(x){
 ## Helper utilitiesfor parsing data URIs
 get_values <- function(x) gsub('\"(([^\\^])+)\"\\^*(.*)',  "\\1", x)
 get_types <- function(x) gsub('\"(([^\\^])+)\"\\^*(.*)',  "\\3", x)
-
 #' @importFrom stringi stri_unescape_unicode
 # https://stackoverflow.com/questions/48602294
 utf8me <- function(x){ 

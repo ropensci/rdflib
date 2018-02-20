@@ -1,8 +1,9 @@
 #' Initialize an `rdf` Object
 #'
+#'@param storage Use in-memory hashes ("memory"), or disk based storage ("BDB")? 
 #' @param path where should local database to store RDF triples be created, if
 #' configured for disk-based storage; see details.
-#' @param new_db logical, default TRUE. should we create a new database on disk
+#' @param new_db logical, default FALSE. should we create a new database on disk
 #' or attempt to connect to an existing database (at the path specified)?
 #' @return an rdf object
 #' @details an rdf Object is a list of class 'rdf', consisting of
@@ -13,8 +14,7 @@
 #' 
 #' `rdflib` defaults to an in-memory hash-based storage structure. 
 #' which should be best for most use cases. For very large triplestores,
-#' disk-based storage will be necessary.  Enable this by setting the option
-#' `options(rdflib_storage = "BDB")` before calling `rdf()` to use disk-based
+#' disk-based storage will be necessary. set `storage="BDB"` to use disk-based
 #' storage. Specify a path with the optional `path` argument, default uses
 #' the current working directory. Disk-based storage requires redland package
 #' to be installed from source with support for the Berkeley DB 
@@ -34,11 +34,13 @@
 #' @examples
 #' x <- rdf()
 #' 
-rdf <- function(path = ".", new_db = TRUE){
+rdf <- function(storage = c("memory", "BDB"), path = ".", new_db = FALSE){
   world <- new("World")
   
+  
   ## Handle storage type
-  if(getOption("rdflib_storage", "memory") == "BDB"){
+  storage <- match.arg(storage)
+  if(storage == "BDB"){
     if(rdf_has_bdb()){
       ## Store in Berkeley DB
       if(new_db){
@@ -93,11 +95,6 @@ rdf <- function(path = ".", new_db = TRUE){
 #' `browseVignettes(package = "rdflib")`
 #'
 #'  Configurations via `options()`
-#'
-#' `rdflib_storage`:
-#' 
-#' - NULL or "memory" for in memory storage. (default)
-#' - "BDB" for disk-based storage in Berkeley Database
 #' 
 #' `rdflib_print_format`:
 #'  
