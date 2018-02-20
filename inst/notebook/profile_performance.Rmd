@@ -16,6 +16,53 @@ We need to set `rdflib` option to use disk-based rather than in-memory storage,
 or it appears that `redland` throws an error (even when the machine has sufficient memory!?)
 when importing the 336,776 rows of the `flights` table.  
 
+Note: if BDB is not available (e.g. `berkeley-db` libraries were not found when `redland` was built from source),
+then this will fallback on in-memory storage and this vignette will use an abridged version of the flights table.
+
+```{r}
+options(rdflib_storage = "BDB")
+options(rdflib_storage = "memory")
+```
+
+
+## Tidyverse Style
+
+Operations in `dplyr` on the `nyflights13` dataset are easy to write and fast to execute, (in memory or on disk):  
+
+```{r}
+df <- flights %>% 
+  left_join(airlines) %>%
+  left_join(planes, by="tailnum") %>% 
+  select(carrier, name, manufacturer, model) %>% 
+  distinct()
+head(df)
+```
+
+
+
+Use a smaller dataset if we do not have a BDB backend: 
+
+```{r}
+#if(!rdf_has_bdb()){
+flights <- flights %>% 
+  filter(distance > 3000) # try smaller dataset
+#}
+```
+
+
+Keys, including foreign keys, must be represented as URIs and not literal strings.  
+
+```{r}
+as_uri <- function(x, base_uri = "x:") paste0(base_uri, x)
+
+uri_flights <- flights %>% 
+  mutate(tailnum = as_uri(tailnum),
+         carrier = as_uri(carrier))
+
+
+```
+
+
 
 # RDF Serialization Strategies for large data.frames
 
@@ -48,4 +95,118 @@ modulo a little markup to identify URIs and datatypes.  (`readr::write_delim` mi
 to be incompatible with the `nquads` use of quotations.)  We're left manually encoding the URI strings and the datatypes onto our 
 `data.frame` in advance (which requires more nuiance to handle default data types, blank nodes and missing values than I've currently
 implemented), but as a proof of principle here this approach is sufficiently fast, as we will now see.  
+
+
+```{r}
+## generic list-based conversion via JSON-LD 
+rdf_planes_from_list <- as_rdf.list(planes)
+```
+
+
+Let's do the smaller tables first.  We declare which column is the `key` (i.e. `subject`), 
+and we define a `base_uri` prefix which we use to make sure column names and subjects are treated as URIs.
+With tables that have only tens of thousands of cells (triples) this is pretty fast:
+
+```{r}
+x1 <- as_rdf(airlines, "carrier", "x:")
+x2 <- as_rdf(airports, "faa", "x:") ## a few funny chars, UTF8 issues?
+x3 <- as_rdf(planes,  "tailnum", "x:")
+
+x <- c(rdf(), x1,x2,x3)
+```
+
+
+SPARQL queries on the resulting data are also pretty fast:
+
+
+
+
+```{r}
+sparql <-
+  'SELECT   ?model
+WHERE {
+ ?tailnum <x:carrier> ?carrier .
+ ?tailnum <x:model>  ?model 
+}'
+
+out <- rdf_query(x1, sparql)
+head(out)
+```
+
+
+
+
+Big table via poor-man's `nquads` 165 seconds if this is the full table:
+
+```{r}
+system.time(
+    x4 <- as_rdf(uri_flights, NULL, "x:")
+)
+```
+
+
+The json-ld approach just appears to crash, so we won't run that:
+
+```{r}
+## nope, the jsonld method appears to crash R...
+#system.time(
+#  x4 <- as_rdf.list(na.omit(flights))
+#)
+```
+
+
+We can join all of these:  
+
+```{r}
+rdf <- c(rdf(), x1,x2,x3,x4)
+```
+
+
+
+Separate queries: This proves very slow on the full data! Would be much faster if we did not have to iterate over getNextResult but could parse all results as a document.  Hopefully this change is coming to `redland` R library soon!
+
+```{r}
+sparql <-
+'SELECT  ?tailnum ?dep_delay ?carrier
+WHERE { 
+  ?flight <x:tailnum>  ?tailnum .
+  ?flight <x:dep_delay>  ?dep_delay .
+  ?flight <x:carrier>  ?carrier 
+}'
+
+system.time(
+
+f1 <- rdf_query(rdf, sparql)
+)
+```
+
+```{r}
+sparql <-
+  'SELECT  ?tailnum ?model ?manufacturer
+WHERE {
+?tailnum <x:manufacturer> ?manufacturer .
+?tailnum <x:model> ?model
+}'
+f2 <- rdf_query(rdf, sparql)
+
+tmp <- inner_join(f1,f2)
+```
+
+
+
+
+```{r}
+s <- 
+  'SELECT  ?carrier ?name ?manufacturer ?model
+WHERE {
+?flight <x:tailnum>  ?tailnum .
+?tailnum <x:manufacturer> ?manufacturer .
+?tailnum <x:model> ?model .
+?flight <x:carrier>  ?carrier .
+?carrier <x:name> ?name
+}'
+
+out2 <- rdf_query(rdf, s)
+head(out2)
+```
 

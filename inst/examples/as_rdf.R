@@ -110,9 +110,8 @@ as_rdf.data.frame <- function(df,
 ## x is a data.frame with columns: subject, predicate, object, & datatype
 poor_mans_nquads <- function(x, loc, vocab){
   
-  ## merge is Slow! ~ 5 seconds for 800K triples
-  #x <- merge(x, col_classes, by = "predicate")
-  x <- dplyr::left_join(x, col_classes, by = "predicate")
+  ## FIXME: currently assumes
+  
   
   ## PROFILE ME.  Currently written to be base-R compatible, 
   ## but a tidyverse implementation may speed serialization.  
@@ -131,7 +130,7 @@ poor_mans_nquads <- function(x, loc, vocab){
   
   ## strings and URIs do not get a datatype
   needs_type <- !is.na(x$datatype)
-
+  
   ## URIs that are not blank nodes need <>
   x$subject[!blank_subject] <- paste0("<", vocab, x$subject[!blank_subject], ">")
   ## Predicate is always a URI
@@ -155,18 +154,9 @@ poor_mans_nquads <- function(x, loc, vocab){
   
   ## write table is a little slow, ~ 1s on 800K triples
   
-  ## write table is a little slow, ~ 1s on 800K triples
-  
   ## drop datatype
   x <- x[c("subject", "predicate", "object", "graph")]       
-  write.table(x, loc, col.names = FALSE, quote = FALSE, row.names = FALSE)     
-  
-  ## And parse text file.  Way faster than adding row by row!
-  ## but still about 8 s on 800K triples, all in the C layer
-  rdf <- rdf_parse(loc, "nquads")
-  
-  rdf
-
+  write.table(x, loc, col.names = FALSE, quote = FALSE, row.names = FALSE)
 }
 
 
