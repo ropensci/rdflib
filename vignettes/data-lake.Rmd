@@ -167,20 +167,14 @@ gh_tibble %>% arrange(name) %>% head()
 
 ## RDF on non-tabular data
 
-The RDF approach merely treats JSON as JSON-LD within a given vocabulary.  In this context, nesting implicitly provides important semantic information about relationships between the data, which are captured in the RDF triples. Here, we import the JSON data as RDF:
+The RDF approach merely treats JSON as JSON-LD within a given vocabulary.  In this context, nesting implicitly provides important semantic information about relationships between the data, which are captured in the RDF triples. Here, we import the JSON data as RDF (and add it to our existing triplestore just for fun)
 
 ```{r gh_add}
-gh_rdf <- as_rdf.list(gh_data, vocab = "gh:")
+gh_rdf <- as_rdf.list(gh_data, rdf = rdf, vocab = "gh:")
 ```
 
 
-We can add it to the existing data lake just for kicks:
 
-```{r}
-system.time(
-rdf <- c(rdf, gh_rdf)
-)
-```
 
 
 And we can query it back out of the lake just by selecting the columns of interest. 
