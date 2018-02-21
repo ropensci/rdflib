@@ -1,6 +1,6 @@
 Package: rdflib
 Title: Tools to Manipulate and Query Semantic Data
-Version: 0.0.4
+Version: 0.1.0
 Authors@R: person("Carl", "Boettiger", 
                   email = "cboettig@gmail.com", 
                   role = c("aut", "cre", "cph"),
@@ -22,8 +22,8 @@ Description: The Resource Description Framework, or 'RDF' is a widely used
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/cboettig/rdflib
-BugReports: https://github.com/cboettig/rdflib/issues
+URL: https://github.com/ropensci/rdflib
+BugReports: https://github.com/ropensci/rdflib/issues
 Imports: redland,
     jsonld,
     methods,
@@ -49,5 +49,6 @@ Suggests: magrittr,
     xml2,
     jsonlite,
     repurrrsive,
-    nycflights13
+    nycflights13,
+    codemetar
 VignetteBuilder: knitr

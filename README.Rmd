@@ -54,9 +54,7 @@ library(rdflib)
 Parse a file and serialize into a different format:
 
 ```{r parse}
-doc <- system.file("extdata", "dc.rdf", package="redland")
-
-doc %>%
+system.file("extdata/dc.rdf", package="redland") %>%
   rdf_parse() %>%
   rdf_serialize("test.nquads", "nquads")
 ```
@@ -70,11 +68,9 @@ sparql <-
   SELECT ?a ?c
   WHERE { ?a dc:creator ?c . }'
 
-rdf <- rdf_parse(doc)
-rdf
-
-
-rdf %>% rdf_query(sparql)
+system.file("extdata/dc.rdf", package="redland") %>%
+rdf_parse() %>%
+rdf_query(sparql)
 ```
 
 Initialize graph a new object or add triples statements to an existing graph:
@@ -111,6 +107,8 @@ For more information on the JSON-LD RDF API, see <https://json-ld.org/spec/lates
 
 ```{r include=FALSE}
 unlink("test.nquads")
+unlink(out)
+rdf_free(x)
 ```
 
 ----
@@ -118,13 +116,19 @@ unlink("test.nquads")
 ## Citing rdflib
 
 
-```{r results="asis"}
-citation("rdflib")
+Please also cite the underlying `redland` library when citing `rdflib`
+
+```{r results="asis", warning=FALSE, echo=FALSE}
+print(citation("rdflib"), "text")
 ```
 
-Please also cite the underlying `redland` library:
-
-```{r results="asis"}
-citation("redland")
+```{r results="asis", warning=FALSE, echo=FALSE}
+print(citation("redland"), "text")
 ```
 
+```{r include=FALSE}
+codemetar::write_codemeta()
+```
+
+
+[![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)

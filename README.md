@@ -30,9 +30,7 @@ library(rdflib)
 Parse a file and serialize into a different format:
 
 ``` r
-doc <- system.file("extdata", "dc.rdf", package="redland")
-
-doc %>%
+system.file("extdata/dc.rdf", package="redland") %>%
   rdf_parse() %>%
   rdf_serialize("test.nquads", "nquads")
 ```
@@ -45,14 +43,9 @@ sparql <-
   SELECT ?a ?c
   WHERE { ?a dc:creator ?c . }'
 
-rdf <- rdf_parse(doc)
-rdf
-#> <http://www.dajobe.org/> <http://purl.org/dc/elements/1.1/description> "The generic home page of Dave Beckett." .
-#> <http://www.dajobe.org/> <http://purl.org/dc/elements/1.1/title> "Dave Beckett's Home Page" .
-#> <http://www.dajobe.org/> <http://purl.org/dc/elements/1.1/creator> "Dave Beckett" .
-
-
-rdf %>% rdf_query(sparql)
+system.file("extdata/dc.rdf", package="redland") %>%
+rdf_parse() %>%
+rdf_query(sparql)
 #> # A tibble: 1 x 2
 #>   a                      c           
 #>   <chr>                  <chr>       
@@ -104,30 +97,10 @@ For more information on the JSON-LD RDF API, see <https://json-ld.org/spec/lates
 Citing rdflib
 -------------
 
-``` r
-citation("rdflib")
-#> Warning in citation("rdflib"): no date field in DESCRIPTION file of package
-#> 'rdflib'
-#> Warning in citation("rdflib"): could not determine year for 'rdflib' from
-#> package DESCRIPTION file
-```
+Please also cite the underlying `redland` library when citing `rdflib`
 
-To cite package 'rdflib' in publications use:
-
-Carl Boettiger (NA). rdflib: Tools to Manipulate and Query Semantic Data. R package version 0.0.4. <https://github.com/cboettig/rdflib>
-
-A BibTeX entry for LaTeX users is
-
-@Manual{, title = {rdflib: Tools to Manipulate and Query Semantic Data}, author = {Carl Boettiger}, note = {R package version 0.0.4}, url = {<https://github.com/cboettig/rdflib>}, }
-
-Please also cite the underlying `redland` library:
-
-``` r
-citation("redland")
-```
+Boettiger C (2018). *rdflib: A high level wrapper around the redland package for common rdf applications*. &lt;URL: <https://doi.org/10.5281/zenodo.1098478>.&gt;.
 
 Jones M, Slaughter P, Ooms J, Boettiger C and Chamberlain S (2016). *redland: RDF Library Bindings in R*. doi: 10.5063/F1VM496B (URL: <http://doi.org/10.5063/F1VM496B>), R package version 1.0.17-9, &lt;URL: <https://github.com/ropensci/redland-bindings/tree/master/R/redland>&gt;.
 
-A BibTeX entry for LaTeX users is
-
-@Manual{, title = {{redland}: RDF Library Bindings in R}, author = {Matthew B. Jones and Peter Slaughter and Jeroen Ooms and Carl Boettiger and Scott Chamberlain}, year = {2016}, note = {R package version 1.0.17-9}, url = {<https://github.com/ropensci/redland-bindings/tree/master/R/redland>}, doi = {10.5063/F1VM496B}, }
+[![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
