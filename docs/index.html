@@ -58,7 +58,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/cboettig/rdflib">
+  <a href="https://github.com/ropensci/rdflib">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -90,7 +90,7 @@
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install rdflib from github with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
-devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"cboettig/rdflib"</span>)</code></pre></div>
+devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"ropensci/rdflib"</span>)</code></pre></div>
 </div>
 <div id="basic-use" class="section level2">
 <h2 class="hasAnchor">
@@ -99,9 +99,7 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)
 <span class="kw">library</span>(rdflib)</code></pre></div>
 <p>Parse a file and serialize into a different format:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">doc &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"dc.rdf"</span>, <span class="dt">package=</span><span class="st">"redland"</span>)
-
-doc <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.file</span>(<span class="st">"extdata/dc.rdf"</span>, <span class="dt">package=</span><span class="st">"redland"</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw"><a href="reference/rdf_parse.html">rdf_parse</a></span>() <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw"><a href="reference/rdf_serialize.html">rdf_serialize</a></span>(<span class="st">"test.nquads"</span>, <span class="st">"nquads"</span>)</code></pre></div>
 <p>Perform SPARQL queries:</p>
@@ -110,14 +108,9 @@ doc <span class="op">%&gt;%</span>
 <span class="st">  SELECT ?a ?c</span>
 <span class="st">  WHERE { ?a dc:creator ?c . }'</span>
 
-rdf &lt;-<span class="st"> </span><span class="kw"><a href="reference/rdf_parse.html">rdf_parse</a></span>(doc)
-rdf
-<span class="co">#&gt; &lt;http://www.dajobe.org/&gt; &lt;http://purl.org/dc/elements/1.1/description&gt; "The generic home page of Dave Beckett." .</span>
-<span class="co">#&gt; &lt;http://www.dajobe.org/&gt; &lt;http://purl.org/dc/elements/1.1/title&gt; "Dave Beckett's Home Page" .</span>
-<span class="co">#&gt; &lt;http://www.dajobe.org/&gt; &lt;http://purl.org/dc/elements/1.1/creator&gt; "Dave Beckett" .</span>
-
-
-rdf <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/rdf_query.html">rdf_query</a></span>(sparql)
+<span class="kw">system.file</span>(<span class="st">"extdata/dc.rdf"</span>, <span class="dt">package=</span><span class="st">"redland"</span>) <span class="op">%&gt;%</span>
+<span class="kw"><a href="reference/rdf_parse.html">rdf_parse</a></span>() <span class="op">%&gt;%</span>
+<span class="kw"><a href="reference/rdf_query.html">rdf_query</a></span>(sparql)
 <span class="co">#&gt; # A tibble: 1 x 2</span>
 <span class="co">#&gt;   a                      c           </span>
 <span class="co">#&gt;   &lt;chr&gt;                  &lt;chr&gt;       </span>
@@ -155,20 +148,10 @@ x
 <div id="citing-rdflib" class="section level2">
 <h2 class="hasAnchor">
 <a href="#citing-rdflib" class="anchor"></a>Citing rdflib</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">citation</span>(<span class="st">"rdflib"</span>)
-<span class="co">#&gt; Warning in citation("rdflib"): no date field in DESCRIPTION file of package</span>
-<span class="co">#&gt; 'rdflib'</span>
-<span class="co">#&gt; Warning in citation("rdflib"): could not determine year for 'rdflib' from</span>
-<span class="co">#&gt; package DESCRIPTION file</span></code></pre></div>
-<p>To cite package ‘rdflib’ in publications use:</p>
-<p>Carl Boettiger (NA). rdflib: Tools to Manipulate and Query Semantic Data. R package version 0.0.4. <a href="https://github.com/cboettig/rdflib" class="uri">https://github.com/cboettig/rdflib</a></p>
-<p>A BibTeX entry for LaTeX users is</p>
-<p><span class="citation">@Manual</span>{, title = {rdflib: Tools to Manipulate and Query Semantic Data}, author = {Carl Boettiger}, note = {R package version 0.0.4}, url = {<a href="https://github.com/cboettig/rdflib" class="uri">https://github.com/cboettig/rdflib</a>}, }</p>
-<p>Please also cite the underlying <code>redland</code> library:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">citation</span>(<span class="st">"redland"</span>)</code></pre></div>
+<p>Please also cite the underlying <code>redland</code> library when citing <code>rdflib</code></p>
+<p>Boettiger C (2018). <em>rdflib: A high level wrapper around the redland package for common rdf applications</em>. &lt;URL: <a href="https://doi.org/10.5281/zenodo.1098478" class="uri">https://doi.org/10.5281/zenodo.1098478</a>.&gt;.</p>
 <p>Jones M, Slaughter P, Ooms J, Boettiger C and Chamberlain S (2016). <em>redland: RDF Library Bindings in R</em>. doi: 10.5063/F1VM496B (URL: <a href="http://doi.org/10.5063/F1VM496B" class="uri">http://doi.org/10.5063/F1VM496B</a>), R package version 1.0.17-9, &lt;URL: <a href="https://github.com/ropensci/redland-bindings/tree/master/R/redland" class="uri">https://github.com/ropensci/redland-bindings/tree/master/R/redland</a>&gt;.</p>
-<p>A BibTeX entry for LaTeX users is</p>
-<p><span class="citation">@Manual</span>{, title = {{redland}: RDF Library Bindings in R}, author = {Matthew B. Jones and Peter Slaughter and Jeroen Ooms and Carl Boettiger and Scott Chamberlain}, year = {2016}, note = {R package version 1.0.17-9}, url = {<a href="https://github.com/ropensci/redland-bindings/tree/master/R/redland" class="uri">https://github.com/ropensci/redland-bindings/tree/master/R/redland</a>}, doi = {10.5063/F1VM496B}, }</p>
+<p><a href="http://ropensci.org"><img src="http://ropensci.org/public_images/github_footer.png" alt="rofooter"></a></p>
 </div>
 </div>
 </div>
@@ -178,13 +161,17 @@ x
     <h2 class="hasAnchor">
 <a href="#sidebar" class="anchor"></a>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/cboettig/rdflib">https://​github.com/​cboettig/​rdflib</a>
+<li>Browse source code at <br><a href="https://github.com/ropensci/rdflib">https://​github.com/​ropensci/​rdflib</a>
 </li>
-<li>Report a bug at <br><a href="https://github.com/cboettig/rdflib/issues">https://​github.com/​cboettig/​rdflib/​issues</a>
+<li>Report a bug at <br><a href="https://github.com/ropensci/rdflib/issues">https://​github.com/​ropensci/​rdflib/​issues</a>
 </li>
 </ul>
 <h2>License</h2>
 <p><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE.html">LICENSE</a></p>
+<h2>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html">Citing rdflib</a></li>
+</ul>
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Carl Boettiger <br><small class="roles"> Author, maintainer, copyright holder </small> <br><small>(0000-0002-1642-628X)</small>
@@ -192,9 +179,9 @@ x
 </ul>
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.org/cboettig/rdflib"><img src="https://travis-ci.org/cboettig/rdflib.svg?branch=master" alt="Travis-CI Build Status"></a></li>
+<li><a href="https://travis-ci.org/ropensci/rdflib"><img src="https://travis-ci.org/ropensci/rdflib.svg?branch=master" alt="Travis-CI Build Status"></a></li>
 <li><a href="https://ci.appveyor.com/project/cboettig/rdflib"><img src="https://ci.appveyor.com/api/projects/status/github/cboettig/rdflib?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
-<li><a href="https://codecov.io/github/cboettig/rdflib?branch=master"><img src="https://img.shields.io/codecov/c/github/cboettig/rdflib/master.svg" alt="Coverage Status"></a></li>
+<li><a href="https://codecov.io/github/ropensci/rdflib?branch=master"><img src="https://img.shields.io/codecov/c/github/ropensci/rdflib/master.svg" alt="Coverage Status"></a></li>
 <li><a href="https://cran.r-project.org/package=rdflib"><img src="http://www.r-pkg.org/badges/version/rdflib" alt="CRAN_Status_Badge"></a></li>
 <li><a href="https://zenodo.org/badge/latestdoi/100521776"><img src="https://zenodo.org/badge/100521776.svg" alt="DOI"></a></li>
 <li><a href="https://github.com/ropensci/onboarding/issues/169"><img src="https://badges.ropensci.org/169_status.svg"></a></li>

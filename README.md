@@ -1,5 +1,5 @@
 
-[![Travis-CI Build Status](https://travis-ci.org/cboettig/rdflib.svg?branch=master)](https://travis-ci.org/cboettig/rdflib) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/cboettig/rdflib?branch=master&svg=true)](https://ci.appveyor.com/project/cboettig/rdflib) [![Coverage Status](https://img.shields.io/codecov/c/github/cboettig/rdflib/master.svg)](https://codecov.io/github/cboettig/rdflib?branch=master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/rdflib)](https://cran.r-project.org/package=rdflib) [![DOI](https://zenodo.org/badge/100521776.svg)](https://zenodo.org/badge/latestdoi/100521776) [![](https://badges.ropensci.org/169_status.svg)](https://github.com/ropensci/onboarding/issues/169)
+[![Travis-CI Build Status](https://travis-ci.org/ropensci/rdflib.svg?branch=master)](https://travis-ci.org/ropensci/rdflib) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/cboettig/rdflib?branch=master&svg=true)](https://ci.appveyor.com/project/cboettig/rdflib) [![Coverage Status](https://img.shields.io/codecov/c/github/ropensci/rdflib/master.svg)](https://codecov.io/github/ropensci/rdflib?branch=master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/rdflib)](https://cran.r-project.org/package=rdflib) [![DOI](https://zenodo.org/badge/100521776.svg)](https://zenodo.org/badge/latestdoi/100521776) [![](https://badges.ropensci.org/169_status.svg)](https://github.com/ropensci/onboarding/issues/169)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 rdflib
@@ -14,7 +14,7 @@ You can install rdflib from github with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("cboettig/rdflib")
+devtools::install_github("ropensci/rdflib")
 ```
 
 Basic use

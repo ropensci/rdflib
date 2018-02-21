@@ -82,7 +82,7 @@
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/cboettig/rdflib">
+  <a href="https://github.com/ropensci/rdflib">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -110,12 +110,14 @@
 <h2 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New Features</h2>
 <ul>
-<li>adds <code>c()</code> method to concatenate <code>rdf</code> objects</li>
 <li>
 <code><a href="../reference/rdf.html">rdf()</a></code> supports BDB backend for disk-based storage for large triplestores <a href="https://github.com/cboettig/rdflib/issues/6">#6</a>
 </li>
 <li>
 <code><a href="../reference/rdf_parse.html">rdf_parse()</a></code> gains an argument <code>rdf</code> to append triples to existing graph</li>
+<li>adds <code>c()</code> method to concatenate <code>rdf</code> objects</li>
+<li>Performance improvements make it possible to handle triplestores with millions of triples</li>
+<li>Two new vignettes better introduce RDF and package functions.</li>
 </ul>
 </div>
 <div id="minor-improvements" class="section level2">
@@ -123,14 +125,16 @@
 <a href="#minor-improvements" class="anchor"></a>Minor Improvements</h2>
 <ul>
 <li>
+<code>rdf_query</code> now bypasses the the very slow iteration over <code>getNextResult</code> approach and uses an internal redland function call to access all results at once in csv format.</li>
+<li><p>experimental <code>as_rdf</code> method now uses a poor-man’s nquad serializer to rapidly generate rdf (instead of slowly iterating over <code>add_rdf</code>).</p></li>
+<li>
 <code>rdf_add</code> argument for <code>object</code> can now take all atomic types (numeric, integer, string, Date, POSIX, logical) and will automatically declare the appropriate <code>datatype_uri</code> if the user has not manually specified this.</li>
 <li>Numerous improvements to documentation from rOpenSci onboarding feedback, see <a href="https://github.com/cboettig/rdflib/issues/9">#9</a> and <a href="https://github.com/cboettig/rdflib/issues/10">#10</a>
 </li>
 <li>both functions and unit tests are broken out into separate files in their respective directories.</li>
 <li>additional example RDF data added in <code>extdata</code>
 </li>
-<li>
-<code>rdf_serialize</code> passes <code>...</code> arguments to serializeToFile (e.g. to set a <code>baseUri</code>)</li>
+<li><p><code>rdf_serialize</code> passes <code>...</code> arguments to serializeToFile (e.g. to set a <code>baseUri</code>)</p></li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
