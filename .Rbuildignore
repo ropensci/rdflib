@@ -10,3 +10,4 @@
 ^paper\.md$
 ^paper\.bib$
 ^CONDUCT\.md$
+^cran-comments\.md$
