@@ -1,14 +1,28 @@
 
-[![Travis-CI Build Status](https://travis-ci.org/ropensci/rdflib.svg?branch=master)](https://travis-ci.org/ropensci/rdflib) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/cboettig/rdflib?branch=master&svg=true)](https://ci.appveyor.com/project/cboettig/rdflib) [![Coverage Status](https://img.shields.io/codecov/c/github/ropensci/rdflib/master.svg)](https://codecov.io/github/ropensci/rdflib?branch=master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/rdflib)](https://cran.r-project.org/package=rdflib) [![DOI](https://zenodo.org/badge/100521776.svg)](https://zenodo.org/badge/latestdoi/100521776) [![](https://badges.ropensci.org/169_status.svg)](https://github.com/ropensci/onboarding/issues/169)
+[![Travis-CI Build
+Status](https://travis-ci.org/ropensci/rdflib.svg?branch=master)](https://travis-ci.org/ropensci/rdflib)
+[![AppVeyor Build
+Status](https://ci.appveyor.com/api/projects/status/github/cboettig/rdflib?branch=master&svg=true)](https://ci.appveyor.com/project/cboettig/rdflib)
+[![Coverage
+Status](https://img.shields.io/codecov/c/github/ropensci/rdflib/master.svg)](https://codecov.io/github/ropensci/rdflib?branch=master)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/rdflib)](https://cran.r-project.org/package=rdflib)
+[![DOI](https://zenodo.org/badge/100521776.svg)](https://zenodo.org/badge/latestdoi/100521776)
+[![](http://badges.ropensci.org/169_status.svg)](https://github.com/ropensci/onboarding/issues/169)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-rdflib
-======
 
-A friendly and consise user interface for performing common tasks on rdf data, such as parsing and converting between formats including rdfxml, turtle, nquads, ntriples, and trig, creating rdf graphs, and performing SPARQL queries. This package wraps the redland R package which provides direct bindings to the redland C library. Additionally, the package supports parsing and serialization of rdf into json-ld through the json-ld package, which binds the official json-ld javascript API. The package interface takes inspiration from the Python rdflib library.
+# rdflib
 
-Installation
-------------
+A friendly and consise user interface for performing common tasks on rdf
+data, such as parsing and converting between formats including rdfxml,
+turtle, nquads, ntriples, and trig, creating rdf graphs, and performing
+SPARQL queries. This package wraps the redland R package which provides
+direct bindings to the redland C library. Additionally, the package
+supports parsing and serialization of rdf into json-ld through the
+json-ld package, which binds the official json-ld javascript API. The
+package interface takes inspiration from the Python rdflib library.
+
+## Installation
 
 You can install rdflib from GitHub with:
 
@@ -17,10 +31,10 @@ You can install rdflib from GitHub with:
 devtools::install_github("ropensci/rdflib")
 ```
 
-Basic use
----------
+## Basic use
 
-While not required, `rdflib` is designed to play nicely with `%>%` pipes, so we will load the `magrittr` package as well:
+While not required, `rdflib` is designed to play nicely with `%>%`
+pipes, so we will load the `magrittr` package as well:
 
 ``` r
 library(magrittr)
@@ -52,7 +66,8 @@ rdf_query(sparql)
 #> 1 http://www.dajobe.org/ Dave Beckett
 ```
 
-Initialize graph a new object or add triples statements to an existing graph:
+Initialize graph a new object or add triples statements to an existing
+graph:
 
 ``` r
 x <- rdf()
@@ -75,10 +90,10 @@ x
 #> }
 ```
 
-JSON-LD
--------
+## JSON-LD
 
-We can also work with the JSON-LD format through additional functions provided in the R package, `jsonld`.
+We can also work with the JSON-LD format through additional functions
+provided in the R package, `jsonld`.
 
 ``` r
 out <- tempfile()
@@ -90,17 +105,22 @@ rdf_parse(out, format = "jsonld")
 #> }
 ```
 
-For more information on the JSON-LD RDF API, see <https://json-ld.org/spec/latest/json-ld-rdf/>.
+For more information on the JSON-LD RDF API, see
+<https://json-ld.org/spec/latest/json-ld-rdf/>.
 
-------------------------------------------------------------------------
+-----
 
-Citing rdflib
--------------
+## Citing rdflib
 
 Please also cite the underlying `redland` library when citing `rdflib`
 
-Boettiger C (2018). *rdflib: A high level wrapper around the redland package for common rdf applications*. &lt;URL: <https://doi.org/10.5281/zenodo.1098478>.&gt;.
+Boettiger C (2018). *rdflib: A high level wrapper around the redland
+package for common rdf applications*. \<URL:
+<https://doi.org/10.5281/zenodo.1098478>.\>.
 
-Jones M, Slaughter P, Ooms J, Boettiger C and Chamberlain S (2016). *redland: RDF Library Bindings in R*. doi: 10.5063/F1VM496B (URL: <http://doi.org/10.5063/F1VM496B>), R package version 1.0.17-9, &lt;URL: <https://github.com/ropensci/redland-bindings/tree/master/R/redland>&gt;.
+Jones M, Slaughter P, Ooms J, Boettiger C and Chamberlain S (2016).
+*redland: RDF Library Bindings in R*. doi: 10.5063/F1VM496B (URL:
+<http://doi.org/10.5063/F1VM496B>), R package version 1.0.17-9, \<URL:
+<https://github.com/ropensci/redland-bindings/tree/master/R/redland>\>.
 
 [![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)

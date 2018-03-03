@@ -7,6 +7,6 @@ citEntry(
                     comment=c(ORCID = "0000-0002-1642-628X"),
   year = '2018',
   publisher = 'Zenodo',
-  url = 'https://doi.org/10.5281/zenodo.1098478.',
-  textVersion = 'Carl Boettiger. (2018). rdflib: A high level wrapper around the redland package for common rdf applications (Version 0.1.0). Zenodo. https://doi.org/0.5281/zenodo.1098478'
+  url = 'http://doi.org/10.5281/zenodo.1098478.',
+  textVersion = 'Carl Boettiger. (2018). rdflib: A high level wrapper around the redland package for common rdf applications (Version 0.1.0). Zenodo. http://doi.org/0.5281/zenodo.1098478'
   )
