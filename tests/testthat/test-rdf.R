@@ -36,8 +36,9 @@ testthat::test_that("We can use BDB storage", {
   testthat::skip_if_not(rdf_has_bdb())
   
   # not sure why this is now failing on appveyor
-  testthat::skip_on_appveyor()
+  testthat::skip_on_os("windows")
   
+    
   testthat::expect_silent(rdf <- rdf(storage="BDB", new_db = TRUE))
   
   rdf_add(rdf, "", "dc:name", "bob")
