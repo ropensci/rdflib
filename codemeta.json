@@ -310,9 +310,9 @@
       }
     }
   ],
-  "contIntegration": "https://travis-ci.org/cboettig/rdflib",
+  "contIntegration": "https://travis-ci.org/ropensci/rdflib",
   "readme": "https://github.com/cboettig/rdflib/blob/master/README.md",
-  "fileSize": "48.827KB",
+  "fileSize": "48.858KB",
   "releaseNotes": "https://github.com/cboettig/rdflib/blob/master/NEWS.md",
   "citation": [
     {

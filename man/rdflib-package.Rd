@@ -48,8 +48,8 @@ default is "localhost://"
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/cboettig/rdflib}
-  \item Report bugs at \url{https://github.com/cboettig/rdflib/issues}
+  \item \url{https://github.com/ropensci/rdflib}
+  \item Report bugs at \url{https://github.com/ropensci/rdflib/issues}
 }
 
 }

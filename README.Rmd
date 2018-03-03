@@ -34,7 +34,7 @@ interface takes inspiration from the Python rdflib library.
 
 ## Installation
 
-You can install rdflib from github with:
+You can install rdflib from GitHub with:
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")

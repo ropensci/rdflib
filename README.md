@@ -10,7 +10,7 @@ A friendly and consise user interface for performing common tasks on rdf data, s
 Installation
 ------------
 
-You can install rdflib from github with:
+You can install rdflib from GitHub with:
 
 ``` r
 # install.packages("devtools")
