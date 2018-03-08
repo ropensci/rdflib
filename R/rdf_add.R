@@ -29,7 +29,7 @@
 #'  will be treated as blank node.  Set `subjectType` or `objectType` 
 #'  explicitly to override this behavior, e.g. to treat an object URI
 #'  as a literal string.  NAs are also treated as blank nodes in subject
-#'  or ojbect.  See examples for details.
+#'  or object  See examples for details.
 #' 
 #' @references <https://en.wikipedia.org/wiki/Uniform_Resource_Identifier>
 #' @importClassesFrom redland Statement

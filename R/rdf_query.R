@@ -2,7 +2,7 @@
 #'
 #' @param rdf an rdf object (e.g. from \code{\link{rdf_parse}})
 #' @param query a SPARQL query, as text string
-#' @param data.frame logical, should the resutls be returned as a data.frame? 
+#' @param data.frame logical, should the results be returned as a data.frame? 
 #' @param ... additional arguments to a redland initialize-Query
 #'
 #' @return a data.frame of all query results (default.)  Columns will 

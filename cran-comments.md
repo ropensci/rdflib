@@ -1,6 +1,7 @@
 Dear CRAN maintainers,
 
 I am pleased to propose rdflib for an initial release to CRAN.  
+This fixes the previous problem in resolving a URL in the CITATION file.
 
 ## Test environments
 

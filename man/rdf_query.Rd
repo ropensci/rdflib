@@ -11,7 +11,7 @@ rdf_query(rdf, query, data.frame = TRUE, ...)
 
 \item{query}{a SPARQL query, as text string}
 
-\item{data.frame}{logical, should the resutls be returned as a data.frame?}
+\item{data.frame}{logical, should the results be returned as a data.frame?}
 
 \item{...}{additional arguments to a redland initialize-Query}
 }

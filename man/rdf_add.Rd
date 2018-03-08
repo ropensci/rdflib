@@ -44,7 +44,7 @@ typed as resource nodes, otherwise as literals.  An empty object \code{""}
 will be treated as blank node.  Set \code{subjectType} or \code{objectType}
 explicitly to override this behavior, e.g. to treat an object URI
 as a literal string.  NAs are also treated as blank nodes in subject
-or ojbect.  See examples for details.
+or object  See examples for details.
 }
 \examples{
 rdf <- rdf()
