@@ -11,3 +11,4 @@
 ^paper\.bib$
 ^CONDUCT\.md$
 ^cran-comments\.md$
+inst/notebook/*
