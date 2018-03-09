@@ -1,0 +1,247 @@
+---
+title: "RDF for Tidyverse Lovers"
+subtitle: ""
+author: "Carl Boettiger"
+date: "2018/03/12"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE, message = FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(comment = NA)
+library(tidyverse)
+library(rdflib)
+library(jsonlite)
+options(max.print = 10)
+mtcars <- mtcars %>% rownames_to_column("Model")
+
+source(system.file("examples/as_rdf.R", package="rdflib"))
+source(system.file("examples/tidy_schema.R", package="rdflib"))
+```
+
+
+
+---
+class: center, middle, inverse
+
+# RDF
+
+
+
+
+---
+class: center, middle, inverse
+background-image: url(img/uglyduckling.jpg)
+
+# RDF
+
+---
+class: center, middle, inverse
+background-image: url(img/steampunk.jpg)
+
+# RDF
+
+---
+class: center, middle, inverse
+
+# The Semantic Web is the Future of the Internet...
+
+---
+class: center, middle, inverse
+
+# ... and always will be.
+
+ -- Peter Norvig,  
+    Director of Research,  
+    Google Inc.
+
+
+
+---
+class: center, top, inverse
+background-image: url(img/tetris.jpg)
+
+# All Data are Tabular
+
+---
+class: center, top, inverse
+background-image: url(img/tetris-lose.jpg)
+
+# All Data are Definitely Not Tabular
+
+
+
+---
+class: center, middle, inverse
+background-image: url(img/factory-farm.jpg)
+
+
+# Factory Farm Data
+
+---
+class: center, middle, inverse
+background-image: url(img/organic-farm.jpg)
+
+
+# Some prefer the Handcrafted, Organic kind
+
+---
+class: center, middle, inverse
+
+# Data Integration is Hard
+
+
+---
+class: center, middle, inverse
+
+
+# Better Metadata?
+
+---
+class: center, middle, inverse
+background-image: url(img/no-data-lake.jpg)
+
+# The Data Lake
+
+---
+class: center, middle, inverse
+background-image: url(img/data-lake.jpg)
+
+
+
+# The Data Lake
+
+---
+class: center, middle, inverse
+
+# All Data Really is Tabular
+
+
+---
+class: center, middle, inverse
+
+
+# One Table. Three (okay five) columns.
+
+---
+class: center, middle, inverse
+
+# `tidyr::gather()` all the things!
+
+
+---
+class: left, top, inverse
+
+# `tidyr::gather()` all the things!
+
+```{r}
+mtcars %>% 
+  rowid_to_column("id") %>% 
+  gather(property, value, -id)
+```
+
+
+
+---
+class: left, top, inverse
+
+# Into the Lake
+
+```{r}
+triplestore <- rdf()
+
+as_rdf(mtcars, triplestore, "mtcars:")
+as_rdf(iris, triplestore, "iris:")
+
+```
+
+
+
+---
+class: left, top, inverse
+
+# Back from the Lake
+
+```{r}
+rdf_query(triplestore,
+'SELECT  ?Species ?Sepal_Length ?Sepal_Width ?Petal_Length  ?Petal_Width
+WHERE {
+ ?s <iris:Species>  ?Species ;
+    <iris:Sepal.Width>  ?Sepal_Width ;
+    <iris:Sepal.Length>  ?Sepal_Length ; 
+    <iris:Petal.Length>  ?Petal_Length ;
+    <iris:Petal.Width>  ?Petal_Width 
+}')
+
+```
+
+
+
+
+---
+class: left, top, inverse
+
+# Into the Lake
+
+GitHub API
+
+```{r echo=FALSE}
+github.json <- system.file("extdata/github.json", package="rdflib")
+cat(readLines(github.json, n = 20), sep="\n")
+```
+
+
+---
+class: left, top, inverse
+
+```{r include=FALSE}
+events <- read_json(github.json)
+```
+```{r eval = FALSE}
+events <- read_json("https://api.github.com/users/cboettig/events")
+```
+```{r}
+as_rdf(events, triplestore, "gh:")
+```
+
+
+---
+class: left, top, inverse
+
+# Rectangling
+
+
+```{r}
+rdf_query(triplestore, '
+SELECT ?type ?user ?repo ?when
+WHERE {
+?s <gh:type> ?type ;
+   <gh:created_at> ?when ;
+   <gh:repo> ?r ;
+   <gh:actor> ?actor .
+?r <gh:name> ?repo .
+?actor <gh:login> ?user .
+
+}
+')
+```
+
+
+---
+class: center, middle, inverse
+
+# Triples
+
+
+---
+class: center, middle, inverse
+
+# I say IRI 
+# U say URL
+

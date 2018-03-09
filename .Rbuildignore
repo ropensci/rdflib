@@ -11,4 +11,5 @@
 ^paper\.bib$
 ^CONDUCT\.md$
 ^cran-comments\.md$
-inst/notebook/*
+^inst/notebook/img$
+^slides$
