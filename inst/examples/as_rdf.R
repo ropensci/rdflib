@@ -1,5 +1,5 @@
 
-#' As RDF
+#' Coerce an object into RDF
 #' 
 #' Coerce an object into RDF
 #' @param x an object to coerce into RDF (list, list-like, or data.frame)
@@ -8,13 +8,19 @@
 #' @param base A base URI to assume for blank subject nodes
 #' @param context: a named list mapping any string to a URI
 #' @param ... additional arguments, specific to certain types
+#' @export
 #' 
+#' @examples 
+#' as_rdf(mtcars)
+#' as_rdf(list(repo = "rdflib", owner = list("id", "ropensci")))
 as_rdf <- function(x, 
                    rdf = rdf(),
                    vocab = NULL, 
                    base = getOption("rdflib_base_uri", "localhost://"), 
                    context = NULL, 
                    ...) UseMethod("as_rdf")
+
+
 
 as_rdf.list <- function(x, 
                         rdf = NULL,
@@ -33,7 +39,7 @@ as_rdf.list <- function(x,
   json2 <- paste0('{\n"@context":', jsonld_context, 
                   ',\n',  '"@graph": ', json,  '}')
   rdflib::rdf_parse(json2, "jsonld", rdf = rdf)
-  rdf
+  invisible(rdf)
 }
 
 
@@ -88,8 +94,10 @@ as_rdf.data.frame <- function(df,
   }
   ## FIXME consider taking an already-gathered table to avoid dependency?
   suppressWarnings(
-    x <- tidyr::gather(x, key = predicate, 
-                       value = object, -subject))
+    x <- tidyr::gather(x, 
+                       key = predicate, 
+                       value = object, 
+                       -subject))
   
   ## merge is Slow! ~ 5 seconds for 800K triples 
   ## (almost as much time as rdf_parse)
@@ -104,16 +112,13 @@ as_rdf.data.frame <- function(df,
   rdf <- rdf_parse(loc, rdf = rdf, format = "nquads")
   unlink(loc)
   
-  rdf
+  invisible(rdf)
 }
 
 ## x is a data.frame with columns: subject, predicate, object, & datatype
 poor_mans_nquads <- function(x, loc, vocab){
   
-  ## FIXME: currently assumes
-  
-  
-  ## PROFILE ME.  Currently written to be base-R compatible, 
+  ## Currently written to be base-R compatible, 
   ## but a tidyverse implementation may speed serialization.  
   ## However, this seems to be fast enough that it is rarely the bottleneck
   
@@ -152,7 +157,8 @@ poor_mans_nquads <- function(x, loc, vocab){
   ## quads needs a graph column
   x$graph <- "."
   
-  ## write table is a little slow, ~ 1s on 800K triples
+  ## write table is a little slow, ~ 1s on 800K triples, 
+  ## but readr cannot write in nquads style
   
   ## drop datatype
   x <- x[c("subject", "predicate", "object", "graph")]       
@@ -160,6 +166,7 @@ poor_mans_nquads <- function(x, loc, vocab){
 }
 
 
+## Not used
 ## tidy data to rdf: use rownames as key column
 ## Note: this method is too slow to be practical on very large data frames
 iterative_rdf_add <- function(df, vocab = "x:", base = vocab){
@@ -173,12 +180,6 @@ iterative_rdf_add <- function(df, vocab = "x:", base = vocab){
               object = x$object[[i]])
     }
   }
-  rdf
+  invisible(rdf)
 }
-
-
-
-
-
-
 

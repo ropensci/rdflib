@@ -1,0 +1,1795 @@
+[
+  {
+    "id": "7353780009",
+    "type": "CreateEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 124477112,
+      "name": "cboettig/test",
+      "url": "https://api.github.com/repos/cboettig/test"
+    },
+    "payload": {
+      "ref": null,
+      "ref_type": "repository",
+      "master_branch": "master",
+      "description": "What the Package Does (Title Case)",
+      "pusher_type": "user"
+    },
+    "public": true,
+    "created_at": "2018-03-09T02:37:27Z"
+  },
+  {
+    "id": "7353770910",
+    "type": "CreateEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 124476780,
+      "name": "cboettig/popdyn",
+      "url": "https://api.github.com/repos/cboettig/popdyn"
+    },
+    "payload": {
+      "ref": null,
+      "ref_type": "repository",
+      "master_branch": "master",
+      "description": "Population Dynamics Functions",
+      "pusher_type": "user"
+    },
+    "public": true,
+    "created_at": "2018-03-09T02:34:21Z"
+  },
+  {
+    "id": "7352727381",
+    "type": "PushEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 100521776,
+      "name": "ropensci/rdflib",
+      "url": "https://api.github.com/repos/ropensci/rdflib"
+    },
+    "payload": {
+      "push_id": 2388147771,
+      "size": 1,
+      "distinct_size": 1,
+      "ref": "refs/heads/master",
+      "head": "ead43841c1242d3e0b4b77b38181038820777e59",
+      "before": "9a4ba67254b5216297f0ce394cdc4286fec37edf",
+      "commits": [
+        {
+          "sha": "ead43841c1242d3e0b4b77b38181038820777e59",
+          "author": {
+            "email": "cboettig@gmail.com",
+            "name": "Carl Boettiger"
+          },
+          "message": "typo",
+          "distinct": true,
+          "url": "https://api.github.com/repos/ropensci/rdflib/commits/ead43841c1242d3e0b4b77b38181038820777e59"
+        }
+      ]
+    },
+    "public": true,
+    "created_at": "2018-03-08T21:37:14Z",
+    "org": {
+      "id": 1200269,
+      "login": "ropensci",
+      "gravatar_id": "",
+      "url": "https://api.github.com/orgs/ropensci",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1200269?"
+    }
+  },
+  {
+    "id": "7352722129",
+    "type": "PushEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 100521776,
+      "name": "ropensci/rdflib",
+      "url": "https://api.github.com/repos/ropensci/rdflib"
+    },
+    "payload": {
+      "push_id": 2388144974,
+      "size": 1,
+      "distinct_size": 1,
+      "ref": "refs/heads/master",
+      "head": "9a4ba67254b5216297f0ce394cdc4286fec37edf",
+      "before": "bcb3fa1ea079853e8668b83cdd0a0f563d83129e",
+      "commits": [
+        {
+          "sha": "9a4ba67254b5216297f0ce394cdc4286fec37edf",
+          "author": {
+            "email": "cboettig@gmail.com",
+            "name": "Carl Boettiger"
+          },
+          "message": "doi",
+          "distinct": true,
+          "url": "https://api.github.com/repos/ropensci/rdflib/commits/9a4ba67254b5216297f0ce394cdc4286fec37edf"
+        }
+      ]
+    },
+    "public": true,
+    "created_at": "2018-03-08T21:36:05Z",
+    "org": {
+      "id": 1200269,
+      "login": "ropensci",
+      "gravatar_id": "",
+      "url": "https://api.github.com/orgs/ropensci",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1200269?"
+    }
+  },
+  {
+    "id": "7352720196",
+    "type": "PushEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 100521776,
+      "name": "ropensci/rdflib",
+      "url": "https://api.github.com/repos/ropensci/rdflib"
+    },
+    "payload": {
+      "push_id": 2388144007,
+      "size": 1,
+      "distinct_size": 1,
+      "ref": "refs/heads/master",
+      "head": "bcb3fa1ea079853e8668b83cdd0a0f563d83129e",
+      "before": "bb3341a473a4d187d722c9a659be836ea7cfdd55",
+      "commits": [
+        {
+          "sha": "bcb3fa1ea079853e8668b83cdd0a0f563d83129e",
+          "author": {
+            "email": "cboettig@gmail.com",
+            "name": "Carl Boettiger"
+          },
+          "message": "fix sp",
+          "distinct": true,
+          "url": "https://api.github.com/repos/ropensci/rdflib/commits/bcb3fa1ea079853e8668b83cdd0a0f563d83129e"
+        }
+      ]
+    },
+    "public": true,
+    "created_at": "2018-03-08T21:35:39Z",
+    "org": {
+      "id": 1200269,
+      "login": "ropensci",
+      "gravatar_id": "",
+      "url": "https://api.github.com/orgs/ropensci",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1200269?"
+    }
+  },
+  {
+    "id": "7351659727",
+    "type": "PushEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 100521776,
+      "name": "ropensci/rdflib",
+      "url": "https://api.github.com/repos/ropensci/rdflib"
+    },
+    "payload": {
+      "push_id": 2387590453,
+      "size": 1,
+      "distinct_size": 1,
+      "ref": "refs/heads/master",
+      "head": "bb3341a473a4d187d722c9a659be836ea7cfdd55",
+      "before": "1c752ae43b65039104b1335557c2cf2b6e2a138e",
+      "commits": [
+        {
+          "sha": "bb3341a473a4d187d722c9a659be836ea7cfdd55",
+          "author": {
+            "email": "cboettig@gmail.com",
+            "name": "Carl Boettiger"
+          },
+          "message": "avoid URL in citation",
+          "distinct": true,
+          "url": "https://api.github.com/repos/ropensci/rdflib/commits/bb3341a473a4d187d722c9a659be836ea7cfdd55"
+        }
+      ]
+    },
+    "public": true,
+    "created_at": "2018-03-08T17:57:02Z",
+    "org": {
+      "id": 1200269,
+      "login": "ropensci",
+      "gravatar_id": "",
+      "url": "https://api.github.com/orgs/ropensci",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1200269?"
+    }
+  },
+  {
+    "id": "7351657731",
+    "type": "PushEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 116610054,
+      "name": "cboettig/NetGen",
+      "url": "https://api.github.com/repos/cboettig/NetGen"
+    },
+    "payload": {
+      "push_id": 2387589417,
+      "size": 1,
+      "distinct_size": 1,
+      "ref": "refs/heads/master",
+      "head": "9d4dd4a54437d1ac16a58caeefb055d29593c7e7",
+      "before": "6cd9225452829e7badd081508f69db6d8443264e",
+      "commits": [
+        {
+          "sha": "9d4dd4a54437d1ac16a58caeefb055d29593c7e7",
+          "author": {
+            "email": "cboettig@gmail.com",
+            "name": "Carl Boettiger"
+          },
+          "message": "some documentation",
+          "distinct": true,
+          "url": "https://api.github.com/repos/cboettig/NetGen/commits/9d4dd4a54437d1ac16a58caeefb055d29593c7e7"
+        }
+      ]
+    },
+    "public": true,
+    "created_at": "2018-03-08T17:56:38Z"
+  },
+  {
+    "id": "7351599732",
+    "type": "PushEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 116610054,
+      "name": "cboettig/NetGen",
+      "url": "https://api.github.com/repos/cboettig/NetGen"
+    },
+    "payload": {
+      "push_id": 2387559369,
+      "size": 1,
+      "distinct_size": 1,
+      "ref": "refs/heads/master",
+      "head": "6cd9225452829e7badd081508f69db6d8443264e",
+      "before": "228cf4a076bf19d5032065ed34aece300ddf16e4",
+      "commits": [
+        {
+          "sha": "6cd9225452829e7badd081508f69db6d8443264e",
+          "author": {
+            "email": "cboettig@gmail.com",
+            "name": "Carl Boettiger"
+          },
+          "message": "enforce integers as integers",
+          "distinct": true,
+          "url": "https://api.github.com/repos/cboettig/NetGen/commits/6cd9225452829e7badd081508f69db6d8443264e"
+        }
+      ]
+    },
+    "public": true,
+    "created_at": "2018-03-08T17:45:01Z"
+  },
+  {
+    "id": "7351545937",
+    "type": "PushEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 116610054,
+      "name": "cboettig/NetGen",
+      "url": "https://api.github.com/repos/cboettig/NetGen"
+    },
+    "payload": {
+      "push_id": 2387531378,
+      "size": 1,
+      "distinct_size": 1,
+      "ref": "refs/heads/master",
+      "head": "228cf4a076bf19d5032065ed34aece300ddf16e4",
+      "before": "072fdc71f0dd2fd15bbb33ad29f0d80abeb83b65",
+      "commits": [
+        {
+          "sha": "228cf4a076bf19d5032065ed34aece300ddf16e4",
+          "author": {
+            "email": "cboettig@gmail.com",
+            "name": "Carl Boettiger"
+          },
+          "message": "example fortran subroutine without GLOBALS",
+          "distinct": true,
+          "url": "https://api.github.com/repos/cboettig/NetGen/commits/228cf4a076bf19d5032065ed34aece300ddf16e4"
+        }
+      ]
+    },
+    "public": true,
+    "created_at": "2018-03-08T17:34:09Z"
+  },
+  {
+    "id": "7351322073",
+    "type": "IssueCommentEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 30199264,
+      "name": "rocker-org/shiny",
+      "url": "https://api.github.com/repos/rocker-org/shiny"
+    },
+    "payload": {
+      "action": "created",
+      "issue": {
+        "url": "https://api.github.com/repos/rocker-org/shiny/issues/24",
+        "repository_url": "https://api.github.com/repos/rocker-org/shiny",
+        "labels_url": "https://api.github.com/repos/rocker-org/shiny/issues/24/labels{/name}",
+        "comments_url": "https://api.github.com/repos/rocker-org/shiny/issues/24/comments",
+        "events_url": "https://api.github.com/repos/rocker-org/shiny/issues/24/events",
+        "html_url": "https://github.com/rocker-org/shiny/pull/24",
+        "id": 207939814,
+        "number": 24,
+        "title": "Add debian:stable based Dockerfiles for specific R versions",
+        "user": {
+          "login": "cboettig",
+          "id": 222586,
+          "avatar_url": "https://avatars3.githubusercontent.com/u/222586?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/cboettig",
+          "html_url": "https://github.com/cboettig",
+          "followers_url": "https://api.github.com/users/cboettig/followers",
+          "following_url": "https://api.github.com/users/cboettig/following{/other_user}",
+          "gists_url": "https://api.github.com/users/cboettig/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/cboettig/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/cboettig/subscriptions",
+          "organizations_url": "https://api.github.com/users/cboettig/orgs",
+          "repos_url": "https://api.github.com/users/cboettig/repos",
+          "events_url": "https://api.github.com/users/cboettig/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/cboettig/received_events",
+          "type": "User",
+          "site_admin": false
+        },
+        "labels": [
+
+        ],
+        "state": "open",
+        "locked": false,
+        "assignee": null,
+        "assignees": [
+
+        ],
+        "milestone": null,
+        "comments": 14,
+        "created_at": "2017-02-15T21:52:18Z",
+        "updated_at": "2018-03-08T16:52:54Z",
+        "closed_at": null,
+        "author_association": "OWNER",
+        "pull_request": {
+          "url": "https://api.github.com/repos/rocker-org/shiny/pulls/24",
+          "html_url": "https://github.com/rocker-org/shiny/pull/24",
+          "diff_url": "https://github.com/rocker-org/shiny/pull/24.diff",
+          "patch_url": "https://github.com/rocker-org/shiny/pull/24.patch"
+        },
+        "body": "Hey @wch ,\r\n\r\nJust a thought since we've been seeing this request a bunch recently.  (eg @nihonjinrxs).  \r\n\r\nHere's a proposal which would create version-stable tags based on the underlying R version, e.g. `rocker/shiny:3.3.2` and `rocker/shiny:3.3.1` images.  These build on debian:stable (so no `-t unstable` switching needed for these as packages debs migrate out of unstable and break things).  The r-ver image also sets an env var for `MRAN` pointing at the MRAN snapshot matching the day that version of R was last current, letting a user install R packages corresponding to the older version of R.  This should give users concerned about reproducibility a bit more version-stable option.  \r\n\r\nI can create the tags in Docker hub if you like this, otherwise feel free to turn it down if it looks like more complexity than necessary.  The `r-ver` stack seems to have gone over well so I thought I'd at least give this a pitch.  "
+      },
+      "comment": {
+        "url": "https://api.github.com/repos/rocker-org/shiny/issues/comments/371549040",
+        "html_url": "https://github.com/rocker-org/shiny/pull/24#issuecomment-371549040",
+        "issue_url": "https://api.github.com/repos/rocker-org/shiny/issues/24",
+        "id": 371549040,
+        "user": {
+          "login": "cboettig",
+          "id": 222586,
+          "avatar_url": "https://avatars3.githubusercontent.com/u/222586?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/cboettig",
+          "html_url": "https://github.com/cboettig",
+          "followers_url": "https://api.github.com/users/cboettig/followers",
+          "following_url": "https://api.github.com/users/cboettig/following{/other_user}",
+          "gists_url": "https://api.github.com/users/cboettig/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/cboettig/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/cboettig/subscriptions",
+          "organizations_url": "https://api.github.com/users/cboettig/orgs",
+          "repos_url": "https://api.github.com/users/cboettig/repos",
+          "events_url": "https://api.github.com/users/cboettig/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/cboettig/received_events",
+          "type": "User",
+          "site_admin": false
+        },
+        "created_at": "2018-03-08T16:52:54Z",
+        "updated_at": "2018-03-08T16:52:54Z",
+        "author_association": "OWNER",
+        "body": "Thanks, that would be great; appreciate your testing and feedback!"
+      }
+    },
+    "public": true,
+    "created_at": "2018-03-08T16:52:54Z",
+    "org": {
+      "id": 9100160,
+      "login": "rocker-org",
+      "gravatar_id": "",
+      "url": "https://api.github.com/orgs/rocker-org",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9100160?"
+    }
+  },
+  {
+    "id": "7348199291",
+    "type": "IssueCommentEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 30199264,
+      "name": "rocker-org/shiny",
+      "url": "https://api.github.com/repos/rocker-org/shiny"
+    },
+    "payload": {
+      "action": "created",
+      "issue": {
+        "url": "https://api.github.com/repos/rocker-org/shiny/issues/24",
+        "repository_url": "https://api.github.com/repos/rocker-org/shiny",
+        "labels_url": "https://api.github.com/repos/rocker-org/shiny/issues/24/labels{/name}",
+        "comments_url": "https://api.github.com/repos/rocker-org/shiny/issues/24/comments",
+        "events_url": "https://api.github.com/repos/rocker-org/shiny/issues/24/events",
+        "html_url": "https://github.com/rocker-org/shiny/pull/24",
+        "id": 207939814,
+        "number": 24,
+        "title": "Add debian:stable based Dockerfiles for specific R versions",
+        "user": {
+          "login": "cboettig",
+          "id": 222586,
+          "avatar_url": "https://avatars3.githubusercontent.com/u/222586?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/cboettig",
+          "html_url": "https://github.com/cboettig",
+          "followers_url": "https://api.github.com/users/cboettig/followers",
+          "following_url": "https://api.github.com/users/cboettig/following{/other_user}",
+          "gists_url": "https://api.github.com/users/cboettig/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/cboettig/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/cboettig/subscriptions",
+          "organizations_url": "https://api.github.com/users/cboettig/orgs",
+          "repos_url": "https://api.github.com/users/cboettig/repos",
+          "events_url": "https://api.github.com/users/cboettig/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/cboettig/received_events",
+          "type": "User",
+          "site_admin": false
+        },
+        "labels": [
+
+        ],
+        "state": "open",
+        "locked": false,
+        "assignee": null,
+        "assignees": [
+
+        ],
+        "milestone": null,
+        "comments": 12,
+        "created_at": "2017-02-15T21:52:18Z",
+        "updated_at": "2018-03-08T05:02:10Z",
+        "closed_at": null,
+        "author_association": "OWNER",
+        "pull_request": {
+          "url": "https://api.github.com/repos/rocker-org/shiny/pulls/24",
+          "html_url": "https://github.com/rocker-org/shiny/pull/24",
+          "diff_url": "https://github.com/rocker-org/shiny/pull/24.diff",
+          "patch_url": "https://github.com/rocker-org/shiny/pull/24.patch"
+        },
+        "body": "Hey @wch ,\r\n\r\nJust a thought since we've been seeing this request a bunch recently.  (eg @nihonjinrxs).  \r\n\r\nHere's a proposal which would create version-stable tags based on the underlying R version, e.g. `rocker/shiny:3.3.2` and `rocker/shiny:3.3.1` images.  These build on debian:stable (so no `-t unstable` switching needed for these as packages debs migrate out of unstable and break things).  The r-ver image also sets an env var for `MRAN` pointing at the MRAN snapshot matching the day that version of R was last current, letting a user install R packages corresponding to the older version of R.  This should give users concerned about reproducibility a bit more version-stable option.  \r\n\r\nI can create the tags in Docker hub if you like this, otherwise feel free to turn it down if it looks like more complexity than necessary.  The `r-ver` stack seems to have gone over well so I thought I'd at least give this a pitch.  "
+      },
+      "comment": {
+        "url": "https://api.github.com/repos/rocker-org/shiny/issues/comments/371379651",
+        "html_url": "https://github.com/rocker-org/shiny/pull/24#issuecomment-371379651",
+        "issue_url": "https://api.github.com/repos/rocker-org/shiny/issues/24",
+        "id": 371379651,
+        "user": {
+          "login": "cboettig",
+          "id": 222586,
+          "avatar_url": "https://avatars3.githubusercontent.com/u/222586?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/cboettig",
+          "html_url": "https://github.com/cboettig",
+          "followers_url": "https://api.github.com/users/cboettig/followers",
+          "following_url": "https://api.github.com/users/cboettig/following{/other_user}",
+          "gists_url": "https://api.github.com/users/cboettig/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/cboettig/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/cboettig/subscriptions",
+          "organizations_url": "https://api.github.com/users/cboettig/orgs",
+          "repos_url": "https://api.github.com/users/cboettig/repos",
+          "events_url": "https://api.github.com/users/cboettig/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/cboettig/received_events",
+          "type": "User",
+          "site_admin": false
+        },
+        "created_at": "2018-03-08T05:02:10Z",
+        "updated_at": "2018-03-08T05:02:10Z",
+        "author_association": "OWNER",
+        "body": "@shapiromatron fair enough.  There's no reason to have rstudio start if you don't want to, just change your default run command.  For instance, if you've installed shiny in a custom Dockerfile as described above, then:\r\n\r\n\r\n```\r\ndocker run -p 3838:3838 your-image shiny-server\r\n```\r\n\r\nwill by-pass the default init system that brings up RStudio, so only Shiny will run.   Note that docker only opens the remote connections you tell it to."
+      }
+    },
+    "public": true,
+    "created_at": "2018-03-08T05:02:10Z",
+    "org": {
+      "id": 9100160,
+      "login": "rocker-org",
+      "gravatar_id": "",
+      "url": "https://api.github.com/orgs/rocker-org",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9100160?"
+    }
+  },
+  {
+    "id": "7348141700",
+    "type": "IssuesEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 102438650,
+      "name": "rocker-org/website",
+      "url": "https://api.github.com/repos/rocker-org/website"
+    },
+    "payload": {
+      "action": "opened",
+      "issue": {
+        "url": "https://api.github.com/repos/rocker-org/website/issues/6",
+        "repository_url": "https://api.github.com/repos/rocker-org/website",
+        "labels_url": "https://api.github.com/repos/rocker-org/website/issues/6/labels{/name}",
+        "comments_url": "https://api.github.com/repos/rocker-org/website/issues/6/comments",
+        "events_url": "https://api.github.com/repos/rocker-org/website/issues/6/events",
+        "html_url": "https://github.com/rocker-org/website/issues/6",
+        "id": 303353867,
+        "number": 6,
+        "title": "Additional 'use' pages",
+        "user": {
+          "login": "cboettig",
+          "id": 222586,
+          "avatar_url": "https://avatars3.githubusercontent.com/u/222586?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/cboettig",
+          "html_url": "https://github.com/cboettig",
+          "followers_url": "https://api.github.com/users/cboettig/followers",
+          "following_url": "https://api.github.com/users/cboettig/following{/other_user}",
+          "gists_url": "https://api.github.com/users/cboettig/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/cboettig/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/cboettig/subscriptions",
+          "organizations_url": "https://api.github.com/users/cboettig/orgs",
+          "repos_url": "https://api.github.com/users/cboettig/repos",
+          "events_url": "https://api.github.com/users/cboettig/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/cboettig/received_events",
+          "type": "User",
+          "site_admin": false
+        },
+        "labels": [
+
+        ],
+        "state": "open",
+        "locked": false,
+        "assignee": null,
+        "assignees": [
+
+        ],
+        "milestone": null,
+        "comments": 0,
+        "created_at": "2018-03-08T04:37:27Z",
+        "updated_at": "2018-03-08T04:37:27Z",
+        "closed_at": null,
+        "author_association": "OWNER",
+        "body": "- Using Shiny\r\n- add Use menu link for singularity / hpc\r\n- developer info: S6 init, etc\r\n- X11\r\n"
+      }
+    },
+    "public": true,
+    "created_at": "2018-03-08T04:37:28Z",
+    "org": {
+      "id": 9100160,
+      "login": "rocker-org",
+      "gravatar_id": "",
+      "url": "https://api.github.com/orgs/rocker-org",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9100160?"
+    }
+  },
+  {
+    "id": "7348131854",
+    "type": "PushEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 25048007,
+      "name": "rocker-org/rocker-versioned",
+      "url": "https://api.github.com/repos/rocker-org/rocker-versioned"
+    },
+    "payload": {
+      "push_id": 2385722151,
+      "size": 1,
+      "distinct_size": 1,
+      "ref": "refs/heads/master",
+      "head": "7a68da1217a70352eeb6bf26f31597876aaf6b5c",
+      "before": "eda408a33a13b21a9bffd3b3dd7254683a814384",
+      "commits": [
+        {
+          "sha": "7a68da1217a70352eeb6bf26f31597876aaf6b5c",
+          "author": {
+            "email": "cboettig@gmail.com",
+            "name": "Carl Boettiger"
+          },
+          "message": "Update README.md",
+          "distinct": true,
+          "url": "https://api.github.com/repos/rocker-org/rocker-versioned/commits/7a68da1217a70352eeb6bf26f31597876aaf6b5c"
+        }
+      ]
+    },
+    "public": true,
+    "created_at": "2018-03-08T04:33:19Z",
+    "org": {
+      "id": 9100160,
+      "login": "rocker-org",
+      "gravatar_id": "",
+      "url": "https://api.github.com/orgs/rocker-org",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9100160?"
+    }
+  },
+  {
+    "id": "7347484340",
+    "type": "IssueCommentEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 30199264,
+      "name": "rocker-org/shiny",
+      "url": "https://api.github.com/repos/rocker-org/shiny"
+    },
+    "payload": {
+      "action": "created",
+      "issue": {
+        "url": "https://api.github.com/repos/rocker-org/shiny/issues/24",
+        "repository_url": "https://api.github.com/repos/rocker-org/shiny",
+        "labels_url": "https://api.github.com/repos/rocker-org/shiny/issues/24/labels{/name}",
+        "comments_url": "https://api.github.com/repos/rocker-org/shiny/issues/24/comments",
+        "events_url": "https://api.github.com/repos/rocker-org/shiny/issues/24/events",
+        "html_url": "https://github.com/rocker-org/shiny/pull/24",
+        "id": 207939814,
+        "number": 24,
+        "title": "Add debian:stable based Dockerfiles for specific R versions",
+        "user": {
+          "login": "cboettig",
+          "id": 222586,
+          "avatar_url": "https://avatars3.githubusercontent.com/u/222586?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/cboettig",
+          "html_url": "https://github.com/cboettig",
+          "followers_url": "https://api.github.com/users/cboettig/followers",
+          "following_url": "https://api.github.com/users/cboettig/following{/other_user}",
+          "gists_url": "https://api.github.com/users/cboettig/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/cboettig/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/cboettig/subscriptions",
+          "organizations_url": "https://api.github.com/users/cboettig/orgs",
+          "repos_url": "https://api.github.com/users/cboettig/repos",
+          "events_url": "https://api.github.com/users/cboettig/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/cboettig/received_events",
+          "type": "User",
+          "site_admin": false
+        },
+        "labels": [
+
+        ],
+        "state": "open",
+        "locked": false,
+        "assignee": null,
+        "assignees": [
+
+        ],
+        "milestone": null,
+        "comments": 11,
+        "created_at": "2017-02-15T21:52:18Z",
+        "updated_at": "2018-03-08T00:51:17Z",
+        "closed_at": null,
+        "author_association": "OWNER",
+        "pull_request": {
+          "url": "https://api.github.com/repos/rocker-org/shiny/pulls/24",
+          "html_url": "https://github.com/rocker-org/shiny/pull/24",
+          "diff_url": "https://github.com/rocker-org/shiny/pull/24.diff",
+          "patch_url": "https://github.com/rocker-org/shiny/pull/24.patch"
+        },
+        "body": "Hey @wch ,\r\n\r\nJust a thought since we've been seeing this request a bunch recently.  (eg @nihonjinrxs).  \r\n\r\nHere's a proposal which would create version-stable tags based on the underlying R version, e.g. `rocker/shiny:3.3.2` and `rocker/shiny:3.3.1` images.  These build on debian:stable (so no `-t unstable` switching needed for these as packages debs migrate out of unstable and break things).  The r-ver image also sets an env var for `MRAN` pointing at the MRAN snapshot matching the day that version of R was last current, letting a user install R packages corresponding to the older version of R.  This should give users concerned about reproducibility a bit more version-stable option.  \r\n\r\nI can create the tags in Docker hub if you like this, otherwise feel free to turn it down if it looks like more complexity than necessary.  The `r-ver` stack seems to have gone over well so I thought I'd at least give this a pitch.  "
+      },
+      "comment": {
+        "url": "https://api.github.com/repos/rocker-org/shiny/issues/comments/371338895",
+        "html_url": "https://github.com/rocker-org/shiny/pull/24#issuecomment-371338895",
+        "issue_url": "https://api.github.com/repos/rocker-org/shiny/issues/24",
+        "id": 371338895,
+        "user": {
+          "login": "cboettig",
+          "id": 222586,
+          "avatar_url": "https://avatars3.githubusercontent.com/u/222586?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/cboettig",
+          "html_url": "https://github.com/cboettig",
+          "followers_url": "https://api.github.com/users/cboettig/followers",
+          "following_url": "https://api.github.com/users/cboettig/following{/other_user}",
+          "gists_url": "https://api.github.com/users/cboettig/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/cboettig/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/cboettig/subscriptions",
+          "organizations_url": "https://api.github.com/users/cboettig/orgs",
+          "repos_url": "https://api.github.com/users/cboettig/repos",
+          "events_url": "https://api.github.com/users/cboettig/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/cboettig/received_events",
+          "type": "User",
+          "site_admin": false
+        },
+        "created_at": "2018-03-08T00:51:17Z",
+        "updated_at": "2018-03-08T00:51:17Z",
+        "author_association": "OWNER",
+        "body": "@nihonjinrxs This runtime argument will work on your image if it is based based on `rocker/rstudio` or any of the derivatives in the versioned stack, e.g. `rocker/tidyverse` etc.  \r\n\r\nBut if you are writing your own Dockerfile based on the stack, it's better to simply include the line:\r\n\r\n```\r\nRUN export ADD=\"shiny\" && bash /etc/cont-init.d/add\r\n```\r\n\r\nwhich will tell Docker to add shiny when your image is built.  \r\n"
+      }
+    },
+    "public": true,
+    "created_at": "2018-03-08T01:51:57Z",
+    "org": {
+      "id": 9100160,
+      "login": "rocker-org",
+      "gravatar_id": "",
+      "url": "https://api.github.com/orgs/rocker-org",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9100160?"
+    }
+  },
+  {
+    "id": "7346890820",
+    "type": "IssueCommentEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 31562506,
+      "name": "ropensci/jqr",
+      "url": "https://api.github.com/repos/ropensci/jqr"
+    },
+    "payload": {
+      "action": "created",
+      "issue": {
+        "url": "https://api.github.com/repos/ropensci/jqr/issues/64",
+        "repository_url": "https://api.github.com/repos/ropensci/jqr",
+        "labels_url": "https://api.github.com/repos/ropensci/jqr/issues/64/labels{/name}",
+        "comments_url": "https://api.github.com/repos/ropensci/jqr/issues/64/comments",
+        "events_url": "https://api.github.com/repos/ropensci/jqr/issues/64/events",
+        "html_url": "https://github.com/ropensci/jqr/issues/64",
+        "id": 301854861,
+        "number": 64,
+        "title": "lq: list query",
+        "user": {
+          "login": "sckott",
+          "id": 577668,
+          "avatar_url": "https://avatars1.githubusercontent.com/u/577668?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/sckott",
+          "html_url": "https://github.com/sckott",
+          "followers_url": "https://api.github.com/users/sckott/followers",
+          "following_url": "https://api.github.com/users/sckott/following{/other_user}",
+          "gists_url": "https://api.github.com/users/sckott/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/sckott/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/sckott/subscriptions",
+          "organizations_url": "https://api.github.com/users/sckott/orgs",
+          "repos_url": "https://api.github.com/users/sckott/repos",
+          "events_url": "https://api.github.com/users/sckott/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/sckott/received_events",
+          "type": "User",
+          "site_admin": false
+        },
+        "labels": [
+
+        ],
+        "state": "open",
+        "locked": false,
+        "assignee": null,
+        "assignees": [
+
+        ],
+        "milestone": null,
+        "comments": 10,
+        "created_at": "2018-03-02T18:06:24Z",
+        "updated_at": "2018-03-07T22:18:46Z",
+        "closed_at": null,
+        "author_association": "OWNER",
+        "body": "idea from @cboettig \r\n\r\nAFAICT idea is just to make it easy to do the stuff we can do with jq on JSON but with R lists. \r\n\r\nis that as easy as `jsonlite::toJSON`, then apply any jq commands?"
+      },
+      "comment": {
+        "url": "https://api.github.com/repos/ropensci/jqr/issues/comments/371305464",
+        "html_url": "https://github.com/ropensci/jqr/issues/64#issuecomment-371305464",
+        "issue_url": "https://api.github.com/repos/ropensci/jqr/issues/64",
+        "id": 371305464,
+        "user": {
+          "login": "cboettig",
+          "id": 222586,
+          "avatar_url": "https://avatars3.githubusercontent.com/u/222586?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/cboettig",
+          "html_url": "https://github.com/cboettig",
+          "followers_url": "https://api.github.com/users/cboettig/followers",
+          "following_url": "https://api.github.com/users/cboettig/following{/other_user}",
+          "gists_url": "https://api.github.com/users/cboettig/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/cboettig/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/cboettig/subscriptions",
+          "organizations_url": "https://api.github.com/users/cboettig/orgs",
+          "repos_url": "https://api.github.com/users/cboettig/repos",
+          "events_url": "https://api.github.com/users/cboettig/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/cboettig/received_events",
+          "type": "User",
+          "site_admin": false
+        },
+        "created_at": "2018-03-07T22:18:46Z",
+        "updated_at": "2018-03-07T22:18:46Z",
+        "author_association": "OWNER",
+        "body": "Re separate package: I hadn't thought about that but could be a good idea -- would certainly make it more visible for users who want to query lists but don't care about JSON.  Like you say, it would also give us more room to play without messing with things for `jqr` users.  👍 "
+      }
+    },
+    "public": true,
+    "created_at": "2018-03-07T22:18:46Z",
+    "org": {
+      "id": 1200269,
+      "login": "ropensci",
+      "gravatar_id": "",
+      "url": "https://api.github.com/orgs/ropensci",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1200269?"
+    }
+  },
+  {
+    "id": "7345300564",
+    "type": "IssuesEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 3932547,
+      "name": "TreeBASE/supertreebase",
+      "url": "https://api.github.com/repos/TreeBASE/supertreebase"
+    },
+    "payload": {
+      "action": "opened",
+      "issue": {
+        "url": "https://api.github.com/repos/TreeBASE/supertreebase/issues/12",
+        "repository_url": "https://api.github.com/repos/TreeBASE/supertreebase",
+        "labels_url": "https://api.github.com/repos/TreeBASE/supertreebase/issues/12/labels{/name}",
+        "comments_url": "https://api.github.com/repos/TreeBASE/supertreebase/issues/12/comments",
+        "events_url": "https://api.github.com/repos/TreeBASE/supertreebase/issues/12/events",
+        "html_url": "https://github.com/TreeBASE/supertreebase/issues/12",
+        "id": 303179831,
+        "number": 12,
+        "title": "filling in DOIs in NeXML?",
+        "user": {
+          "login": "cboettig",
+          "id": 222586,
+          "avatar_url": "https://avatars3.githubusercontent.com/u/222586?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/cboettig",
+          "html_url": "https://github.com/cboettig",
+          "followers_url": "https://api.github.com/users/cboettig/followers",
+          "following_url": "https://api.github.com/users/cboettig/following{/other_user}",
+          "gists_url": "https://api.github.com/users/cboettig/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/cboettig/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/cboettig/subscriptions",
+          "organizations_url": "https://api.github.com/users/cboettig/orgs",
+          "repos_url": "https://api.github.com/users/cboettig/repos",
+          "events_url": "https://api.github.com/users/cboettig/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/cboettig/received_events",
+          "type": "User",
+          "site_admin": false
+        },
+        "labels": [
+
+        ],
+        "state": "open",
+        "locked": false,
+        "assignee": null,
+        "assignees": [
+
+        ],
+        "milestone": null,
+        "comments": 0,
+        "created_at": "2018-03-07T17:00:16Z",
+        "updated_at": "2018-03-07T17:00:16Z",
+        "closed_at": null,
+        "author_association": "NONE",
+        "body": "Hi @rvosa ,\r\n\r\nApologies if this isn't the best place to put this, but looks like the NeXML records often lack a DOI for a study.  Not sure what the best strategy is for identifying records associated with a DOI would be (maybe study title?) and if it would be robust enough to back-propagate into those records.  "
+      }
+    },
+    "public": true,
+    "created_at": "2018-03-07T17:00:16Z",
+    "org": {
+      "id": 10004081,
+      "login": "TreeBASE",
+      "gravatar_id": "",
+      "url": "https://api.github.com/orgs/TreeBASE",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10004081?"
+    }
+  },
+  {
+    "id": "7341983809",
+    "type": "PushEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 94135460,
+      "name": "cboettig/noise-phenomena",
+      "url": "https://api.github.com/repos/cboettig/noise-phenomena"
+    },
+    "payload": {
+      "push_id": 2382516812,
+      "size": 1,
+      "distinct_size": 1,
+      "ref": "refs/heads/master",
+      "head": "c06730299b089e45fa934337140e82a223364d3d",
+      "before": "d2404ac1890f0bc72f3c96cfef74c5505d7d0a81",
+      "commits": [
+        {
+          "sha": "c06730299b089e45fa934337140e82a223364d3d",
+          "author": {
+            "email": "cboettig@gmail.com",
+            "name": "Carl Boettiger"
+          },
+          "message": "ignore list",
+          "distinct": true,
+          "url": "https://api.github.com/repos/cboettig/noise-phenomena/commits/c06730299b089e45fa934337140e82a223364d3d"
+        }
+      ]
+    },
+    "public": true,
+    "created_at": "2018-03-07T05:25:30Z"
+  },
+  {
+    "id": "7341980117",
+    "type": "PushEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 94135460,
+      "name": "cboettig/noise-phenomena",
+      "url": "https://api.github.com/repos/cboettig/noise-phenomena"
+    },
+    "payload": {
+      "push_id": 2382514730,
+      "size": 2,
+      "distinct_size": 2,
+      "ref": "refs/heads/master",
+      "head": "d2404ac1890f0bc72f3c96cfef74c5505d7d0a81",
+      "before": "9548d94422c0f0d515600f3b9e9b03a7dd10d177",
+      "commits": [
+        {
+          "sha": "c12e224e8d968894a3a683ad257ca463ebeb58c4",
+          "author": {
+            "email": "cboettig@gmail.com",
+            "name": "Carl Boettiger"
+          },
+          "message": "fix trailing whitespace",
+          "distinct": true,
+          "url": "https://api.github.com/repos/cboettig/noise-phenomena/commits/c12e224e8d968894a3a683ad257ca463ebeb58c4"
+        },
+        {
+          "sha": "d2404ac1890f0bc72f3c96cfef74c5505d7d0a81",
+          "author": {
+            "email": "cboettig@gmail.com",
+            "name": "Carl Boettiger"
+          },
+          "message": "submitted revisions",
+          "distinct": true,
+          "url": "https://api.github.com/repos/cboettig/noise-phenomena/commits/d2404ac1890f0bc72f3c96cfef74c5505d7d0a81"
+        }
+      ]
+    },
+    "public": true,
+    "created_at": "2018-03-07T05:24:02Z"
+  },
+  {
+    "id": "7341840859",
+    "type": "IssueCommentEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 31562506,
+      "name": "ropensci/jqr",
+      "url": "https://api.github.com/repos/ropensci/jqr"
+    },
+    "payload": {
+      "action": "created",
+      "issue": {
+        "url": "https://api.github.com/repos/ropensci/jqr/issues/64",
+        "repository_url": "https://api.github.com/repos/ropensci/jqr",
+        "labels_url": "https://api.github.com/repos/ropensci/jqr/issues/64/labels{/name}",
+        "comments_url": "https://api.github.com/repos/ropensci/jqr/issues/64/comments",
+        "events_url": "https://api.github.com/repos/ropensci/jqr/issues/64/events",
+        "html_url": "https://github.com/ropensci/jqr/issues/64",
+        "id": 301854861,
+        "number": 64,
+        "title": "lq: list query",
+        "user": {
+          "login": "sckott",
+          "id": 577668,
+          "avatar_url": "https://avatars1.githubusercontent.com/u/577668?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/sckott",
+          "html_url": "https://github.com/sckott",
+          "followers_url": "https://api.github.com/users/sckott/followers",
+          "following_url": "https://api.github.com/users/sckott/following{/other_user}",
+          "gists_url": "https://api.github.com/users/sckott/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/sckott/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/sckott/subscriptions",
+          "organizations_url": "https://api.github.com/users/sckott/orgs",
+          "repos_url": "https://api.github.com/users/sckott/repos",
+          "events_url": "https://api.github.com/users/sckott/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/sckott/received_events",
+          "type": "User",
+          "site_admin": false
+        },
+        "labels": [
+
+        ],
+        "state": "open",
+        "locked": false,
+        "assignee": null,
+        "assignees": [
+
+        ],
+        "milestone": null,
+        "comments": 7,
+        "created_at": "2018-03-02T18:06:24Z",
+        "updated_at": "2018-03-07T04:27:29Z",
+        "closed_at": null,
+        "author_association": "OWNER",
+        "body": "idea from @cboettig \r\n\r\nAFAICT idea is just to make it easy to do the stuff we can do with jq on JSON but with R lists. \r\n\r\nis that as easy as `jsonlite::toJSON`, then apply any jq commands?"
+      },
+      "comment": {
+        "url": "https://api.github.com/repos/ropensci/jqr/issues/comments/371018872",
+        "html_url": "https://github.com/ropensci/jqr/issues/64#issuecomment-371018872",
+        "issue_url": "https://api.github.com/repos/ropensci/jqr/issues/64",
+        "id": 371018872,
+        "user": {
+          "login": "cboettig",
+          "id": 222586,
+          "avatar_url": "https://avatars3.githubusercontent.com/u/222586?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/cboettig",
+          "html_url": "https://github.com/cboettig",
+          "followers_url": "https://api.github.com/users/cboettig/followers",
+          "following_url": "https://api.github.com/users/cboettig/following{/other_user}",
+          "gists_url": "https://api.github.com/users/cboettig/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/cboettig/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/cboettig/subscriptions",
+          "organizations_url": "https://api.github.com/users/cboettig/orgs",
+          "repos_url": "https://api.github.com/users/cboettig/repos",
+          "events_url": "https://api.github.com/users/cboettig/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/cboettig/received_events",
+          "type": "User",
+          "site_admin": false
+        },
+        "created_at": "2018-03-07T04:27:29Z",
+        "updated_at": "2018-03-07T04:27:29Z",
+        "author_association": "OWNER",
+        "body": "Nice! yeah, the lack of an explicit `build_object` function and doing that inside `select` confused me, so really nice to see the new `build_object` and `build_array`.  (though while these are good names for the `jq` DSL, an `lq` aliases `build_list` and `build_vector` might be more familiar to R users).  "
+      }
+    },
+    "public": true,
+    "created_at": "2018-03-07T04:27:29Z",
+    "org": {
+      "id": 1200269,
+      "login": "ropensci",
+      "gravatar_id": "",
+      "url": "https://api.github.com/orgs/ropensci",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1200269?"
+    }
+  },
+  {
+    "id": "7341060081",
+    "type": "IssueCommentEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 30199264,
+      "name": "rocker-org/shiny",
+      "url": "https://api.github.com/repos/rocker-org/shiny"
+    },
+    "payload": {
+      "action": "created",
+      "issue": {
+        "url": "https://api.github.com/repos/rocker-org/shiny/issues/24",
+        "repository_url": "https://api.github.com/repos/rocker-org/shiny",
+        "labels_url": "https://api.github.com/repos/rocker-org/shiny/issues/24/labels{/name}",
+        "comments_url": "https://api.github.com/repos/rocker-org/shiny/issues/24/comments",
+        "events_url": "https://api.github.com/repos/rocker-org/shiny/issues/24/events",
+        "html_url": "https://github.com/rocker-org/shiny/pull/24",
+        "id": 207939814,
+        "number": 24,
+        "title": "Add debian:stable based Dockerfiles for specific R versions",
+        "user": {
+          "login": "cboettig",
+          "id": 222586,
+          "avatar_url": "https://avatars3.githubusercontent.com/u/222586?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/cboettig",
+          "html_url": "https://github.com/cboettig",
+          "followers_url": "https://api.github.com/users/cboettig/followers",
+          "following_url": "https://api.github.com/users/cboettig/following{/other_user}",
+          "gists_url": "https://api.github.com/users/cboettig/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/cboettig/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/cboettig/subscriptions",
+          "organizations_url": "https://api.github.com/users/cboettig/orgs",
+          "repos_url": "https://api.github.com/users/cboettig/repos",
+          "events_url": "https://api.github.com/users/cboettig/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/cboettig/received_events",
+          "type": "User",
+          "site_admin": false
+        },
+        "labels": [
+
+        ],
+        "state": "open",
+        "locked": false,
+        "assignee": null,
+        "assignees": [
+
+        ],
+        "milestone": null,
+        "comments": 8,
+        "created_at": "2017-02-15T21:52:18Z",
+        "updated_at": "2018-03-07T00:04:29Z",
+        "closed_at": null,
+        "author_association": "OWNER",
+        "pull_request": {
+          "url": "https://api.github.com/repos/rocker-org/shiny/pulls/24",
+          "html_url": "https://github.com/rocker-org/shiny/pull/24",
+          "diff_url": "https://github.com/rocker-org/shiny/pull/24.diff",
+          "patch_url": "https://github.com/rocker-org/shiny/pull/24.patch"
+        },
+        "body": "Hey @wch ,\r\n\r\nJust a thought since we've been seeing this request a bunch recently.  (eg @nihonjinrxs).  \r\n\r\nHere's a proposal which would create version-stable tags based on the underlying R version, e.g. `rocker/shiny:3.3.2` and `rocker/shiny:3.3.1` images.  These build on debian:stable (so no `-t unstable` switching needed for these as packages debs migrate out of unstable and break things).  The r-ver image also sets an env var for `MRAN` pointing at the MRAN snapshot matching the day that version of R was last current, letting a user install R packages corresponding to the older version of R.  This should give users concerned about reproducibility a bit more version-stable option.  \r\n\r\nI can create the tags in Docker hub if you like this, otherwise feel free to turn it down if it looks like more complexity than necessary.  The `r-ver` stack seems to have gone over well so I thought I'd at least give this a pitch.  "
+      },
+      "comment": {
+        "url": "https://api.github.com/repos/rocker-org/shiny/issues/comments/370974135",
+        "html_url": "https://github.com/rocker-org/shiny/pull/24#issuecomment-370974135",
+        "issue_url": "https://api.github.com/repos/rocker-org/shiny/issues/24",
+        "id": 370974135,
+        "user": {
+          "login": "cboettig",
+          "id": 222586,
+          "avatar_url": "https://avatars3.githubusercontent.com/u/222586?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/cboettig",
+          "html_url": "https://github.com/cboettig",
+          "followers_url": "https://api.github.com/users/cboettig/followers",
+          "following_url": "https://api.github.com/users/cboettig/following{/other_user}",
+          "gists_url": "https://api.github.com/users/cboettig/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/cboettig/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/cboettig/subscriptions",
+          "organizations_url": "https://api.github.com/users/cboettig/orgs",
+          "repos_url": "https://api.github.com/users/cboettig/repos",
+          "events_url": "https://api.github.com/users/cboettig/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/cboettig/received_events",
+          "type": "User",
+          "site_admin": false
+        },
+        "created_at": "2018-03-07T00:04:29Z",
+        "updated_at": "2018-03-07T00:04:29Z",
+        "author_association": "OWNER",
+        "body": "Note that you can add shiny at runtime to existing rocker-versioned images using `-e ADD=shiny`, e.g.\r\n\r\n```\r\ndocker run -p 8787:8787 -e ADD=shiny rocker/rstudio:3.4.2\r\n```\r\n\r\nGuess that's not well documented though.  "
+      }
+    },
+    "public": true,
+    "created_at": "2018-03-07T00:04:29Z",
+    "org": {
+      "id": 9100160,
+      "login": "rocker-org",
+      "gravatar_id": "",
+      "url": "https://api.github.com/orgs/rocker-org",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9100160?"
+    }
+  },
+  {
+    "id": "7340952499",
+    "type": "PushEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 116610054,
+      "name": "cboettig/NetGen",
+      "url": "https://api.github.com/repos/cboettig/NetGen"
+    },
+    "payload": {
+      "push_id": 2381962585,
+      "size": 1,
+      "distinct_size": 1,
+      "ref": "refs/heads/master",
+      "head": "072fdc71f0dd2fd15bbb33ad29f0d80abeb83b65",
+      "before": "42e180835ae06108a77fc0e9d5d0bcbbc68ed982",
+      "commits": [
+        {
+          "sha": "072fdc71f0dd2fd15bbb33ad29f0d80abeb83b65",
+          "author": {
+            "email": "cboettig@gmail.com",
+            "name": "Carl Boettiger"
+          },
+          "message": "testing with revised code from Marcus",
+          "distinct": true,
+          "url": "https://api.github.com/repos/cboettig/NetGen/commits/072fdc71f0dd2fd15bbb33ad29f0d80abeb83b65"
+        }
+      ]
+    },
+    "public": true,
+    "created_at": "2018-03-06T23:32:53Z"
+  },
+  {
+    "id": "7339473469",
+    "type": "PushEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 94135460,
+      "name": "cboettig/noise-phenomena",
+      "url": "https://api.github.com/repos/cboettig/noise-phenomena"
+    },
+    "payload": {
+      "push_id": 2381195609,
+      "size": 1,
+      "distinct_size": 1,
+      "ref": "refs/heads/master",
+      "head": "9548d94422c0f0d515600f3b9e9b03a7dd10d177",
+      "before": "2c598de17abb2b7f7911d997cc268070469fdb6d",
+      "commits": [
+        {
+          "sha": "9548d94422c0f0d515600f3b9e9b03a7dd10d177",
+          "author": {
+            "email": "cboettig@gmail.com",
+            "name": "Carl Boettiger"
+          },
+          "message": "better creator section intro, new conclusion section",
+          "distinct": true,
+          "url": "https://api.github.com/repos/cboettig/noise-phenomena/commits/9548d94422c0f0d515600f3b9e9b03a7dd10d177"
+        }
+      ]
+    },
+    "public": true,
+    "created_at": "2018-03-06T18:23:51Z"
+  },
+  {
+    "id": "7335728229",
+    "type": "PushEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 94135460,
+      "name": "cboettig/noise-phenomena",
+      "url": "https://api.github.com/repos/cboettig/noise-phenomena"
+    },
+    "payload": {
+      "push_id": 2379250816,
+      "size": 1,
+      "distinct_size": 1,
+      "ref": "refs/heads/master",
+      "head": "2c598de17abb2b7f7911d997cc268070469fdb6d",
+      "before": "ffa7289bf6f9909a864d10f918d2f7bdb01c8653",
+      "commits": [
+        {
+          "sha": "2c598de17abb2b7f7911d997cc268070469fdb6d",
+          "author": {
+            "email": "cboettig@gmail.com",
+            "name": "Carl Boettiger"
+          },
+          "message": "tweaks",
+          "distinct": true,
+          "url": "https://api.github.com/repos/cboettig/noise-phenomena/commits/2c598de17abb2b7f7911d997cc268070469fdb6d"
+        }
+      ]
+    },
+    "public": true,
+    "created_at": "2018-03-06T05:52:01Z"
+  },
+  {
+    "id": "7335661314",
+    "type": "PushEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 4196671,
+      "name": "cboettig/labnotebook",
+      "url": "https://api.github.com/repos/cboettig/labnotebook"
+    },
+    "payload": {
+      "push_id": 2379214818,
+      "size": 1,
+      "distinct_size": 1,
+      "ref": "refs/heads/master",
+      "head": "3bb8558d4e82be7f5167ac8b0d1b7a8f96948873",
+      "before": "1c4795aa6c11bd09005c975b563144cb6e52f115",
+      "commits": [
+        {
+          "sha": "3bb8558d4e82be7f5167ac8b0d1b7a8f96948873",
+          "author": {
+            "email": "cboettig@gmail.com",
+            "name": "Carl Boettiger"
+          },
+          "message": "rebuild site",
+          "distinct": true,
+          "url": "https://api.github.com/repos/cboettig/labnotebook/commits/3bb8558d4e82be7f5167ac8b0d1b7a8f96948873"
+        }
+      ]
+    },
+    "public": true,
+    "created_at": "2018-03-06T05:27:18Z"
+  },
+  {
+    "id": "7335655385",
+    "type": "PushEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 94135460,
+      "name": "cboettig/noise-phenomena",
+      "url": "https://api.github.com/repos/cboettig/noise-phenomena"
+    },
+    "payload": {
+      "push_id": 2379211644,
+      "size": 1,
+      "distinct_size": 1,
+      "ref": "refs/heads/master",
+      "head": "ffa7289bf6f9909a864d10f918d2f7bdb01c8653",
+      "before": "62279fb1fafd2618a5eae53679d1d54ec68ea222",
+      "commits": [
+        {
+          "sha": "ffa7289bf6f9909a864d10f918d2f7bdb01c8653",
+          "author": {
+            "email": "cboettig@gmail.com",
+            "name": "Carl Boettiger"
+          },
+          "message": "tweaking refs",
+          "distinct": true,
+          "url": "https://api.github.com/repos/cboettig/noise-phenomena/commits/ffa7289bf6f9909a864d10f918d2f7bdb01c8653"
+        }
+      ]
+    },
+    "public": true,
+    "created_at": "2018-03-06T05:25:07Z"
+  },
+  {
+    "id": "7334939308",
+    "type": "IssuesEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 85984414,
+      "name": "rocker-org/geospatial",
+      "url": "https://api.github.com/repos/rocker-org/geospatial"
+    },
+    "payload": {
+      "action": "closed",
+      "issue": {
+        "url": "https://api.github.com/repos/rocker-org/geospatial/issues/11",
+        "repository_url": "https://api.github.com/repos/rocker-org/geospatial",
+        "labels_url": "https://api.github.com/repos/rocker-org/geospatial/issues/11/labels{/name}",
+        "comments_url": "https://api.github.com/repos/rocker-org/geospatial/issues/11/comments",
+        "events_url": "https://api.github.com/repos/rocker-org/geospatial/issues/11/events",
+        "html_url": "https://github.com/rocker-org/geospatial/issues/11",
+        "id": 302390737,
+        "number": 11,
+        "title": "Failing builds on versioned images",
+        "user": {
+          "login": "dlebauer",
+          "id": 464871,
+          "avatar_url": "https://avatars2.githubusercontent.com/u/464871?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/dlebauer",
+          "html_url": "https://github.com/dlebauer",
+          "followers_url": "https://api.github.com/users/dlebauer/followers",
+          "following_url": "https://api.github.com/users/dlebauer/following{/other_user}",
+          "gists_url": "https://api.github.com/users/dlebauer/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/dlebauer/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/dlebauer/subscriptions",
+          "organizations_url": "https://api.github.com/users/dlebauer/orgs",
+          "repos_url": "https://api.github.com/users/dlebauer/repos",
+          "events_url": "https://api.github.com/users/dlebauer/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/dlebauer/received_events",
+          "type": "User",
+          "site_admin": false
+        },
+        "labels": [
+
+        ],
+        "state": "closed",
+        "locked": false,
+        "assignee": null,
+        "assignees": [
+
+        ],
+        "milestone": null,
+        "comments": 2,
+        "created_at": "2018-03-05T17:27:22Z",
+        "updated_at": "2018-03-06T01:14:00Z",
+        "closed_at": "2018-03-06T01:14:00Z",
+        "author_association": "NONE",
+        "body": "These are failing in the geospatial container: \r\n\r\nhttps://hub.docker.com/r/rocker/geospatial/builds/\r\n\r\n![image](https://user-images.githubusercontent.com/464871/36989690-0925eac4-2068-11e8-840e-fac0d29c89f7.png)\r\n\r\nBut not in the parent rocker/verse https://hub.docker.com/r/rocker/verse/builds/ builds that were done on the same day. Perhaps the geospatial builds just need to be re-launched?"
+      }
+    },
+    "public": true,
+    "created_at": "2018-03-06T01:14:00Z",
+    "org": {
+      "id": 9100160,
+      "login": "rocker-org",
+      "gravatar_id": "",
+      "url": "https://api.github.com/orgs/rocker-org",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9100160?"
+    }
+  },
+  {
+    "id": "7334939306",
+    "type": "IssueCommentEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 85984414,
+      "name": "rocker-org/geospatial",
+      "url": "https://api.github.com/repos/rocker-org/geospatial"
+    },
+    "payload": {
+      "action": "created",
+      "issue": {
+        "url": "https://api.github.com/repos/rocker-org/geospatial/issues/11",
+        "repository_url": "https://api.github.com/repos/rocker-org/geospatial",
+        "labels_url": "https://api.github.com/repos/rocker-org/geospatial/issues/11/labels{/name}",
+        "comments_url": "https://api.github.com/repos/rocker-org/geospatial/issues/11/comments",
+        "events_url": "https://api.github.com/repos/rocker-org/geospatial/issues/11/events",
+        "html_url": "https://github.com/rocker-org/geospatial/issues/11",
+        "id": 302390737,
+        "number": 11,
+        "title": "Failing builds on versioned images",
+        "user": {
+          "login": "dlebauer",
+          "id": 464871,
+          "avatar_url": "https://avatars2.githubusercontent.com/u/464871?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/dlebauer",
+          "html_url": "https://github.com/dlebauer",
+          "followers_url": "https://api.github.com/users/dlebauer/followers",
+          "following_url": "https://api.github.com/users/dlebauer/following{/other_user}",
+          "gists_url": "https://api.github.com/users/dlebauer/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/dlebauer/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/dlebauer/subscriptions",
+          "organizations_url": "https://api.github.com/users/dlebauer/orgs",
+          "repos_url": "https://api.github.com/users/dlebauer/repos",
+          "events_url": "https://api.github.com/users/dlebauer/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/dlebauer/received_events",
+          "type": "User",
+          "site_admin": false
+        },
+        "labels": [
+
+        ],
+        "state": "closed",
+        "locked": false,
+        "assignee": null,
+        "assignees": [
+
+        ],
+        "milestone": null,
+        "comments": 1,
+        "created_at": "2018-03-05T17:27:22Z",
+        "updated_at": "2018-03-06T01:14:00Z",
+        "closed_at": "2018-03-06T01:14:00Z",
+        "author_association": "NONE",
+        "body": "These are failing in the geospatial container: \r\n\r\nhttps://hub.docker.com/r/rocker/geospatial/builds/\r\n\r\n![image](https://user-images.githubusercontent.com/464871/36989690-0925eac4-2068-11e8-840e-fac0d29c89f7.png)\r\n\r\nBut not in the parent rocker/verse https://hub.docker.com/r/rocker/verse/builds/ builds that were done on the same day. Perhaps the geospatial builds just need to be re-launched?"
+      },
+      "comment": {
+        "url": "https://api.github.com/repos/rocker-org/geospatial/issues/comments/370625764",
+        "html_url": "https://github.com/rocker-org/geospatial/issues/11#issuecomment-370625764",
+        "issue_url": "https://api.github.com/repos/rocker-org/geospatial/issues/11",
+        "id": 370625764,
+        "user": {
+          "login": "cboettig",
+          "id": 222586,
+          "avatar_url": "https://avatars3.githubusercontent.com/u/222586?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/cboettig",
+          "html_url": "https://github.com/cboettig",
+          "followers_url": "https://api.github.com/users/cboettig/followers",
+          "following_url": "https://api.github.com/users/cboettig/following{/other_user}",
+          "gists_url": "https://api.github.com/users/cboettig/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/cboettig/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/cboettig/subscriptions",
+          "organizations_url": "https://api.github.com/users/cboettig/orgs",
+          "repos_url": "https://api.github.com/users/cboettig/repos",
+          "events_url": "https://api.github.com/users/cboettig/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/cboettig/received_events",
+          "type": "User",
+          "site_admin": false
+        },
+        "created_at": "2018-03-06T01:13:59Z",
+        "updated_at": "2018-03-06T01:13:59Z",
+        "author_association": "OWNER",
+        "body": "Rebuilds successfully completed.  "
+      }
+    },
+    "public": true,
+    "created_at": "2018-03-06T01:14:00Z",
+    "org": {
+      "id": 9100160,
+      "login": "rocker-org",
+      "gravatar_id": "",
+      "url": "https://api.github.com/orgs/rocker-org",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9100160?"
+    }
+  },
+  {
+    "id": "7334337582",
+    "type": "PushEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 94135460,
+      "name": "cboettig/noise-phenomena",
+      "url": "https://api.github.com/repos/cboettig/noise-phenomena"
+    },
+    "payload": {
+      "push_id": 2378506812,
+      "size": 1,
+      "distinct_size": 1,
+      "ref": "refs/heads/master",
+      "head": "62279fb1fafd2618a5eae53679d1d54ec68ea222",
+      "before": "1c5e945fcd64ff84f4563fcddd598c2928f8e32e",
+      "commits": [
+        {
+          "sha": "62279fb1fafd2618a5eae53679d1d54ec68ea222",
+          "author": {
+            "email": "cboettig@gmail.com",
+            "name": "Carl Boettiger"
+          },
+          "message": "reproduced figures",
+          "distinct": true,
+          "url": "https://api.github.com/repos/cboettig/noise-phenomena/commits/62279fb1fafd2618a5eae53679d1d54ec68ea222"
+        }
+      ]
+    },
+    "public": true,
+    "created_at": "2018-03-05T22:25:31Z"
+  },
+  {
+    "id": "7334335663",
+    "type": "PushEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 94135460,
+      "name": "cboettig/noise-phenomena",
+      "url": "https://api.github.com/repos/cboettig/noise-phenomena"
+    },
+    "payload": {
+      "push_id": 2378505792,
+      "size": 2,
+      "distinct_size": 2,
+      "ref": "refs/heads/master",
+      "head": "1c5e945fcd64ff84f4563fcddd598c2928f8e32e",
+      "before": "5dc366d22ef980908550f3fd6f5ce0962fa56104",
+      "commits": [
+        {
+          "sha": "f0e9936431351be7fcb42671a2674fe02c6c6780",
+          "author": {
+            "email": "cboettig@gmail.com",
+            "name": "Carl Boettiger"
+          },
+          "message": "fix typos",
+          "distinct": true,
+          "url": "https://api.github.com/repos/cboettig/noise-phenomena/commits/f0e9936431351be7fcb42671a2674fe02c6c6780"
+        },
+        {
+          "sha": "1c5e945fcd64ff84f4563fcddd598c2928f8e32e",
+          "author": {
+            "email": "cboettig@gmail.com",
+            "name": "Carl Boettiger"
+          },
+          "message": "sp",
+          "distinct": true,
+          "url": "https://api.github.com/repos/cboettig/noise-phenomena/commits/1c5e945fcd64ff84f4563fcddd598c2928f8e32e"
+        }
+      ]
+    },
+    "public": true,
+    "created_at": "2018-03-05T22:25:08Z"
+  },
+  {
+    "id": "7334032539",
+    "type": "PushEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 85984414,
+      "name": "rocker-org/geospatial",
+      "url": "https://api.github.com/repos/rocker-org/geospatial"
+    },
+    "payload": {
+      "push_id": 2378348947,
+      "size": 1,
+      "distinct_size": 1,
+      "ref": "refs/heads/master",
+      "head": "2c4cad12dc2e42275311d403b6e56d317e6e7c56",
+      "before": "81587936ddfcafb79825a40e6aea5b53521022b1",
+      "commits": [
+        {
+          "sha": "2c4cad12dc2e42275311d403b6e56d317e6e7c56",
+          "author": {
+            "email": "cboettig@gmail.com",
+            "name": "Carl Boettiger"
+          },
+          "message": "hdf5r not avail prior to 3.4.2",
+          "distinct": true,
+          "url": "https://api.github.com/repos/rocker-org/geospatial/commits/2c4cad12dc2e42275311d403b6e56d317e6e7c56"
+        }
+      ]
+    },
+    "public": true,
+    "created_at": "2018-03-05T21:22:46Z",
+    "org": {
+      "id": 9100160,
+      "login": "rocker-org",
+      "gravatar_id": "",
+      "url": "https://api.github.com/orgs/rocker-org",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9100160?"
+    }
+  }
+]
