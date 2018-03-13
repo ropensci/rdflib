@@ -13,6 +13,15 @@ output:
       countIncrementalSlides: false
 ---
 
+
+
+---
+class: left, top, inverse
+background-image: url(img/uglyduckling.jpg)
+
+# RDF: Ugly Duckling
+
+
 ```{r setup, include=FALSE, message = FALSE}
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(comment = NA)
@@ -26,21 +35,6 @@ source(system.file("examples/as_rdf.R", package="rdflib"))
 source(system.file("examples/tidy_schema.R", package="rdflib"))
 ```
 
-
-
----
-class: center, middle, inverse
-
-# RDF
-
-
-
-
----
-class: left, top, inverse
-background-image: url(img/uglyduckling.jpg)
-
-# RDF: Ugly Duckling
 
 ```{r}
 cat(readLines(system.file("extdata/ex2.xml", package="rdflib")), sep= "\n")
@@ -180,7 +174,7 @@ mtcars %>%
 
 
 ---
-class: left, top, inverse
+class: center, middle, inverse
 
 # Atomizing your data
 
