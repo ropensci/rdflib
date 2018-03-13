@@ -6,6 +6,7 @@ date: "2018/03/12"
 output:
   xaringan::moon_reader:
     lib_dir: libs
+    chakra: libs/remark-latest.min.js
     nature:
       highlightStyle: github
       highlightLines: true
@@ -18,7 +19,7 @@ knitr::opts_chunk$set(comment = NA)
 library(tidyverse)
 library(rdflib)
 library(jsonlite)
-options(max.print = 10)
+  options(max.print = 50)
 mtcars <- mtcars %>% rownames_to_column("Model")
 
 source(system.file("examples/as_rdf.R", package="rdflib"))
@@ -36,16 +37,14 @@ class: center, middle, inverse
 
 
 ---
-class: center, middle, inverse
+class: left, top, inverse
 background-image: url(img/uglyduckling.jpg)
 
-# RDF
+# RDF: Ugly Duckling
 
----
-class: center, middle, inverse
-background-image: url(img/steampunk.jpg)
-
-# RDF
+```{r}
+cat(readLines(system.file("extdata/ex2.xml", package="rdflib")), sep= "\n")
+```
 
 ---
 class: center, middle, inverse
@@ -61,6 +60,12 @@ class: center, middle, inverse
     Director of Research,  
     Google Inc.
 
+
+---
+class: center, top, inverse
+background-image: url(img/steampunk.jpg)
+
+# RDF as Steampunk?
 
 
 ---
@@ -86,48 +91,75 @@ background-image: url(img/factory-farm.jpg)
 
 ---
 class: center, middle, inverse
-background-image: url(img/organic-farm.jpg)
+background-image: url(img/organic-farm.png)
 
 
-# Some prefer the Handcrafted, Organic kind
-
----
-class: center, middle, inverse
-
-# Data Integration is Hard
-
+# Or Handcrafted, Organic Data?
 
 ---
 class: center, middle, inverse
 
+# Heterogeneous Data is Hard
 
-# Better Metadata?
+
 
 ---
-class: center, middle, inverse
+class: center, top, inverse
+background-image: url(img/field-notes.jpg)
+
+# Heterogeneous Data in Ecology 
+
+
+---
+class: center, top, inverse
+background-image: url(img/neon.png)
+
+# Heterogeneous Data in Ecology 
+
+
+---
+class: center, top, inverse
+background-image: url(img/integration.png)
+
+
+# Ecological Metadata Language
+
+
+---
+class: center, middle
+background-image: url(img/codemeta.png)
+
+# CodeMeta
+
+
+
+
+---
+class: center, top, inverse
 background-image: url(img/no-data-lake.jpg)
 
 # The Data Lake
 
 ---
-class: center, middle, inverse
+class: center, top, inverse
 background-image: url(img/data-lake.jpg)
-
-
 
 # The Data Lake
 
+
 ---
 class: center, middle, inverse
+
+# From Schema on Write
+
+# To Schema on Read
+
+---
+class: center, middle, inverse
+
 
 # All Data Really is Tabular
 
-
----
-class: center, middle, inverse
-
-
-# One Table. Three (okay five) columns.
 
 ---
 class: center, middle, inverse
@@ -147,11 +179,54 @@ mtcars %>%
 ```
 
 
+---
+class: left, top, inverse
+
+# Atomizing your data
+
+
+
+---
+class: left, middle
+
+# Row, Column, Cell
+
+```{r echo=FALSE}
+knitr::kable(head(mtcars, 20), "html")
+```
+
+
+
+---
+class: left, middle, inverse
+
+# Object, Property, Value
+
+```{r echo=FALSE}
+toJSON(mtcars, pretty = TRUE)
+```
+
+---
+class: left, middle, inverse
+
+# Subject, Predicate, Object
+
+```{r echo=FALSE}
+rdf_ex <- as_rdf(mtcars, vocab = "mtcars:")
+rdf_ex
+```
 
 ---
 class: left, top, inverse
 
-# Into the Lake
+# Triples
+
+---
+class: center, middle, inverse
+background-image: url(img/no-data-lake.jpg)
+
+# Into the Lake: Data Frames
+
 
 ```{r}
 triplestore <- rdf()
@@ -163,33 +238,16 @@ as_rdf(iris, triplestore, "iris:")
 
 
 
----
-class: left, top, inverse
-
-# Back from the Lake
-
-```{r}
-rdf_query(triplestore,
-'SELECT  ?Species ?Sepal_Length ?Sepal_Width ?Petal_Length  ?Petal_Width
-WHERE {
- ?s <iris:Species>  ?Species ;
-    <iris:Sepal.Width>  ?Sepal_Width ;
-    <iris:Sepal.Length>  ?Sepal_Length ; 
-    <iris:Petal.Length>  ?Petal_Length ;
-    <iris:Petal.Width>  ?Petal_Width 
-}')
-
-```
-
 
 
 
 ---
-class: left, top, inverse
+class: left, middle, inverse
+background-image: url(img/no-data-lake.jpg)
 
-# Into the Lake
+# Into the Lake: Lists
 
-GitHub API
+Example JSON data returned from the [GitHub API](https://api.github.com/users/cboettig/events)
 
 ```{r echo=FALSE}
 github.json <- system.file("extdata/github.json", package="rdflib")
@@ -197,8 +255,13 @@ cat(readLines(github.json, n = 20), sep="\n")
 ```
 
 
+
+
 ---
-class: left, top, inverse
+class: left, middle, inverse
+background-image: url(img/no-data-lake.jpg)
+
+# Into the Lake: Lists
 
 ```{r include=FALSE}
 events <- read_json(github.json)
@@ -212,14 +275,72 @@ as_rdf(events, triplestore, "gh:")
 
 
 ---
-class: left, top, inverse
+class: left, middle
 
-# Rectangling
+# Schema on read: SPARQL
+
+```{r, results="hide"}
+rdf_query(triplestore,
+'SELECT  ?Model ?mpg ?cyl ?disp  ?hp
+WHERE {
+ ?s <mtcars:Model>  ?Model ;
+    <mtcars:mpg>  ?mpg ;
+    <mtcars:cyl>  ?cyl ; 
+    <mtcars:disp>  ?disp ;
+    <mtcars:hp>  ?hp 
+}')
+
+```
+
+---
+class: left, middle
+
+# Schema on read: SPARQL
+
+```{r, echo=FALSE}
+rdf_query(triplestore,
+'SELECT  ?Model ?mpg ?cyl ?disp  ?hp
+WHERE {
+ ?s <mtcars:Model>  ?Model ;
+    <mtcars:mpg>  ?mpg ;
+    <mtcars:cyl>  ?cyl ; 
+    <mtcars:disp>  ?disp ;
+    <mtcars:hp>  ?hp 
+}')
+
+```
 
 
-```{r}
-rdf_query(triplestore, '
-SELECT ?type ?user ?repo ?when
+
+---
+class: left, middle
+
+# Data Rectangling
+
+
+```{r, results="hide"}
+rdf_query(triplestore, 
+'SELECT ?type ?user ?repo ?when
+WHERE {
+?s <gh:type> ?type ;
+   <gh:created_at> ?when ;
+   <gh:repo> ?repo_id ;
+   <gh:actor> ?actor .
+?actor <gh:login> ?user .
+?repo_id <gh:name> ?repo
+}')
+```
+
+
+---
+class: left, middle
+
+# Data Rectangling
+
+
+```{r, echo=FALSE}
+rdf_query(triplestore, 
+'SELECT ?type ?user ?repo ?when
 WHERE {
 ?s <gh:type> ?type ;
    <gh:created_at> ?when ;
@@ -227,21 +348,119 @@ WHERE {
    <gh:actor> ?actor .
 ?r <gh:name> ?repo .
 ?actor <gh:login> ?user .
+}')
+```
 
-}
-')
+---
+class: left, middle
+
+# Data Rectangling: Graph Queries
+
+
+```{r }
+df <- rdf_query(triplestore, 
+'SELECT DISTINCT ?property ?value
+WHERE {
+?s <gh:url> "https://api.github.com/repos/cboettig/noise-phenomena" .
+?parent ?p ?s .
+?parent ?property ?value
+}')
+
+```
+
+---
+class: left, middle
+
+# Data Rectangling: Graph Queries
+
+```{r echo=FALSE}
+df
 ```
 
 
 ---
 class: center, middle, inverse
 
-# Triples
+# Potential Issues
+
+- Potential column name or property collisions
+- Dealing with data types (numeric, logical, dates, etc)
+- Potential row name or object id collisions
+
+---
+class: center, middle, inverse
+
+# U say URL
+# I say IRI 
+
+
+---
+class: left, middle, inverse
+
+# Internationalized Resource Identifiers
+
+
+- `https://example.com`
+- `https://schema.org/givenName`
+- `isbn:978-0-387-98140-6`
+- `urn:uuid:0aae8482-93b9-4b22-879e-aa71af0d3fd1`
 
 
 ---
 class: center, middle, inverse
 
-# I say IRI 
-# U say URL
+# Unique variable/column names
 
+- `https://schema.org/givenName`
+- `https://schema.org/programmingLanguage`
+- `https://schema.org/softwareRequirements`
+
+
+
+---
+class: center, middle, inverse
+
+# Data types
+
+- `http://www.w3.org/2001/XMLSchema#decimal`
+- `http://www.w3.org/2001/XMLSchema#dateTime`
+
+
+---
+class: center, middle, inverse
+
+# Subject IRIs
+
+- `https://example.com`
+- `isbn:978-0-387-98140-6`
+- `doi:10.1007/978-0-387-98141-3`
+- `_:` Blank nodes
+
+---
+class: center, middle, inverse
+
+# Object Types and Resource Nodes
+
+- `https://schema.org/SoftwareSoureCode`
+- `doi:10.1007/978-0-387-98141-3`
+
+
+---
+class: center, middle, inverse
+
+# Practical Issues
+
+- `SQL` -> `dplyr`
+- `SPARQL` -> `???`
+
+
+
+
+---
+class: center, middle, inverse
+
+
+# Explore & Contribute
+
+- <https://github.com/ropensci/rdflib>
+- <https://cran.r-project.org/package=rdflib>

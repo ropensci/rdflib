@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RDF for Tidyverse Lovers</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Carl Boettiger" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# RDF for Tidyverse Lovers
+### Carl Boettiger
+### 2018/03/12
+
+---
+
+
+
+
+
+
+---
+class: center, middle, inverse
+
+# RDF
+
+
+
+
+---
+class: left, top, inverse
+background-image: url(img/uglyduckling.jpg)
+
+# RDF: Ugly Duckling
+
+
+```r
+cat(readLines(system.file("extdata/ex2.xml", package="rdflib")), sep= "\n")
+```
+
+```
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"&gt;
+  &lt;rdf:Description rdf:nodeID="b0"&gt;
+    &lt;rdf:type rdf:resource="http://schema.org/Person"/&gt;
+  &lt;/rdf:Description&gt;
+  &lt;rdf:Description rdf:nodeID="b0"&gt;
+    &lt;ns0:name xmlns:ns0="http://schema.org/"&gt;Jane Doe&lt;/ns0:name&gt;
+  &lt;/rdf:Description&gt;
+  &lt;rdf:Description rdf:nodeID="b0"&gt;
+    &lt;ns0:url xmlns:ns0="http://schema.org/" rdf:resource="http://www.janedoe.com"/&gt;
+  &lt;/rdf:Description&gt;
+  &lt;rdf:Description rdf:nodeID="b0"&gt;
+    &lt;ns0:jobTitle xmlns:ns0="http://schema.org/"&gt;Professor&lt;/ns0:jobTitle&gt;
+  &lt;/rdf:Description&gt;
+  &lt;rdf:Description rdf:nodeID="b0"&gt;
+    &lt;ns0:telephone xmlns:ns0="http://schema.org/"&gt;(425) 123-4567&lt;/ns0:telephone&gt;
+  &lt;/rdf:Description&gt;
+&lt;/rdf:RDF&gt;
+```
+
+---
+class: center, middle, inverse
+
+# The Semantic Web is the Future of the Internet...
+
+---
+class: center, middle, inverse
+
+# ... and always will be.
+
+ -- Peter Norvig,  
+    Director of Research,  
+    Google Inc.
+
+
+---
+class: center, top, inverse
+background-image: url(img/steampunk.jpg)
+
+# RDF as Steampunk?
+
+
+---
+class: center, top, inverse
+background-image: url(img/tetris.jpg)
+
+# All Data are Tabular
+
+---
+class: center, top, inverse
+background-image: url(img/tetris-lose.jpg)
+
+# All Data are Definitely Not Tabular
+
+
+
+---
+class: center, middle, inverse
+background-image: url(img/factory-farm.jpg)
+
+
+# Factory Farm Data
+
+---
+class: center, middle, inverse
+background-image: url(img/organic-farm.png)
+
+
+# Or Handcrafted, Organic Data?
+
+---
+class: center, middle, inverse
+
+# Heterogeneous Data is Hard
+
+
+
+---
+class: center, top, inverse
+background-image: url(img/field-notes.jpg)
+
+# Heterogeneous Data in Ecology 
+
+
+---
+class: center, top, inverse
+background-image: url(img/neon.png)
+
+# Heterogeneous Data in Ecology 
+
+
+---
+class: center, top, inverse
+background-image: url(img/integration.png)
+
+
+# Ecological Metadata Language
+
+
+---
+class: center, middle
+background-image: url(img/codemeta.png)
+
+# CodeMeta
+
+
+
+
+---
+class: center, top, inverse
+background-image: url(img/no-data-lake.jpg)
+
+# The Data Lake
+
+---
+class: center, top, inverse
+background-image: url(img/data-lake.jpg)
+
+# The Data Lake
+
+
+---
+class: center, middle, inverse
+
+# From Schema on Write
+
+# To Schema on Read
+
+---
+class: center, middle, inverse
+
+
+# All Data Really is Tabular
+
+
+---
+class: center, middle, inverse
+
+# `tidyr::gather()` all the things!
+
+
+---
+class: left, top, inverse
+
+# `tidyr::gather()` all the things!
+
+
+```r
+mtcars %&gt;% 
+  rowid_to_column("id") %&gt;% 
+  gather(property, value, -id)
+```
+
+```
+    id property               value
+1    1    Model           Mazda RX4
+2    2    Model       Mazda RX4 Wag
+3    3    Model          Datsun 710
+4    4    Model      Hornet 4 Drive
+5    5    Model   Hornet Sportabout
+6    6    Model             Valiant
+7    7    Model          Duster 360
+8    8    Model           Merc 240D
+9    9    Model            Merc 230
+10  10    Model            Merc 280
+11  11    Model           Merc 280C
+12  12    Model          Merc 450SE
+13  13    Model          Merc 450SL
+14  14    Model         Merc 450SLC
+15  15    Model  Cadillac Fleetwood
+16  16    Model Lincoln Continental
+ [ reached getOption("max.print") -- omitted 368 rows ]
+```
+
+
+---
+class: left, top, inverse
+
+# Atomizing your data
+
+
+
+---
+class: left, middle
+
+# Row, Column, Cell
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Model &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; mpg &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; cyl &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; disp &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; hp &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; drat &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; wt &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; qsec &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; vs &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; am &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gear &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; carb &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Mazda RX4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 160.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 110 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.90 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.620 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16.46 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Mazda RX4 Wag &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 160.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 110 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.90 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.875 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.02 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Datsun 710 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 22.8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 108.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 93 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.85 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.320 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18.61 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Hornet 4 Drive &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21.4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 258.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 110 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.08 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.215 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 19.44 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Hornet Sportabout &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18.7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 360.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 175 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.15 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.440 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.02 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Valiant &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18.1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 225.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 105 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.76 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.460 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20.22 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Duster 360 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14.3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 360.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 245 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.21 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.570 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15.84 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Merc 240D &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 24.4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 146.7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 62 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.69 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.190 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20.00 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Merc 230 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 22.8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 140.8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 95 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.92 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.150 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 22.90 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Merc 280 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 19.2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 167.6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 123 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.92 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.440 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18.30 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Merc 280C &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 167.6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 123 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.92 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.440 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18.90 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Merc 450SE &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16.4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 275.8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 180 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.07 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.070 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.40 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Merc 450SL &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 275.8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 180 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.07 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.730 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.60 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Merc 450SLC &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15.2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 275.8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 180 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.07 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.780 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18.00 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Cadillac Fleetwood &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 472.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 205 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.93 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.250 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.98 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Lincoln Continental &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 460.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 215 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.00 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.424 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.82 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Chrysler Imperial &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14.7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 440.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 230 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.23 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.345 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Fiat 128 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 32.4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 78.7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 66 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.08 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.200 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 19.47 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Honda Civic &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 30.4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 75.7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 52 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.93 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.615 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18.52 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Toyota Corolla &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 33.9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 71.1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 65 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.22 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.835 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 19.90 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+
+---
+class: left, middle, inverse
+
+# Object, Property, Value
+
+
+```
+[
+  {
+    "Model": "Mazda RX4",
+    "mpg": 21,
+    "cyl": 6,
+    "disp": 160,
+    "hp": 110,
+    "drat": 3.9,
+    "wt": 2.62,
+    "qsec": 16.46,
+    "vs": 0,
+    "am": 1,
+    "gear": 4,
+    "carb": 4
+  },
+  {
+    "Model": "Mazda RX4 Wag",
+    "mpg": 21,
+    "cyl": 6,
+    "disp": 160,
+    "hp": 110,
+    "drat": 3.9,
+    "wt": 2.875,
+    "qsec": 17.02,
+    "vs": 0,
+    "am": 1,
+    "gear": 4,
+    "carb": 4
+  },
+  {
+    "Model": "Datsun 710",
+    "mpg": 22.8,
+    "cyl": 4,
+    "disp": 108,
+    "hp": 93,
+    "drat": 3.85,
+    "wt": 2.32,
+    "qsec": 18.61,
+    "vs": 1,
+    "am": 1,
+    "gear": 4,
+    "carb": 1
+  },
+  {
+    "Model": "Hornet 4 Drive",
+    "mpg": 21.4,
+    "cyl": 6,
+    "disp": 258,
+    "hp": 110,
+    "drat": 3.08,
+    "wt": 3.215,
+    "qsec": 19.44,
+    "vs": 1,
+    "am": 0,
+    "gear": 3,
+    "carb": 1
+  },
+  {
+    "Model": "Hornet Sportabout",
+    "mpg": 18.7,
+    "cyl": 8,
+    "disp": 360,
+    "hp": 175,
+    "drat": 3.15,
+    "wt": 3.44,
+    "qsec": 17.02,
+    "vs": 0,
+    "am": 0,
+    "gear": 3,
+    "carb": 2
+  },
+  {
+    "Model": "Valiant",
+    "mpg": 18.1,
+    "cyl": 6,
+    "disp": 225,
+    "hp": 105,
+    "drat": 2.76,
+    "wt": 3.46,
+    "qsec": 20.22,
+    "vs": 1,
+    "am": 0,
+    "gear": 3,
+    "carb": 1
+  },
+  {
+    "Model": "Duster 360",
+    "mpg": 14.3,
+    "cyl": 8,
+    "disp": 360,
+    "hp": 245,
+    "drat": 3.21,
+    "wt": 3.57,
+    "qsec": 15.84,
+    "vs": 0,
+    "am": 0,
+    "gear": 3,
+    "carb": 4
+  },
+  {
+    "Model": "Merc 240D",
+    "mpg": 24.4,
+    "cyl": 4,
+    "disp": 146.7,
+    "hp": 62,
+    "drat": 3.69,
+    "wt": 3.19,
+    "qsec": 20,
+    "vs": 1,
+    "am": 0,
+    "gear": 4,
+    "carb": 2
+  },
+  {
+    "Model": "Merc 230",
+    "mpg": 22.8,
+    "cyl": 4,
+    "disp": 140.8,
+    "hp": 95,
+    "drat": 3.92,
+    "wt": 3.15,
+    "qsec": 22.9,
+    "vs": 1,
+    "am": 0,
+    "gear": 4,
+    "carb": 2
+  },
+  {
+    "Model": "Merc 280",
+    "mpg": 19.2,
+    "cyl": 6,
+    "disp": 167.6,
+    "hp": 123,
+    "drat": 3.92,
+    "wt": 3.44,
+    "qsec": 18.3,
+    "vs": 1,
+    "am": 0,
+    "gear": 4,
+    "carb": 4
+  },
+  {
+    "Model": "Merc 280C",
+    "mpg": 17.8,
+    "cyl": 6,
+    "disp": 167.6,
+    "hp": 123,
+    "drat": 3.92,
+    "wt": 3.44,
+    "qsec": 18.9,
+    "vs": 1,
+    "am": 0,
+    "gear": 4,
+    "carb": 4
+  },
+  {
+    "Model": "Merc 450SE",
+    "mpg": 16.4,
+    "cyl": 8,
+    "disp": 275.8,
+    "hp": 180,
+    "drat": 3.07,
+    "wt": 4.07,
+    "qsec": 17.4,
+    "vs": 0,
+    "am": 0,
+    "gear": 3,
+    "carb": 3
+  },
+  {
+    "Model": "Merc 450SL",
+    "mpg": 17.3,
+    "cyl": 8,
+    "disp": 275.8,
+    "hp": 180,
+    "drat": 3.07,
+    "wt": 3.73,
+    "qsec": 17.6,
+    "vs": 0,
+    "am": 0,
+    "gear": 3,
+    "carb": 3
+  },
+  {
+    "Model": "Merc 450SLC",
+    "mpg": 15.2,
+    "cyl": 8,
+    "disp": 275.8,
+    "hp": 180,
+    "drat": 3.07,
+    "wt": 3.78,
+    "qsec": 18,
+    "vs": 0,
+    "am": 0,
+    "gear": 3,
+    "carb": 3
+  },
+  {
+    "Model": "Cadillac Fleetwood",
+    "mpg": 10.4,
+    "cyl": 8,
+    "disp": 472,
+    "hp": 205,
+    "drat": 2.93,
+    "wt": 5.25,
+    "qsec": 17.98,
+    "vs": 0,
+    "am": 0,
+    "gear": 3,
+    "carb": 4
+  },
+  {
+    "Model": "Lincoln Continental",
+    "mpg": 10.4,
+    "cyl": 8,
+    "disp": 460,
+    "hp": 215,
+    "drat": 3,
+    "wt": 5.424,
+    "qsec": 17.82,
+    "vs": 0,
+    "am": 0,
+    "gear": 3,
+    "carb": 4
+  },
+  {
+    "Model": "Chrysler Imperial",
+    "mpg": 14.7,
+    "cyl": 8,
+    "disp": 440,
+    "hp": 230,
+    "drat": 3.23,
+    "wt": 5.345,
+    "qsec": 17.42,
+    "vs": 0,
+    "am": 0,
+    "gear": 3,
+    "carb": 4
+  },
+  {
+    "Model": "Fiat 128",
+    "mpg": 32.4,
+    "cyl": 4,
+    "disp": 78.7,
+    "hp": 66,
+    "drat": 4.08,
+    "wt": 2.2,
+    "qsec": 19.47,
+    "vs": 1,
+    "am": 1,
+    "gear": 4,
+    "carb": 1
+  },
+  {
+    "Model": "Honda Civic",
+    "mpg": 30.4,
+    "cyl": 4,
+    "disp": 75.7,
+    "hp": 52,
+    "drat": 4.93,
+    "wt": 1.615,
+    "qsec": 18.52,
+    "vs": 1,
+    "am": 1,
+    "gear": 4,
+    "carb": 2
+  },
+  {
+    "Model": "Toyota Corolla",
+    "mpg": 33.9,
+    "cyl": 4,
+    "disp": 71.1,
+    "hp": 65,
+    "drat": 4.22,
+    "wt": 1.835,
+    "qsec": 19.9,
+    "vs": 1,
+    "am": 1,
+    "gear": 4,
+    "carb": 1
+  },
+  {
+    "Model": "Toyota Corona",
+    "mpg": 21.5,
+    "cyl": 4,
+    "disp": 120.1,
+    "hp": 97,
+    "drat": 3.7,
+    "wt": 2.465,
+    "qsec": 20.01,
+    "vs": 1,
+    "am": 0,
+    "gear": 3,
+    "carb": 1
+  },
+  {
+    "Model": "Dodge Challenger",
+    "mpg": 15.5,
+    "cyl": 8,
+    "disp": 318,
+    "hp": 150,
+    "drat": 2.76,
+    "wt": 3.52,
+    "qsec": 16.87,
+    "vs": 0,
+    "am": 0,
+    "gear": 3,
+    "carb": 2
+  },
+  {
+    "Model": "AMC Javelin",
+    "mpg": 15.2,
+    "cyl": 8,
+    "disp": 304,
+    "hp": 150,
+    "drat": 3.15,
+    "wt": 3.435,
+    "qsec": 17.3,
+    "vs": 0,
+    "am": 0,
+    "gear": 3,
+    "carb": 2
+  },
+  {
+    "Model": "Camaro Z28",
+    "mpg": 13.3,
+    "cyl": 8,
+    "disp": 350,
+    "hp": 245,
+    "drat": 3.73,
+    "wt": 3.84,
+    "qsec": 15.41,
+    "vs": 0,
+    "am": 0,
+    "gear": 3,
+    "carb": 4
+  },
+  {
+    "Model": "Pontiac Firebird",
+    "mpg": 19.2,
+    "cyl": 8,
+    "disp": 400,
+    "hp": 175,
+    "drat": 3.08,
+    "wt": 3.845,
+    "qsec": 17.05,
+    "vs": 0,
+    "am": 0,
+    "gear": 3,
+    "carb": 2
+  },
+  {
+    "Model": "Fiat X1-9",
+    "mpg": 27.3,
+    "cyl": 4,
+    "disp": 79,
+    "hp": 66,
+    "drat": 4.08,
+    "wt": 1.935,
+    "qsec": 18.9,
+    "vs": 1,
+    "am": 1,
+    "gear": 4,
+    "carb": 1
+  },
+  {
+    "Model": "Porsche 914-2",
+    "mpg": 26,
+    "cyl": 4,
+    "disp": 120.3,
+    "hp": 91,
+    "drat": 4.43,
+    "wt": 2.14,
+    "qsec": 16.7,
+    "vs": 0,
+    "am": 1,
+    "gear": 5,
+    "carb": 2
+  },
+  {
+    "Model": "Lotus Europa",
+    "mpg": 30.4,
+    "cyl": 4,
+    "disp": 95.1,
+    "hp": 113,
+    "drat": 3.77,
+    "wt": 1.513,
+    "qsec": 16.9,
+    "vs": 1,
+    "am": 1,
+    "gear": 5,
+    "carb": 2
+  },
+  {
+    "Model": "Ford Pantera L",
+    "mpg": 15.8,
+    "cyl": 8,
+    "disp": 351,
+    "hp": 264,
+    "drat": 4.22,
+    "wt": 3.17,
+    "qsec": 14.5,
+    "vs": 0,
+    "am": 1,
+    "gear": 5,
+    "carb": 4
+  },
+  {
+    "Model": "Ferrari Dino",
+    "mpg": 19.7,
+    "cyl": 6,
+    "disp": 145,
+    "hp": 175,
+    "drat": 3.62,
+    "wt": 2.77,
+    "qsec": 15.5,
+    "vs": 0,
+    "am": 1,
+    "gear": 5,
+    "carb": 6
+  },
+  {
+    "Model": "Maserati Bora",
+    "mpg": 15,
+    "cyl": 8,
+    "disp": 301,
+    "hp": 335,
+    "drat": 3.54,
+    "wt": 3.57,
+    "qsec": 14.6,
+    "vs": 0,
+    "am": 1,
+    "gear": 5,
+    "carb": 8
+  },
+  {
+    "Model": "Volvo 142E",
+    "mpg": 21.4,
+    "cyl": 4,
+    "disp": 121,
+    "hp": 109,
+    "drat": 4.11,
+    "wt": 2.78,
+    "qsec": 18.6,
+    "vs": 1,
+    "am": 1,
+    "gear": 4,
+    "carb": 2
+  }
+] 
+```
+
+---
+class: left, middle, inverse
+
+# Subject, Predicate, Object
+
+
+```
+&lt;mtcars:24&gt; &lt;mtcars:wt&gt; "3.84"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:9&gt; &lt;mtcars:wt&gt; "3.15"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:7&gt; &lt;mtcars:hp&gt; "245"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:16&gt; &lt;mtcars:Model&gt; "Lincoln Continental" .
+&lt;mtcars:12&gt; &lt;mtcars:mpg&gt; "16.4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:3&gt; &lt;mtcars:wt&gt; "2.32"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:11&gt; &lt;mtcars:carb&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:27&gt; &lt;mtcars:am&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:20&gt; &lt;mtcars:hp&gt; "65"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:10&gt; &lt;mtcars:qsec&gt; "18.3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:2&gt; &lt;mtcars:disp&gt; "160"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:10&gt; &lt;mtcars:am&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:28&gt; &lt;mtcars:drat&gt; "3.77"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:20&gt; &lt;mtcars:disp&gt; "71.1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:21&gt; &lt;mtcars:hp&gt; "97"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:23&gt; &lt;mtcars:qsec&gt; "17.3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:12&gt; &lt;mtcars:drat&gt; "3.07"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:20&gt; &lt;mtcars:qsec&gt; "19.9"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:22&gt; &lt;mtcars:disp&gt; "318"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:32&gt; &lt;mtcars:cyl&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:23&gt; &lt;mtcars:cyl&gt; "8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:32&gt; &lt;mtcars:disp&gt; "121"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:29&gt; &lt;mtcars:wt&gt; "3.17"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:18&gt; &lt;mtcars:drat&gt; "4.08"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:14&gt; &lt;mtcars:Model&gt; "Merc 450SLC" .
+&lt;mtcars:3&gt; &lt;mtcars:mpg&gt; "22.8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:4&gt; &lt;mtcars:drat&gt; "3.08"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:13&gt; &lt;mtcars:vs&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:16&gt; &lt;mtcars:hp&gt; "215"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:18&gt; &lt;mtcars:am&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:22&gt; &lt;mtcars:mpg&gt; "15.5"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:9&gt; &lt;mtcars:am&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:21&gt; &lt;mtcars:carb&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:21&gt; &lt;mtcars:Model&gt; "Toyota Corona" .
+&lt;mtcars:23&gt; &lt;mtcars:wt&gt; "3.435"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:22&gt; &lt;mtcars:Model&gt; "Dodge Challenger" .
+&lt;mtcars:27&gt; &lt;mtcars:hp&gt; "91"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:32&gt; &lt;mtcars:vs&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:18&gt; &lt;mtcars:gear&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:18&gt; &lt;mtcars:hp&gt; "66"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:31&gt; &lt;mtcars:carb&gt; "8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:1&gt; &lt;mtcars:vs&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:7&gt; &lt;mtcars:carb&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:30&gt; &lt;mtcars:disp&gt; "145"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:28&gt; &lt;mtcars:gear&gt; "5"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:23&gt; &lt;mtcars:gear&gt; "3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:16&gt; &lt;mtcars:carb&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:17&gt; &lt;mtcars:am&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:15&gt; &lt;mtcars:qsec&gt; "17.98"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:12&gt; &lt;mtcars:qsec&gt; "17.4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:30&gt; &lt;mtcars:vs&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:13&gt; &lt;mtcars:disp&gt; "275.8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:27&gt; &lt;mtcars:qsec&gt; "16.7"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:30&gt; &lt;mtcars:drat&gt; "3.62"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:9&gt; &lt;mtcars:gear&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:6&gt; &lt;mtcars:cyl&gt; "6"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:8&gt; &lt;mtcars:vs&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:8&gt; &lt;mtcars:am&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:17&gt; &lt;mtcars:wt&gt; "5.345"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:18&gt; &lt;mtcars:disp&gt; "78.7"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:8&gt; &lt;mtcars:gear&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:1&gt; &lt;mtcars:disp&gt; "160"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:13&gt; &lt;mtcars:wt&gt; "3.73"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:9&gt; &lt;mtcars:carb&gt; "2"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:11&gt; &lt;mtcars:hp&gt; "123"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:9&gt; &lt;mtcars:Model&gt; "Merc 230" .
+&lt;mtcars:12&gt; &lt;mtcars:carb&gt; "3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:5&gt; &lt;mtcars:qsec&gt; "17.02"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:7&gt; &lt;mtcars:mpg&gt; "14.3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:10&gt; &lt;mtcars:gear&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:12&gt; &lt;mtcars:gear&gt; "3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:1&gt; &lt;mtcars:mpg&gt; "21"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:30&gt; &lt;mtcars:wt&gt; "2.77"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:19&gt; &lt;mtcars:am&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:30&gt; &lt;mtcars:Model&gt; "Ferrari Dino" .
+&lt;mtcars:19&gt; &lt;mtcars:cyl&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:12&gt; &lt;mtcars:Model&gt; "Merc 450SE" .
+&lt;mtcars:2&gt; &lt;mtcars:cyl&gt; "6"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:29&gt; &lt;mtcars:drat&gt; "4.22"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:11&gt; &lt;mtcars:disp&gt; "167.6"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:32&gt; &lt;mtcars:qsec&gt; "18.6"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:24&gt; &lt;mtcars:disp&gt; "350"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:31&gt; &lt;mtcars:wt&gt; "3.57"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:27&gt; &lt;mtcars:drat&gt; "4.43"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:31&gt; &lt;mtcars:qsec&gt; "14.6"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:16&gt; &lt;mtcars:vs&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:4&gt; &lt;mtcars:hp&gt; "110"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:7&gt; &lt;mtcars:wt&gt; "3.57"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:4&gt; &lt;mtcars:cyl&gt; "6"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:8&gt; &lt;mtcars:drat&gt; "3.69"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:5&gt; &lt;mtcars:cyl&gt; "8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:12&gt; &lt;mtcars:vs&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:27&gt; &lt;mtcars:Model&gt; "Porsche 914-2" .
+&lt;mtcars:1&gt; &lt;mtcars:wt&gt; "2.62"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:32&gt; &lt;mtcars:drat&gt; "4.11"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:24&gt; &lt;mtcars:carb&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:1&gt; &lt;mtcars:hp&gt; "110"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:3&gt; &lt;mtcars:drat&gt; "3.85"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:7&gt; &lt;mtcars:vs&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:11&gt; &lt;mtcars:qsec&gt; "18.9"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:17&gt; &lt;mtcars:gear&gt; "3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:10&gt; &lt;mtcars:cyl&gt; "6"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:9&gt; &lt;mtcars:cyl&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:26&gt; &lt;mtcars:Model&gt; "Fiat X1-9" .
+&lt;mtcars:31&gt; &lt;mtcars:mpg&gt; "15"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:15&gt; &lt;mtcars:gear&gt; "3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:13&gt; &lt;mtcars:Model&gt; "Merc 450SL" .
+&lt;mtcars:3&gt; &lt;mtcars:Model&gt; "Datsun 710" .
+&lt;mtcars:1&gt; &lt;mtcars:am&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:19&gt; &lt;mtcars:mpg&gt; "30.4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:18&gt; &lt;mtcars:carb&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:26&gt; &lt;mtcars:drat&gt; "4.08"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:10&gt; &lt;mtcars:carb&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:17&gt; &lt;mtcars:Model&gt; "Chrysler Imperial" .
+&lt;mtcars:15&gt; &lt;mtcars:mpg&gt; "10.4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:14&gt; &lt;mtcars:drat&gt; "3.07"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:6&gt; &lt;mtcars:gear&gt; "3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:16&gt; &lt;mtcars:cyl&gt; "8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:18&gt; &lt;mtcars:mpg&gt; "32.4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:14&gt; &lt;mtcars:gear&gt; "3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:32&gt; &lt;mtcars:mpg&gt; "21.4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:13&gt; &lt;mtcars:carb&gt; "3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:10&gt; &lt;mtcars:mpg&gt; "19.2"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:13&gt; &lt;mtcars:drat&gt; "3.07"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:20&gt; &lt;mtcars:gear&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:2&gt; &lt;mtcars:hp&gt; "110"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:23&gt; &lt;mtcars:mpg&gt; "15.2"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:22&gt; &lt;mtcars:wt&gt; "3.52"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:14&gt; &lt;mtcars:cyl&gt; "8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:23&gt; &lt;mtcars:hp&gt; "150"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:11&gt; &lt;mtcars:vs&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:19&gt; &lt;mtcars:gear&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:3&gt; &lt;mtcars:hp&gt; "93"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:30&gt; &lt;mtcars:gear&gt; "5"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:1&gt; &lt;mtcars:cyl&gt; "6"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:4&gt; &lt;mtcars:am&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:15&gt; &lt;mtcars:drat&gt; "2.93"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:4&gt; &lt;mtcars:vs&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:17&gt; &lt;mtcars:vs&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:29&gt; &lt;mtcars:mpg&gt; "15.8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:27&gt; &lt;mtcars:vs&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:29&gt; &lt;mtcars:qsec&gt; "14.5"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:22&gt; &lt;mtcars:carb&gt; "2"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:27&gt; &lt;mtcars:gear&gt; "5"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:24&gt; &lt;mtcars:qsec&gt; "15.41"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:25&gt; &lt;mtcars:qsec&gt; "17.05"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:17&gt; &lt;mtcars:cyl&gt; "8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:10&gt; &lt;mtcars:hp&gt; "123"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:6&gt; &lt;mtcars:vs&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:4&gt; &lt;mtcars:gear&gt; "3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:16&gt; &lt;mtcars:qsec&gt; "17.82"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:25&gt; &lt;mtcars:hp&gt; "175"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:22&gt; &lt;mtcars:cyl&gt; "8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:25&gt; &lt;mtcars:carb&gt; "2"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:16&gt; &lt;mtcars:mpg&gt; "10.4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:5&gt; &lt;mtcars:vs&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:24&gt; &lt;mtcars:Model&gt; "Camaro Z28" .
+&lt;mtcars:25&gt; &lt;mtcars:wt&gt; "3.845"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:31&gt; &lt;mtcars:hp&gt; "335"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:27&gt; &lt;mtcars:cyl&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:3&gt; &lt;mtcars:carb&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:5&gt; &lt;mtcars:drat&gt; "3.15"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:29&gt; &lt;mtcars:carb&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:9&gt; &lt;mtcars:qsec&gt; "22.9"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:9&gt; &lt;mtcars:vs&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:25&gt; &lt;mtcars:am&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:28&gt; &lt;mtcars:wt&gt; "1.513"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:7&gt; &lt;mtcars:gear&gt; "3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:13&gt; &lt;mtcars:hp&gt; "180"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:3&gt; &lt;mtcars:disp&gt; "108"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:30&gt; &lt;mtcars:am&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:26&gt; &lt;mtcars:am&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:24&gt; &lt;mtcars:am&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:22&gt; &lt;mtcars:gear&gt; "3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:1&gt; &lt;mtcars:qsec&gt; "16.46"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:15&gt; &lt;mtcars:Model&gt; "Cadillac Fleetwood" .
+&lt;mtcars:22&gt; &lt;mtcars:qsec&gt; "16.87"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:24&gt; &lt;mtcars:gear&gt; "3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:29&gt; &lt;mtcars:am&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:14&gt; &lt;mtcars:vs&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:20&gt; &lt;mtcars:Model&gt; "Toyota Corolla" .
+&lt;mtcars:9&gt; &lt;mtcars:drat&gt; "3.92"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:30&gt; &lt;mtcars:hp&gt; "175"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:14&gt; &lt;mtcars:hp&gt; "180"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:21&gt; &lt;mtcars:drat&gt; "3.7"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:31&gt; &lt;mtcars:gear&gt; "5"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:6&gt; &lt;mtcars:hp&gt; "105"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:29&gt; &lt;mtcars:gear&gt; "5"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:20&gt; &lt;mtcars:cyl&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:15&gt; &lt;mtcars:cyl&gt; "8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:15&gt; &lt;mtcars:wt&gt; "5.25"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:6&gt; &lt;mtcars:carb&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:6&gt; &lt;mtcars:am&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:29&gt; &lt;mtcars:disp&gt; "351"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:11&gt; &lt;mtcars:drat&gt; "3.92"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:16&gt; &lt;mtcars:wt&gt; "5.424"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:32&gt; &lt;mtcars:Model&gt; "Volvo 142E" .
+&lt;mtcars:23&gt; &lt;mtcars:drat&gt; "3.15"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:25&gt; &lt;mtcars:vs&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:31&gt; &lt;mtcars:Model&gt; "Maserati Bora" .
+&lt;mtcars:28&gt; &lt;mtcars:carb&gt; "2"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:20&gt; &lt;mtcars:mpg&gt; "33.9"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:12&gt; &lt;mtcars:wt&gt; "4.07"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:5&gt; &lt;mtcars:hp&gt; "175"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:2&gt; &lt;mtcars:drat&gt; "3.9"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:30&gt; &lt;mtcars:qsec&gt; "15.5"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:16&gt; &lt;mtcars:disp&gt; "460"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:4&gt; &lt;mtcars:carb&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:19&gt; &lt;mtcars:vs&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:29&gt; &lt;mtcars:cyl&gt; "8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:23&gt; &lt;mtcars:disp&gt; "304"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:28&gt; &lt;mtcars:disp&gt; "95.1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:2&gt; &lt;mtcars:Model&gt; "Mazda RX4 Wag" .
+&lt;mtcars:14&gt; &lt;mtcars:qsec&gt; "18"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:13&gt; &lt;mtcars:am&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:9&gt; &lt;mtcars:disp&gt; "140.8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:2&gt; &lt;mtcars:carb&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:25&gt; &lt;mtcars:Model&gt; "Pontiac Firebird" .
+&lt;mtcars:31&gt; &lt;mtcars:drat&gt; "3.54"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:2&gt; &lt;mtcars:wt&gt; "2.875"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:24&gt; &lt;mtcars:mpg&gt; "13.3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:13&gt; &lt;mtcars:mpg&gt; "17.3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:5&gt; &lt;mtcars:carb&gt; "2"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:17&gt; &lt;mtcars:mpg&gt; "14.7"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:14&gt; &lt;mtcars:mpg&gt; "15.2"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:23&gt; &lt;mtcars:carb&gt; "2"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:32&gt; &lt;mtcars:gear&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:15&gt; &lt;mtcars:am&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:31&gt; &lt;mtcars:cyl&gt; "8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:11&gt; &lt;mtcars:cyl&gt; "6"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:19&gt; &lt;mtcars:Model&gt; "Honda Civic" .
+&lt;mtcars:7&gt; &lt;mtcars:drat&gt; "3.21"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:22&gt; &lt;mtcars:am&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:1&gt; &lt;mtcars:gear&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:8&gt; &lt;mtcars:mpg&gt; "24.4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:15&gt; &lt;mtcars:hp&gt; "205"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:9&gt; &lt;mtcars:mpg&gt; "22.8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:3&gt; &lt;mtcars:am&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:29&gt; &lt;mtcars:hp&gt; "264"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:28&gt; &lt;mtcars:cyl&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:19&gt; &lt;mtcars:hp&gt; "52"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:20&gt; &lt;mtcars:drat&gt; "4.22"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:10&gt; &lt;mtcars:vs&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:6&gt; &lt;mtcars:qsec&gt; "20.22"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:13&gt; &lt;mtcars:qsec&gt; "17.6"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:1&gt; &lt;mtcars:drat&gt; "3.9"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:19&gt; &lt;mtcars:disp&gt; "75.7"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:8&gt; &lt;mtcars:qsec&gt; "20"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:28&gt; &lt;mtcars:am&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:20&gt; &lt;mtcars:wt&gt; "1.835"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:17&gt; &lt;mtcars:disp&gt; "440"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:3&gt; &lt;mtcars:qsec&gt; "18.61"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:24&gt; &lt;mtcars:hp&gt; "245"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:5&gt; &lt;mtcars:gear&gt; "3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:26&gt; &lt;mtcars:qsec&gt; "18.9"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:25&gt; &lt;mtcars:mpg&gt; "19.2"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:26&gt; &lt;mtcars:wt&gt; "1.935"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:8&gt; &lt;mtcars:hp&gt; "62"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:19&gt; &lt;mtcars:drat&gt; "4.93"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:3&gt; &lt;mtcars:gear&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:16&gt; &lt;mtcars:gear&gt; "3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:14&gt; &lt;mtcars:am&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:7&gt; &lt;mtcars:cyl&gt; "8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:21&gt; &lt;mtcars:wt&gt; "2.465"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:18&gt; &lt;mtcars:wt&gt; "2.2"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:8&gt; &lt;mtcars:Model&gt; "Merc 240D" .
+&lt;mtcars:12&gt; &lt;mtcars:am&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:28&gt; &lt;mtcars:vs&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:28&gt; &lt;mtcars:Model&gt; "Lotus Europa" .
+&lt;mtcars:26&gt; &lt;mtcars:cyl&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:26&gt; &lt;mtcars:mpg&gt; "27.3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:22&gt; &lt;mtcars:vs&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:8&gt; &lt;mtcars:cyl&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:32&gt; &lt;mtcars:hp&gt; "109"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:32&gt; &lt;mtcars:am&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:13&gt; &lt;mtcars:gear&gt; "3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:21&gt; &lt;mtcars:cyl&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:7&gt; &lt;mtcars:disp&gt; "360"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:18&gt; &lt;mtcars:cyl&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:14&gt; &lt;mtcars:disp&gt; "275.8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:27&gt; &lt;mtcars:carb&gt; "2"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:19&gt; &lt;mtcars:wt&gt; "1.615"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:22&gt; &lt;mtcars:drat&gt; "2.76"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:11&gt; &lt;mtcars:wt&gt; "3.44"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:26&gt; &lt;mtcars:vs&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:6&gt; &lt;mtcars:drat&gt; "2.76"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:14&gt; &lt;mtcars:carb&gt; "3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:26&gt; &lt;mtcars:carb&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:27&gt; &lt;mtcars:disp&gt; "120.3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:5&gt; &lt;mtcars:mpg&gt; "18.7"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:25&gt; &lt;mtcars:disp&gt; "400"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:20&gt; &lt;mtcars:vs&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:10&gt; &lt;mtcars:drat&gt; "3.92"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:2&gt; &lt;mtcars:gear&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:11&gt; &lt;mtcars:am&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:7&gt; &lt;mtcars:am&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:15&gt; &lt;mtcars:carb&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:26&gt; &lt;mtcars:gear&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:25&gt; &lt;mtcars:cyl&gt; "8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:7&gt; &lt;mtcars:Model&gt; "Duster 360" .
+&lt;mtcars:17&gt; &lt;mtcars:qsec&gt; "17.42"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:28&gt; &lt;mtcars:mpg&gt; "30.4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:21&gt; &lt;mtcars:vs&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:21&gt; &lt;mtcars:mpg&gt; "21.5"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:11&gt; &lt;mtcars:Model&gt; "Merc 280C" .
+&lt;mtcars:16&gt; &lt;mtcars:am&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:8&gt; &lt;mtcars:wt&gt; "3.19"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:2&gt; &lt;mtcars:qsec&gt; "17.02"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:1&gt; &lt;mtcars:carb&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:24&gt; &lt;mtcars:drat&gt; "3.73"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:4&gt; &lt;mtcars:qsec&gt; "19.44"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:17&gt; &lt;mtcars:drat&gt; "3.23"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:25&gt; &lt;mtcars:drat&gt; "3.08"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:23&gt; &lt;mtcars:vs&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:26&gt; &lt;mtcars:hp&gt; "66"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:6&gt; &lt;mtcars:mpg&gt; "18.1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:2&gt; &lt;mtcars:am&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:19&gt; &lt;mtcars:qsec&gt; "18.52"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:32&gt; &lt;mtcars:wt&gt; "2.78"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:4&gt; &lt;mtcars:Model&gt; "Hornet 4 Drive" .
+&lt;mtcars:8&gt; &lt;mtcars:disp&gt; "146.7"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:29&gt; &lt;mtcars:Model&gt; "Ford Pantera L" .
+&lt;mtcars:14&gt; &lt;mtcars:wt&gt; "3.78"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:31&gt; &lt;mtcars:disp&gt; "301"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:3&gt; &lt;mtcars:cyl&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:10&gt; &lt;mtcars:disp&gt; "167.6"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:30&gt; &lt;mtcars:mpg&gt; "19.7"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:20&gt; &lt;mtcars:carb&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:8&gt; &lt;mtcars:carb&gt; "2"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:28&gt; &lt;mtcars:hp&gt; "113"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:15&gt; &lt;mtcars:vs&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:12&gt; &lt;mtcars:cyl&gt; "8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:6&gt; &lt;mtcars:Model&gt; "Valiant" .
+&lt;mtcars:4&gt; &lt;mtcars:wt&gt; "3.215"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:5&gt; &lt;mtcars:disp&gt; "360"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:21&gt; &lt;mtcars:disp&gt; "120.1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:2&gt; &lt;mtcars:mpg&gt; "21"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:21&gt; &lt;mtcars:am&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:32&gt; &lt;mtcars:carb&gt; "2"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:7&gt; &lt;mtcars:qsec&gt; "15.84"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:13&gt; &lt;mtcars:cyl&gt; "8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:31&gt; &lt;mtcars:am&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:18&gt; &lt;mtcars:qsec&gt; "19.47"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:18&gt; &lt;mtcars:Model&gt; "Fiat 128" .
+&lt;mtcars:21&gt; &lt;mtcars:gear&gt; "3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:21&gt; &lt;mtcars:qsec&gt; "20.01"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:18&gt; &lt;mtcars:vs&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:5&gt; &lt;mtcars:am&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:27&gt; &lt;mtcars:mpg&gt; "26"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:4&gt; &lt;mtcars:disp&gt; "258"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:2&gt; &lt;mtcars:vs&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:5&gt; &lt;mtcars:Model&gt; "Hornet Sportabout" .
+&lt;mtcars:10&gt; &lt;mtcars:wt&gt; "3.44"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:9&gt; &lt;mtcars:hp&gt; "95"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:23&gt; &lt;mtcars:Model&gt; "AMC Javelin" .
+&lt;mtcars:12&gt; &lt;mtcars:disp&gt; "275.8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:31&gt; &lt;mtcars:vs&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:26&gt; &lt;mtcars:disp&gt; "79"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:3&gt; &lt;mtcars:vs&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:10&gt; &lt;mtcars:Model&gt; "Merc 280" .
+&lt;mtcars:17&gt; &lt;mtcars:hp&gt; "230"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:19&gt; &lt;mtcars:carb&gt; "2"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:23&gt; &lt;mtcars:am&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:5&gt; &lt;mtcars:wt&gt; "3.44"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:6&gt; &lt;mtcars:disp&gt; "225"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:1&gt; &lt;mtcars:Model&gt; "Mazda RX4" .
+&lt;mtcars:11&gt; &lt;mtcars:mpg&gt; "17.8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:30&gt; &lt;mtcars:cyl&gt; "6"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:12&gt; &lt;mtcars:hp&gt; "180"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:16&gt; &lt;mtcars:drat&gt; "3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:11&gt; &lt;mtcars:gear&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:6&gt; &lt;mtcars:wt&gt; "3.46"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:4&gt; &lt;mtcars:mpg&gt; "21.4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:24&gt; &lt;mtcars:cyl&gt; "8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:30&gt; &lt;mtcars:carb&gt; "6"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:20&gt; &lt;mtcars:am&gt; "1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:29&gt; &lt;mtcars:vs&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:28&gt; &lt;mtcars:qsec&gt; "16.9"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:25&gt; &lt;mtcars:gear&gt; "3"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:24&gt; &lt;mtcars:vs&gt; "0"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:15&gt; &lt;mtcars:disp&gt; "472"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:17&gt; &lt;mtcars:carb&gt; "4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:22&gt; &lt;mtcars:hp&gt; "150"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+&lt;mtcars:27&gt; &lt;mtcars:wt&gt; "2.14"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+```
+
+---
+class: left, top, inverse
+
+# Triples
+
+---
+class: center, middle, inverse
+background-image: url(img/no-data-lake.jpg)
+
+# Into the Lake: Data Frames
+
+
+
+```r
+triplestore &lt;- rdf()
+
+as_rdf(mtcars, triplestore, "mtcars:")
+as_rdf(iris, triplestore, "iris:")
+```
+
+
+
+
+
+
+---
+class: left, middle, inverse
+background-image: url(img/no-data-lake.jpg)
+
+# Into the Lake: Lists
+
+Example JSON data returned from the [GitHub API](https://api.github.com/users/cboettig/events)
+
+
+```
+[
+  {
+    "id": "7353780009",
+    "type": "CreateEvent",
+    "actor": {
+      "id": 222586,
+      "login": "cboettig",
+      "display_login": "cboettig",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cboettig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/222586?"
+    },
+    "repo": {
+      "id": 124477112,
+      "name": "cboettig/test",
+      "url": "https://api.github.com/repos/cboettig/test"
+    },
+    "payload": {
+      "ref": null,
+      "ref_type": "repository",
+```
+
+
+
+
+---
+class: left, middle, inverse
+background-image: url(img/no-data-lake.jpg)
+
+# Into the Lake: Lists
+
+
+
+```r
+events &lt;- read_json("https://api.github.com/users/cboettig/events")
+```
+
+```r
+as_rdf(events, triplestore, "gh:")
+```
+
+
+---
+class: left, middle
+
+# Schema on read: SPARQL
+
+
+```r
+rdf_query(triplestore,
+'SELECT  ?Model ?mpg ?cyl ?disp  ?hp
+WHERE {
+ ?s &lt;mtcars:Model&gt;  ?Model ;
+    &lt;mtcars:mpg&gt;  ?mpg ;
+    &lt;mtcars:cyl&gt;  ?cyl ; 
+    &lt;mtcars:disp&gt;  ?disp ;
+    &lt;mtcars:hp&gt;  ?hp 
+}')
+```
+
+---
+class: left, middle
+
+# Schema on read: SPARQL
+
+
+```
+# A tibble: 32 x 5
+   Model                 mpg   cyl  disp    hp
+   &lt;chr&gt;               &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;int&gt;
+ 1 Merc 230             22.8     4 141.     95
+ 2 Toyota Corolla       33.9     4  71.1    65
+ 3 Merc 450SL           17.3     8 276.    180
+ 4 Fiat 128             32.4     4  78.7    66
+ 5 Lincoln Continental  10.4     8 460.    215
+ 6 Merc 450SLC          15.2     8 276.    180
+ 7 Fiat X1-9            27.3     4  79.0    66
+ 8 Hornet Sportabout    18.7     8 360.    175
+ 9 Lotus Europa         30.4     4  95.1   113
+10 Valiant              18.1     6 225.    105
+# ... with 22 more rows
+```
+
+
+
+---
+class: left, middle
+
+# Data Rectangling
+
+
+
+```r
+rdf_query(triplestore, 
+'SELECT ?type ?user ?repo ?when
+WHERE {
+?s &lt;gh:type&gt; ?type ;
+   &lt;gh:created_at&gt; ?when ;
+   &lt;gh:repo&gt; ?repo_id ;
+   &lt;gh:actor&gt; ?actor .
+?actor &lt;gh:login&gt; ?user .
+?repo_id &lt;gh:name&gt; ?repo
+}')
+```
+
+
+---
+class: left, middle
+
+# Data Rectangling
+
+
+
+```
+# A tibble: 30 x 4
+   type              user     repo                     when               
+   &lt;chr&gt;             &lt;chr&gt;    &lt;chr&gt;                    &lt;dttm&gt;             
+ 1 PushEvent         cboettig cboettig/noise-phenomena 2018-03-06 05:25:07
+ 2 IssueCommentEvent cboettig rocker-org/shiny         2018-03-08 01:51:57
+ 3 PushEvent         cboettig cboettig/NetGen          2018-03-08 17:34:09
+ 4 PushEvent         cboettig cboettig/labnotebook     2018-03-06 05:27:18
+ 5 IssueCommentEvent cboettig ropensci/jqr             2018-03-07 22:18:46
+ 6 PushEvent         cboettig ropensci/rdflib          2018-03-08 21:37:14
+ 7 PushEvent         cboettig cboettig/noise-phenomena 2018-03-05 22:25:31
+ 8 PushEvent         cboettig cboettig/noise-phenomena 2018-03-06 18:23:51
+ 9 CreateEvent       cboettig cboettig/popdyn          2018-03-09 02:34:21
+10 PushEvent         cboettig cboettig/NetGen          2018-03-08 17:56:38
+# ... with 20 more rows
+```
+
+---
+class: left, middle
+
+# Data Rectangling: Graph Queries
+
+
+
+```r
+df &lt;- rdf_query(triplestore, 
+'SELECT DISTINCT ?property ?value
+WHERE {
+?s &lt;gh:url&gt; "https://api.github.com/repos/cboettig/noise-phenomena" .
+?parent ?p ?s .
+?parent ?property ?value
+}')
+```
+
+---
+class: left, middle
+
+# Data Rectangling: Graph Queries
+
+
+```
+# A tibble: 37 x 2
+   property      value               
+   &lt;chr&gt;         &lt;chr&gt;               
+ 1 gh:created_at 2018-03-05T22:25:08Z
+ 2 gh:payload    _:b231              
+ 3 gh:repo       _:b236              
+ 4 gh:type       PushEvent           
+ 5 gh:id         7334335663          
+ 6 gh:public     true                
+ 7 gh:actor      _:b230              
+ 8 gh:created_at 2018-03-05T22:25:31Z
+ 9 gh:id         7334337582          
+10 gh:payload    _:b225              
+# ... with 27 more rows
+```
+
+
+---
+class: center, middle, inverse
+
+# Potential Issues
+
+- Potential column name or property collisions
+- Dealing with data types (numeric, logical, dates, etc)
+- Potential row name or object id collisions
+
+---
+class: center, middle, inverse
+
+# U say URL
+# I say IRI 
+
+
+---
+class: left, middle, inverse
+
+# Internationalized Resource Identifiers
+
+
+- `https://example.com`
+- `https://schema.org/givenName`
+- `isbn:978-0-387-98140-6`
+- `urn:uuid:0aae8482-93b9-4b22-879e-aa71af0d3fd1`
+
+
+---
+class: center, middle, inverse
+
+# Unique variable/column names
+
+- `https://schema.org/givenName`
+- `https://schema.org/programmingLanguage`
+- `https://schema.org/softwareRequirements`
+
+
+
+---
+class: center, middle, inverse
+
+# Data types
+
+- `http://www.w3.org/2001/XMLSchema#decimal`
+- `http://www.w3.org/2001/XMLSchema#dateTime`
+
+
+---
+class: center, middle, inverse
+
+# Subject IRIs
+
+- `https://example.com`
+- `isbn:978-0-387-98140-6`
+- `doi:10.1007/978-0-387-98141-3`
+- `_:` Blank nodes
+
+---
+class: center, middle, inverse
+
+# Object Types and Resource Nodes
+
+- `https://schema.org/SoftwareSoureCode`
+- `doi:10.1007/978-0-387-98141-3`
+
+
+---
+class: center, middle, inverse
+
+# Practical Issues
+
+- `SQL` -&gt; `dplyr`
+- `SPARQL` -&gt; `???`
+
+
+
+
+---
+class: center, middle, inverse
+
+
+# Explore &amp; Contribute
+
+- &lt;https://github.com/ropensci/rdflib&gt;
+- &lt;https://cran.r-project.org/package=rdflib&gt;
+    </textarea>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
