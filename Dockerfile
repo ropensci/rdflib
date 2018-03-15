@@ -17,9 +17,9 @@ RUN apt-get update && apt-get -y install \
     libjq-dev \ 
     libpq-dev \
     libdb-dev \
-    libodbc1 \
-    libsqlite-dev \
-    libmariadb-dev \
+    libiodbc2-dev \
+    libsqlite3-dev \
+    libmariadbclient-dev \
     librdf-storage-virtuoso 
 
 RUN git clone git://github.com/dajobe/raptor.git && \

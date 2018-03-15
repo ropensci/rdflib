@@ -3,16 +3,27 @@
 library(redland)
 world <- new("World")
 
-## Works if BDB installed when we compile.  (not true on mac binaries from CRAN :/)
+## BDB
 bdb_storage <- new("Storage", world, "hashes", name = "db1", 
                       options = "new='yes',hash-type='bdb',dir='.'")
 model <- new("Model", world = world, storage = bdb_storage, options = "")
 
-## error: sqlite not found
-#sqlite_storage <- new("Storage", world, "sqlite", name = "sqlite1", options = "new='yes'")
-## not found
-#postgres_storage <- new("Storage", world, "postgresql", name = "postgres1", 
-#    options = "new='yes',host='localhost',database='red',user='foo','password='bar'")
+## SQLITE 
+sqlite_storage <- new("Storage", world, "sqlite", name = "sqlite1", options = "new='yes'")
+
+
+## POSTGRES
+## Needs postgres backend running
+postgres_storage <- new("Storage", world, "postgresql", name = "postgres1", 
+    options = "new='yes',host='localhost',database='red',user='foo','password='bar'")
+
+## MYSQL
+## Needs mysql backend running
+
+## VIRTUOSO
+## Needs virtuoso backend running
+
+
 
 ## Works, in memory, serializes to an rdf/xml file called thing.rdf when freed.
 ## Not indexed, so will be slow. Suitable for small models.
