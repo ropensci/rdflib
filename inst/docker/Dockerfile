@@ -1,5 +1,6 @@
-FROM rocker/r-ver:latest
+FROM rocker/tidyverse:latest
 
+## consider removing build deps
 RUN apt-get update && apt-get -y install \
     libxml2-dev \
     libcurl4-openssl-dev \
@@ -20,9 +21,8 @@ RUN apt-get update && apt-get -y install \
     libiodbc2-dev \
     libsqlite3-dev \
     libmariadbclient-dev \
-    librdf-storage-virtuoso 
-
-RUN git clone git://github.com/dajobe/raptor.git && \
+    librdf-storage-virtuoso && \
+    git clone git://github.com/dajobe/raptor.git && \
     cd raptor && \
     ./autogen.sh && \
     make && \
@@ -38,16 +38,11 @@ RUN git clone git://github.com/dajobe/raptor.git && \
     cd librdf && \
     ./autogen.sh && \
     make && \
-    make install
-
-RUN R -e "install.packages('remotes')" && \
+    make install && \
+    R -e "install.packages('remotes')" && \
     R -e "remotes::install_github('ropensci/redland-bindings/R/redland')" && \
     R -e "remotes::install_github('ropensci/rdflib')"
 
-#RUN git clone https://github.com/ropensci/redland-bindings && \
-#    cd redland-bindings/R && \
-#    R CMD build redland && \
-#    R CMD INSTALL redland*.gz
 
 
 
