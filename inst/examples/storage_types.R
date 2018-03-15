@@ -22,7 +22,8 @@ postgres_storage <- new("Storage", world, "postgresql", name = "postgres1",
 
 ## VIRTUOSO
 ## Needs virtuoso backend running
-
+virtuoso_storage <- new("Storage", world, "virtuoso", name = "db1",
+      "dsn='Local Virtuoso',user='demo',password='demo'")
 
 
 ## Works, in memory, serializes to an rdf/xml file called thing.rdf when freed.
