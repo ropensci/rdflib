@@ -34,34 +34,101 @@
 #' @examples
 #' x <- rdf()
 #' 
-rdf <- function(storage = c("memory", "BDB"), path = ".", new_db = FALSE){
+rdf <- function(storage = c("memory", "BDB", "sqlite", 
+                            "postgres", "mysql", "virtuoso"), 
+                path = ".", 
+                new_db = FALSE){
+  
   world <- new("World")
-  
-  
-  ## Handle storage type
-  storage <- match.arg(storage)
-  if(storage == "BDB"){
-    if(rdf_has_bdb()){
-      ## Store in Berkeley DB
-      if(new_db){
-        options <- paste0("new='yes',hash-type='bdb',dir='", path, "'") 
-      } else {
-        options <- paste0("hash-type='bdb',dir='", path, "'") 
-      }
-    } else {
-      warning("BDB driver not found. Falling back on in-memory storage")
-      options <- "hash-type='memory'"
-    }
-  } else { ## Store in memory
-   options <- "hash-type='memory'"
-  }
-  storage <- new("Storage", world, "hashes", name = "rdflib", 
-                 options = options)
-  
-  
-  model <- new("Model", world = world, storage, options = "")
-  structure(list(world = world, model = model, storage = storage),
+  store <- rdf_storage(storage, world, dir = ".", new_db = FALSE)
+  model <- new("Model", world = world, storage = store, options = "")
+  structure(list(world = world, model = model, storage = store),
             class = "rdf")
+}
+
+
+
+
+rdf_storage <- function(storage = c("memory", 
+                                    "BDB", 
+                                    "sqlite", 
+                                    "postgres", 
+                                    "mysql", 
+                                    "virtuoso"),
+                        world = new("World"),
+                        host = NULL,
+                        port = NULL,
+                        user = NULL,
+                        password = NULL,
+                        database = NULL,
+                        charset = NULL,
+                        dir = NULL,
+                        dsn = "Local Virtuoso",
+                        name = "rdflib",
+                        new_db = FALSE,
+                        fallback = TRUE){
+  
+  storage <- match.arg(storage)
+  
+  new <- NULL
+  if(new_db){
+    new <- "yes"
+  }
+  if(is.null(dir)){
+    dir <- "."
+  }
+  
+  options <- options_to_str(
+    switch(storage,
+      memory = list("hash-type" = "memory"),
+         BDB = list(new = new, "hash-type" = "bdb", dir = dir),  
+      sqlite = list(new = new, dir = dir),
+    postgres = list(new = new, host = host, port = port,
+                    database = database, user = user, password = password),
+       mysql = list(new = new, host = host, port = port,
+                    database = database, user = user, password = password),
+    virtuoso = list(dsn = dsn, user = user, password = password, 
+                    database = database, host = host, charset = charset),
+    list()
+    ))
+  
+ store <- switch(storage,
+    memory = new("Storage", world, "hashes", name = name, options = options),
+    BDB = new("Storage", world, "hashes", name = name, options = options),
+    sqlite = new("Storage", world, "sqlite", name = name, options = options),
+    postgres = new("Storage", world, "postgresql", name = name, options = options),
+    mysql =  new("Storage", world, "mysql", name = name, options = options),
+    virtuoso =  new("Storage", world, "virtuoso", name = name, options = options)
+  ) 
+  
+ continue <- !(utils::capture.output(
+   base::print.default(
+     store@librdf_storage@ref)) == 
+     "<pointer: 0x0>")
+ 
+  if(!continue){
+    if(fallback){
+       warning(paste(storage, "driver not found. Falling back on in-memory storage"))
+       redland::freeStorage(store)
+       store <- new("Storage", world)
+     } else {
+       stop(paste(storage, "not found"))
+     }
+  }
+ 
+  store
+}
+
+
+compact <- function(l){ Filter(Negate(is.null), l)}
+options_to_str <- function(x){
+  x <- compact(x)
+  n <- names(x)
+  out <- character(0)
+  for(i in seq_along(x)){
+    out <- paste0(c(out, paste0(n[[i]], "=", "'", x[[i]], "'")), collapse=",")
+  }
+  out
 }
 
 

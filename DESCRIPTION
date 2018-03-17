@@ -1,10 +1,16 @@
 Package: rdflib
 Title: Tools to Manipulate and Query Semantic Data
-Version: 0.1.0
-Authors@R: person("Carl", "Boettiger", 
+Version: 0.1.1
+Authors@R: c(person("Carl", "Boettiger", 
                   email = "cboettig@gmail.com", 
                   role = c("aut", "cre", "cph"),
-                  comment=c(ORCID = "0000-0002-1642-628X"))
+                  comment=c(ORCID = "0000-0002-1642-628X")),
+             person("Bryce", "Mecum", 
+                  role = "rev",
+                  comment=c(ORCID = "0000-0002-0381-3766")),
+             person("Anna", "Krystalli", 
+                  role = "rev",
+                  comment=c(ORCID = "0000-0002-2378-4915")))                  
 Description: The Resource Description Framework, or 'RDF' is a widely used
              data representation model that forms the cornerstone of the 
              Semantic Web. 'RDF' represents data as a graph rather than 

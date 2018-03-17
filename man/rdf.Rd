@@ -4,7 +4,8 @@
 \alias{rdf}
 \title{Initialize an \code{rdf} Object}
 \usage{
-rdf(storage = c("memory", "BDB"), path = ".", new_db = FALSE)
+rdf(storage = c("memory", "BDB", "sqlite", "postgres", "mysql", "virtuoso"),
+  path = ".", new_db = FALSE)
 }
 \arguments{
 \item{storage}{Use in-memory hashes ("memory"), or disk based storage ("BDB")?}
