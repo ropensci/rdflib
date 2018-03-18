@@ -117,10 +117,7 @@ rdf_storage <- function(storage = c("memory",
     virtuoso =  new("Storage", world, "virtuoso", name = name, options = options)
   ) 
   
-  continue <- !(utils::capture.output(
-   base::print.default(
-     store@librdf_storage@ref)) == 
-     "<pointer: 0x0>")
+  continue <- !is_null_pointer(store)
   
   if(check_only){
     freeStorage(store)
@@ -153,7 +150,12 @@ options_to_str <- function(x){
   out
 }
 
-
+is_null_pointer <- function(x){
+  utils::capture.output(
+    base::print.default(
+      x@librdf_storage@ref)) == 
+  "<pointer: 0x0>"
+}
 
 
 #' rdflib: Tools to Manipulate and Query Semantic Data
