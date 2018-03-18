@@ -8,6 +8,8 @@ Status](https://img.shields.io/codecov/c/github/ropensci/rdflib/master.svg)](htt
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/rdflib)](https://cran.r-project.org/package=rdflib)
 [![DOI](https://zenodo.org/badge/100521776.svg)](https://zenodo.org/badge/latestdoi/100521776)
 [![](http://badges.ropensci.org/169_status.svg)](https://github.com/ropensci/onboarding/issues/169)
+[![CRAN RStudio mirror
+downloads](http://cranlogs.r-pkg.org/badges/rdflib)](https://CRAN.R-project.org/package=rdflib)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -115,8 +117,9 @@ For more information on the JSON-LD RDF API, see
 Please also cite the underlying `redland` library when citing `rdflib`
 
 Boettiger C (2018). *rdflib: A high level wrapper around the redland
-package for common rdf applications*. \<URL:
-<https://doi.org/10.5281/zenodo.1098478>.\>.
+package for common rdf applications*. doi: 10.5281/zenodo.1098478 (URL:
+<http://doi.org/10.5281/zenodo.1098478>), \<URL:
+<https://doi.org/10.5281/zenodo.1098478>\>.
 
 Jones M, Slaughter P, Ooms J, Boettiger C and Chamberlain S (2016).
 *redland: RDF Library Bindings in R*. doi: 10.5063/F1VM496B (URL:

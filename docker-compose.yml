@@ -9,7 +9,7 @@ services:
       environment:
           - POSTGRES_PASSWORD=rdflib
   rdf:
-    image: rdf
+    image: ropensci/rdflib
     links: 
       - postgres
       - mariadb

@@ -1,8 +1,74 @@
 testthat::context("RDF Storage")
 
-rdf_storage()
-rdf_storage("BDB")
-rdf_storage("sqlite")
+testthat::test_that("SQLite Backend", {
+  testthat::skip_if_not(rdf_storage("sqlite", new_db = TRUE, check_only = TRUE))
+  
+  testthat::expect_silent(rdf <- rdf(storage="sqlite", new_db = TRUE))
+  
+  rdf_add(rdf, "", "dc:name", "bob")
+  expect_match(format(rdf, "nquads"), "bob")
+  testthat::expect_is(rdf, "rdf")
+  rdf_free(rdf)
+  
+})
+
+
+testthat::test_that("Postgres Backend", {
+  testthat::skip_if_not(rdf_storage("postgres", user="postgres",
+                                    password="rdflib", new_db = TRUE,
+                                    check_only = TRUE))
+  
+  testthat::expect_silent(
+    rdf <- rdf(storage="postgres", host = "postgres", 
+               user="postgres", password="rdflib", new_db = TRUE)
+  )
+  
+  rdf_add(rdf, "", "dc:name", "bob")
+  expect_match(format(rdf, "nquads"), "bob")
+  testthat::expect_is(rdf, "rdf")
+  rdf_free(rdf)
+  
+})
+
+
+## FIXME may need to create the database on mysql as well.
+testthat::test_that("MySQL Backend", {
+  testthat::skip_if_not(rdf_storage("mysql", host = "mysql", 
+                                    user="root", password="rdflib",
+                                    new_db=TRUE, check_only = TRUE ))
+  
+  testthat::expect_silent(
+    rdf <- rdf(storage="mysql", host = "mysql", 
+               user="root", password="rdflib", 
+               new_db = TRUE)
+  )
+  
+  rdf_add(rdf, "", "dc:name", "bob")
+  expect_match(format(rdf, "nquads"), "bob")
+  testthat::expect_is(rdf, "rdf")
+  rdf_free(rdf)
+  
+})
+
+
+testthat::test_that("Virtuoso Backend", {
+  testthat::skip_if_not(rdf_storage("virtuoso", 
+                                    user="demo", 
+                                    password="demo",
+                                    new_db=TRUE,
+                                    check_only = TRUE))
+  
+  testthat::expect_silent(rdf <- 
+                            rdf(storage="mysql", 
+                                user="demo", password="demo", 
+                                new_db = TRUE))
+  
+  rdf_add(rdf, "", "dc:name", "bob")
+  expect_match(format(rdf, "nquads"), "bob")
+  testthat::expect_is(rdf, "rdf")
+  rdf_free(rdf)
+  
+})
 
 
 
@@ -20,7 +86,6 @@ testthat::test_that("We can use BDB storage", {
   
   # not sure why this is now failing on appveyor
   testthat::skip_on_os("windows")
-  
   
   testthat::expect_silent(rdf <- rdf(storage="BDB", new_db = TRUE))
   

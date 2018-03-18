@@ -5,16 +5,36 @@
 \title{Initialize an \code{rdf} Object}
 \usage{
 rdf(storage = c("memory", "BDB", "sqlite", "postgres", "mysql", "virtuoso"),
-  path = ".", new_db = FALSE)
+  host = NULL, port = NULL, user = NULL, password = NULL,
+  database = NULL, charset = NULL, dir = NULL, dsn = "Local Virtuoso",
+  name = "rdflib", new_db = FALSE, fallback = TRUE)
 }
 \arguments{
-\item{storage}{Use in-memory hashes ("memory"), or disk based storage ("BDB")?}
+\item{storage}{Storage backend to use; see details}
 
-\item{path}{where should local database to store RDF triples be created, if
-configured for disk-based storage; see details.}
+\item{host}{host address for mysql, postgres, or viruoso storage}
 
-\item{new_db}{logical, default FALSE. should we create a new database on disk
-or attempt to connect to an existing database (at the path specified)?}
+\item{port}{port for mysql (mysql storage defaults to mysql standard port, 3306)
+or postgres (postgres storage defaults to postgres standard port, 4321)}
+
+\item{user}{user name for postgres, mysql, or virtuoso}
+
+\item{password}{password for postgres, mysql, or vituoso}
+
+\item{database}{name of the database to be created/used}
+
+\item{charset}{charset for virtuoso database, if desired}
+
+\item{dir}{directory of where to write sqlite or berkeley database.}
+
+\item{dsn}{Virtuoso dsn, either "Local Virtuoso" or "Remote Virtuoso"}
+
+\item{name}{name for the storage object created. Default is usually fine.}
+
+\item{new_db}{logical, default FALSE. Create new database or connect to existing?}
+
+\item{fallback}{logical, default TRUE. If requested storage system cannot initialize,
+should \code{rdf()} fall back on memory (default) or throw an error (fallback=FALSE)?}
 }
 \value{
 an rdf object
@@ -31,16 +51,9 @@ and a \code{storage} object, indicating how these statements are stored.
 
 \code{rdflib} defaults to an in-memory hash-based storage structure.
 which should be best for most use cases. For very large triplestores,
-disk-based storage will be necessary. set \code{storage="BDB"} to use disk-based
-storage. Specify a path with the optional \code{path} argument, default uses
-the current working directory. Disk-based storage requires redland package
-to be installed from source with support for the Berkeley DB
-(libdb-dev on Ubuntu, berkeley-db on homebrew), otherwise this will
-fall back to in-memory storage with a warning. Check for working BDB
-support with the function \code{rdf_has_bdb()}.
-
-Typical use will be simply to initialize a container to which
-the user would manually add triples using \code{\link{rdf_add}}.
+disk-based storage will be necessary. Enabling external storage devices
+will require additional libraries and custom compiling. See the storage
+vignette for details.
 }
 \examples{
 x <- rdf()

@@ -13,5 +13,5 @@
 ^cran-comments\.md$
 ^inst/notebook/img$
 ^slides$
-Dockerfile
-
+^.circleci$
+^docker-compose\.yml$

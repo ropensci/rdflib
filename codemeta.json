@@ -10,7 +10,7 @@
   "codeRepository": "https://github.com/ropensci/rdflib",
   "issueTracker": "https://github.com/ropensci/rdflib/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -312,7 +312,7 @@
   ],
   "contIntegration": "https://travis-ci.org/ropensci/rdflib",
   "readme": "https://github.com/ropensci/rdflib/blob/master/README.md",
-  "fileSize": "48.904KB",
+  "fileSize": "59.704KB",
   "releaseNotes": "https://github.com/ropensci/rdflib/blob/master/NEWS.md",
   "citation": [
     {
@@ -327,7 +327,10 @@
         }
       ],
       "name": "rdflib: A high level wrapper around the redland package for common rdf applications",
-      "url": "http://doi.org/10.5281/zenodo.1098478."
+      "identifier": "10.5281/zenodo.1098478",
+      "url": "https://doi.org/10.5281/zenodo.1098478",
+      "@id": "https://doi.org/10.5281/zenodo.1098478",
+      "sameAs": "https://doi.org/10.5281/zenodo.1098478"
     }
   ]
 }

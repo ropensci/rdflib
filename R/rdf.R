@@ -1,10 +1,19 @@
 #' Initialize an `rdf` Object
 #'
-#'@param storage Use in-memory hashes ("memory"), or disk based storage ("BDB")? 
-#' @param path where should local database to store RDF triples be created, if
-#' configured for disk-based storage; see details.
-#' @param new_db logical, default FALSE. should we create a new database on disk
-#' or attempt to connect to an existing database (at the path specified)?
+#' @param storage Storage backend to use; see details
+#' @param host host address for mysql, postgres, or viruoso storage
+#' @param port port for mysql (mysql storage defaults to mysql standard port, 3306)
+#' or postgres (postgres storage defaults to postgres standard port, 4321)
+#' @param user user name for postgres, mysql, or virtuoso
+#' @param password password for postgres, mysql, or vituoso
+#' @param database name of the database to be created/used
+#' @param charset charset for virtuoso database, if desired
+#' @param dir directory of where to write sqlite or berkeley database.
+#' @param dsn Virtuoso dsn, either "Local Virtuoso" or "Remote Virtuoso"
+#' @param name name for the storage object created. Default is usually fine.  
+#' @param new_db logical, default FALSE. Create new database or connect to existing?
+#' @param fallback logical, default TRUE. If requested storage system cannot initialize,
+#' should `rdf()` fall back on memory (default) or throw an error (fallback=FALSE)?
 #' @return an rdf object
 #' @details an rdf Object is a list of class 'rdf', consisting of
 #' three pointers to external C objects managed by the redland library.
@@ -14,17 +23,9 @@
 #' 
 #' `rdflib` defaults to an in-memory hash-based storage structure. 
 #' which should be best for most use cases. For very large triplestores,
-#' disk-based storage will be necessary. set `storage="BDB"` to use disk-based
-#' storage. Specify a path with the optional `path` argument, default uses
-#' the current working directory. Disk-based storage requires redland package
-#' to be installed from source with support for the Berkeley DB 
-#' (libdb-dev on Ubuntu, berkeley-db on homebrew), otherwise this will
-#' fall back to in-memory storage with a warning. Check for working BDB
-#' support with the function `rdf_has_bdb()`.  
-#' 
-#' 
-#' Typical use will be simply to initialize a container to which
-#' the user would manually add triples using \code{\link{rdf_add}}.
+#' disk-based storage will be necessary. Enabling external storage devices
+#' will require additional libraries and custom compiling. See the storage
+#' vignette for details.  
 #'
 #' @importClassesFrom redland World Model Storage
 #' @importMethodsFrom redland freeWorld freeModel freeStorage
@@ -36,8 +37,17 @@
 #' 
 rdf <- function(storage = c("memory", "BDB", "sqlite", 
                             "postgres", "mysql", "virtuoso"), 
-                path = ".", 
-                new_db = FALSE){
+                host = NULL,
+                port = NULL,
+                user = NULL,
+                password = NULL,
+                database = NULL,
+                charset = NULL,
+                dir = NULL,
+                dsn = "Local Virtuoso",
+                name = "rdflib",
+                new_db = FALSE,
+                fallback = TRUE){
   
   world <- new("World")
   store <- rdf_storage(storage, world, dir = ".", new_db = FALSE)
@@ -45,6 +55,8 @@ rdf <- function(storage = c("memory", "BDB", "sqlite",
   structure(list(world = world, model = model, storage = store),
             class = "rdf")
 }
+
+
 
 
 
@@ -66,7 +78,8 @@ rdf_storage <- function(storage = c("memory",
                         dsn = "Local Virtuoso",
                         name = "rdflib",
                         new_db = FALSE,
-                        fallback = TRUE){
+                        fallback = TRUE,
+                        check_only = FALSE){
   
   storage <- match.arg(storage)
   
@@ -92,7 +105,7 @@ rdf_storage <- function(storage = c("memory",
     list()
     ))
   
- store <- switch(storage,
+  store <- switch(storage,
     memory = new("Storage", world, "hashes", name = name, options = options),
     BDB = new("Storage", world, "hashes", name = name, options = options),
     sqlite = new("Storage", world, "sqlite", name = name, options = options),
@@ -101,11 +114,15 @@ rdf_storage <- function(storage = c("memory",
     virtuoso =  new("Storage", world, "virtuoso", name = name, options = options)
   ) 
   
- continue <- !(utils::capture.output(
+  continue <- !(utils::capture.output(
    base::print.default(
      store@librdf_storage@ref)) == 
      "<pointer: 0x0>")
- 
+  
+  if(check_only){
+    return(continue)
+  }
+  
   if(!continue){
     if(fallback){
        warning(paste(storage, "driver not found. Falling back on in-memory storage"))
