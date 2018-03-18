@@ -1,4 +1,4 @@
-FROM rocker/tidyverse:latest
+FROM rocker/r-ver:latest
 
 ## consider removing build deps
 RUN apt-get update && apt-get -y install \
