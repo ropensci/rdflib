@@ -41,7 +41,7 @@ RUN apt-get update && apt-get -y install \
     make install && \
     R -e "install.packages('remotes')" && \
     R -e "remotes::install_github('ropensci/redland-bindings/R/redland')" && \
-    R -e "remotes::install_github('ropensci/rdflib')"
+    R -e "remotes::install_github('ropensci/rdflib', dep=TRUE)"
 
 
 
