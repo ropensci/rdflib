@@ -1,12 +1,15 @@
 testthat::context("RDF Storage")
 
 testthat::test_that("SQLite Backend", {
+  
+  testthat::skip_on_travis()
+  
   testthat::skip_if_not(rdf_storage("sqlite", new_db = TRUE, check_only = TRUE))
   
   testthat::expect_silent(rdf <- rdf(storage="sqlite", new_db = TRUE))
   
   rdf_add(rdf, "", "dc:name", "bob")
-  expect_match(format(rdf, "nquads"), "bob")
+  testthat::expect_match(format(rdf, "nquads"), "bob")
   testthat::expect_is(rdf, "rdf")
   rdf_free(rdf)
   
@@ -14,6 +17,9 @@ testthat::test_that("SQLite Backend", {
 
 
 testthat::test_that("Postgres Backend", {
+  
+  testthat::skip_on_travis()
+  
   testthat::skip_if_not(rdf_storage("postgres", user="postgres",
                                     password="rdflib", new_db = TRUE,
                                     check_only = TRUE))
@@ -24,7 +30,7 @@ testthat::test_that("Postgres Backend", {
   )
   
   rdf_add(rdf, "", "dc:name", "bob")
-  expect_match(format(rdf, "nquads"), "bob")
+  testthat::expect_match(format(rdf, "nquads"), "bob")
   testthat::expect_is(rdf, "rdf")
   rdf_free(rdf)
   
@@ -33,6 +39,10 @@ testthat::test_that("Postgres Backend", {
 
 ## FIXME may need to create the database on mysql as well.
 testthat::test_that("MySQL Backend", {
+  
+  testthat::skip_on_travis()
+  
+  
   testthat::skip_if_not(rdf_storage("mysql", host = "mysql", 
                                     user="root", password="rdflib",
                                     new_db=TRUE, check_only = TRUE ))
@@ -52,6 +62,10 @@ testthat::test_that("MySQL Backend", {
 
 
 testthat::test_that("Virtuoso Backend", {
+  
+  testthat::skip_on_travis()
+  
+  
   testthat::skip_if_not(rdf_storage("virtuoso", 
                                     user="demo", 
                                     password="demo",

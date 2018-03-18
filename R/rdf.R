@@ -50,7 +50,8 @@ rdf <- function(storage = c("memory", "BDB", "sqlite",
                 fallback = TRUE){
   
   world <- new("World")
-  store <- rdf_storage(storage, world, dir = ".", new_db = FALSE)
+  store <- rdf_storage(storage, world, host, port, user, password, 
+                       database, charset, dir, dsn, name, new_db, fallback)
   model <- new("Model", world = world, storage = store, options = "")
   structure(list(world = world, model = model, storage = store),
             class = "rdf")
@@ -67,7 +68,7 @@ rdf_storage <- function(storage = c("memory",
                                     "postgres", 
                                     "mysql", 
                                     "virtuoso"),
-                        world = new("World"),
+                        world = NULL,
                         host = NULL,
                         port = NULL,
                         user = NULL,
@@ -80,7 +81,9 @@ rdf_storage <- function(storage = c("memory",
                         new_db = FALSE,
                         fallback = TRUE,
                         check_only = FALSE){
-  
+  if(is.null(world)){
+    world <- new("World")
+  }
   storage <- match.arg(storage)
   
   new <- NULL
@@ -120,6 +123,8 @@ rdf_storage <- function(storage = c("memory",
      "<pointer: 0x0>")
   
   if(check_only){
+    freeStorage(store)
+    freeWorld(world)
     return(continue)
   }
   
