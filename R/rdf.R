@@ -150,11 +150,11 @@ options_to_str <- function(x){
   out
 }
 
+#' @importFrom redland is.null.externalptr
 is_null_pointer <- function(x){
-  utils::capture.output(
-    base::print.default(
-      x@librdf_storage@ref)) == 
-  "<pointer: 0x0>"
+  redland::is.null.externalptr(x@librdf_storage@ref)
+#  utils::capture.output(base::print.default(x@librdf_storage@ref)) == 
+#  "<pointer: 0x0>"
 }
 
 

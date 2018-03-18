@@ -8,8 +8,11 @@ services:
       image: postgres
       environment:
           - POSTGRES_PASSWORD=rdflib
-  rdf:
-    image: ropensci/rdflib
+  rdflib:
+    image: ropensci/rdflib:cli
+    volumes: 
+      - .:/data
+    working_dir: /data
     links: 
       - postgres
       - mariadb

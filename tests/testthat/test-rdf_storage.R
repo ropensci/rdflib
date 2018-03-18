@@ -1,17 +1,69 @@
 testthat::context("RDF Storage")
 
+library(redland)
+
+testthat::test_that("BDB, redland-level",{
+  
+  world <- new("World")
+  store <- new("Storage", world, "hashes", name = "db1", 
+                     options = "new='yes',hash-type='bdb',dir='.'")
+  
+  testthat::skip_if(is_null_pointer(store))
+  testthat::expect_true(TRUE)
+  redland::freeStorage(store)
+  redland::freeWorld(world)
+  
+  })
+  
+testthat::test_that("SQLite, redland-level",{
+  world <- new("World")
+  store <- new("Storage", world, "sqlite", name = "sqlite1", options = "new='yes'")
+  testthat::skip_if(is_null_pointer(store))
+  testthat::expect_true(TRUE)
+  redland::freeStorage(store)
+  redland::freeWorld(world)
+  
+})
+
+testthat::test_that("Postgres, redland-level",{
+  world <- new("World")
+  store <- new("Storage", world, "postgresql", name = "postgres1", 
+    options = "new='yes',host='postgres',user='postgres','password='rdflib'")
+  testthat::skip_if(is_null_pointer(store))
+  testthat::expect_true(TRUE)
+  redland::freeStorage(store)
+  redland::freeWorld(world)
+  
+})
+
+testthat::test_that("Virtuoso, redland-level",{
+  world <- new("World")
+  store <- new("Storage", world, "virtuoso", name = "rdflib",
+                          "new='yes',dsn='Local Virtuoso',user='demo',password='demo'")
+  testthat::skip_if(is_null_pointer(store))
+  testthat::expect_true(TRUE)
+  redland::freeStorage(store)
+  redland::freeWorld(world)
+})
+
+
+#  store <- rdf_storage("sqlite", world = world, new_db = TRUE, check_only = TRUE)
+#  store <- rdf_storage("sqlite", new_db = TRUE, check_only = TRUE)
+#  store <- rdf("sqlite", new_db = TRUE)
+
+
 testthat::test_that("SQLite Backend", {
   
   testthat::skip_on_travis()
   
   testthat::skip_if_not(rdf_storage("sqlite", new_db = TRUE, check_only = TRUE))
   
-  testthat::expect_silent(rdf <- rdf(storage="sqlite", new_db = TRUE))
+  testthat::expect_silent(r <- rdf(storage="sqlite", new_db = TRUE))
   
-  rdf_add(rdf, "", "dc:name", "bob")
-  testthat::expect_match(format(rdf, "nquads"), "bob")
-  testthat::expect_is(rdf, "rdf")
-  rdf_free(rdf)
+  rdf_add(r, "", "dc:name", "bob")
+  testthat::expect_match(format(r, "nquads"), "bob")
+  testthat::expect_is(r, "rdf")
+  rdf_free(r)
   
 })
 
@@ -72,15 +124,15 @@ testthat::test_that("Virtuoso Backend", {
                                     new_db=TRUE,
                                     check_only = TRUE))
   
-  testthat::expect_silent(rdf <- 
-                            rdf(storage="mysql", 
+  testthat::expect_silent(r <- 
+                            rdf(storage="virtuoso", 
                                 user="demo", password="demo", 
                                 new_db = TRUE))
   
-  rdf_add(rdf, "", "dc:name", "bob")
-  expect_match(format(rdf, "nquads"), "bob")
-  testthat::expect_is(rdf, "rdf")
-  rdf_free(rdf)
+  rdf_add(r, "", "dc:name", "bob")
+  expect_match(format(r, "nquads"), "bob")
+  testthat::expect_is(r, "rdf")
+  rdf_free(r)
   
 })
 

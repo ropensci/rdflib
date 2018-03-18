@@ -15,7 +15,7 @@ sqlite_storage <- new("Storage", world, "sqlite", name = "sqlite1", options = "n
 ## POSTGRES
 ## Needs postgres backend running
 postgres_storage <- new("Storage", world, "postgresql", name = "postgres1", 
-    options = "new='yes',host='postgres',user='postgres','password='rflib'")
+    options = "new='yes',host='postgres',user='postgres','password='rdflib'")
 
 ## MYSQL
 ## Needs mysql backend running
