@@ -58,15 +58,20 @@ testthat::test_that("MySQL Backend", {
 testthat::test_that("Virtuoso Backend", {
   testthat::skip("Virtuoso not tested")
   testthat::skip_on_travis()
-  ## FIXME Can pass even when database not present
-  testthat::skip_if_not(rdf_storage("virtuoso", 
+  ## FIXME Thiss skip check will pass even when database not present
+  testthat::skip_if_not(rdf_storage("virtuoso",
+                                    host="virtuoso",
                                     user="demo", 
-                                    password="demo",
+                                    password="rdflib",
                                     new_db=TRUE,
                                     check_only = TRUE))
+  
+  ## Fails to connect: librdf error - Virtuoso SQLConnect() failed
+  ## [IM002] [iODBC][Driver Manager]Data source name not found and no default driver specified.
+  ## Driver could not be loaded
   testthat::expect_silent(
-    r <- rdf(storage="virtuoso", user="demo", 
-             password="demo",new_db = TRUE)
+    r <- rdf(storage="virtuoso", host = "virtuoso", user="demo", 
+             password="rdflib",new_db = TRUE)
     )
   rdf_add(r, "", "dc:name", "bob")
   expect_match(format(r, "nquads"), "bob")
