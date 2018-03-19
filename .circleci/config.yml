@@ -4,4 +4,5 @@ jobs:
     machine: true
     steps:
       - checkout
-      - run: docker-compose run rdflib R -e 'x <- devtools::check(); testthat::expect_length(x$errors,0); testthat::expect_length(x$warnings,0))'
+      - run: docker-compose run rdflib R -e 'testthat::test_file("tests/testthat/test-rdf_storage.R")'
+#      - run: docker-compose run rdflib R -e 'x <- devtools::check(); testthat::expect_length(x$errors,0); testthat::expect_length(x$warnings,0))'
