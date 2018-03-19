@@ -1,22 +1,32 @@
 version: '3'
 services:
+
   mariadb:
       image: mariadb
       environment:
           - MYSQL_ROOT_PASSWORD=rdflib
+
   postgres:
       image: postgres
       environment:
           - POSTGRES_PASSWORD=rdflib
+
+  virtuoso:
+    image: tenforce/virtuoso:1.3.1-virtuoso7.2.2
+    environment:
+      DBA_PASSWORD: "rdflib"
+      SPARQL_UPDATE: "true"
+      DEFAULT_GRAPH: "http://www.example.com/my-graph"
+    volumes:
+      - ./data/virtuoso:/data
+
   rdflib:
     image: ropensci/rdflib
-    volumes: 
+    volumes:
       - .:/data
     working_dir: /data
-    links: 
+    links:
       - postgres
       - mariadb
-      
-
-
+      - virtuoso
 
