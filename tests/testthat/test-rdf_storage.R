@@ -34,16 +34,17 @@ testthat::test_that("Postgres Backend", {
 })
 
 
-## FIXME may need to create the database on mysql as well.
+## Note: `mysql` is the name default database created by mariadb
 testthat::test_that("MySQL Backend", {
-  testthat::skip("MySQL not tested")
   testthat::skip_on_travis()
   testthat::skip_if_not(rdf_storage("mysql", host = "mariadb", 
                                     user="root", password="rdflib",
+                                    database = "mysql",
                                     new_db=TRUE, check_only = TRUE ))
   testthat::expect_silent(
-    rdf <- rdf(storage="mysql", host = "mysql", 
+    rdf <- rdf(storage="mysql", host = "mariadb", 
                user="root", password="rdflib", 
+               database = "mysql",
                new_db = TRUE)
   )
   rdf_add(rdf, "", "dc:name", "bob")
