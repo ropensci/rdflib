@@ -18,15 +18,17 @@ services:
       SPARQL_UPDATE: "true"
       DEFAULT_GRAPH: "http://www.example.com/my-graph"
     volumes:
-      - ./data/virtuoso:/data
+      - virtuoso_volume:/data
 
   rdflib:
     image: ropensci/rdflib
     volumes:
       - .:/data
     working_dir: /data
-    links:
+    depends_on:
       - postgres
       - mariadb
       - virtuoso
 
+volumes:
+  virtuoso_volume:
