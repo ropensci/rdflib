@@ -21,6 +21,7 @@ testthat::test_that("we can parse (in rdfxml)
                       roundtrip <- rdf_parse(out, "nquads")
                       testthat::expect_is(roundtrip, "rdf")
                       
+                      rdf_free(roundtrip)
                       rdf_free(rdf)
                       })
 
@@ -49,6 +50,7 @@ testthat::test_that("we can parse and serialize json-ld", {
   rdf_serialize(rdf, "out.jsonld")
   unlink("out.json")
   unlink("out.jsonld")
+  rdf_free(roundtrip)
   rdf_free(rdf)
   
 })
@@ -59,6 +61,7 @@ testthat::test_that("we can parse and serialize nquads", {
   roundtrip <- rdf_parse("out.nquads")
   testthat::expect_is(roundtrip, "rdf")
   unlink("nquads")
+  rdf_free(roundtrip)
   rdf_free(rdf)
   
 })
@@ -70,8 +73,9 @@ testthat::test_that("we can parse and serialize ntriples", {
   unlink("out.nt")
   rdf_serialize(rdf, "out.ntriples")
   unlink("out.ntriples")
+
+  rdf_free(roundtrip)
   rdf_free(rdf)
-  
 })
 testthat::test_that("we can parse and serialize tutle", {
   rdf <- rdf_parse(doc)
@@ -82,6 +86,7 @@ testthat::test_that("we can parse and serialize tutle", {
   rdf_serialize(rdf, "out.turtle")
   unlink("out.turtle")
   
+  rdf_free(roundtrip)
   rdf_free(rdf)
 })
 testthat::test_that("we can parse and serialize rdfxml", {
@@ -93,6 +98,8 @@ testthat::test_that("we can parse and serialize rdfxml", {
   unlink("out.rdf")
   rdf_serialize(rdf, "out.xml")
   unlink("out.xml")
+  
+  rdf_free(roundtrip)
   rdf_free(rdf)
 })
 

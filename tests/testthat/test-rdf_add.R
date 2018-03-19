@@ -8,6 +8,7 @@ testthat::test_that("we can print.rdf UTF-8", {
           object="Maëlle Salmon")
   
   testthat::expect_output(print(r), "Maëlle")
+  rdf_free(r)
 })
 
 
