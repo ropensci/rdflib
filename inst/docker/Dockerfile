@@ -10,13 +10,13 @@ RUN apt-get update && apt-get -y install \
     libtool \
     gtk-doc-tools \
     bison \
-    flex \ 
+    flex \
     libgmp-dev  \
     libmhash-dev \
     libgcrypt20-dev \
     libpcre3-dev \
     libv8-dev \
-    libjq-dev \ 
+    libjq-dev \
     libpq-dev \
     libdb-dev \
     libiodbc2-dev \

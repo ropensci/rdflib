@@ -9,7 +9,7 @@ services:
       environment:
           - POSTGRES_PASSWORD=rdflib
   rdflib:
-    image: ropensci/rdflib:cli
+    image: ropensci/rdflib
     volumes: 
       - .:/data
     working_dir: /data
