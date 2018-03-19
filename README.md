@@ -10,6 +10,10 @@ Status](https://img.shields.io/codecov/c/github/ropensci/rdflib/master.svg)](htt
 [![](http://badges.ropensci.org/169_status.svg)](https://github.com/ropensci/onboarding/issues/169)
 [![CRAN RStudio mirror
 downloads](http://cranlogs.r-pkg.org/badges/rdflib)](https://CRAN.R-project.org/package=rdflib)
+[![CircleCI](https://circleci.com/gh/ropensci/rdflib.svg?style=svg)](https://circleci.com/gh/ropensci/rdflib)
+[![Project Status: Active – The project has reached a stable, usable
+state and is being actively
+developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
