@@ -312,7 +312,7 @@
   ],
   "contIntegration": "https://travis-ci.org/ropensci/rdflib",
   "readme": "https://github.com/ropensci/rdflib/blob/master/README.md",
-  "fileSize": "62.033KB",
+  "fileSize": "62.334KB",
   "releaseNotes": "https://github.com/ropensci/rdflib/blob/master/NEWS.md",
   "citation": [
     {
@@ -332,5 +332,6 @@
       "@id": "https://doi.org/10.5281/zenodo.1098478",
       "sameAs": "https://doi.org/10.5281/zenodo.1098478"
     }
-  ]
+  ],
+  "developmentStatus": "[![Project Status: Active – The project has reached a stable, usable"
 }
