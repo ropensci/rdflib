@@ -18,13 +18,21 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Check for BDB support — rdf_has_bdb" />
+
+<meta property="og:description" content="Detect whether Berkeley Database for disk-based storage of RDF graphs
+is available.  Disk-based storage requires redland package
+to be installed from source with support for the Berkeley DB
+(libdb-dev on Ubuntu, berkeley-db on homebrew), otherwise rdf() will
+fall back to in-memory storage with a warning." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -73,10 +81,13 @@
     <li>
       <a href="../articles/rdf_intro.html">A tidyverse lover's intro to RDF</a>
     </li>
+    <li>
+      <a href="../articles/storage.html">Working with Database Storage Backends in `rdflib`</a>
+    </li>
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -99,6 +110,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check for BDB support</h1>
+    <small>Source: <a href='https:/github.com/ropensci/rdflib/blob/master/R/rdf_has_bdb.R'><code>R/rdf_has_bdb.R</code></a></small>
     </div>
 
     
@@ -145,3 +157,4 @@ fall back to in-memory storage with a warning.</p>
 
   </body>
 </html>
+

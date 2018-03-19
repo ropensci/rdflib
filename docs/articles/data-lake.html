@@ -8,8 +8,11 @@
 <title>The Data Lake and Schema On Read • rdflib</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><meta property="og:title" content="The Data Lake and Schema On Read">
+<meta property="og:description" content="">
+<meta name="twitter:card" content="summary">
+<!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
@@ -50,10 +53,13 @@
     <li>
       <a href="../articles/rdf_intro.html">A tidyverse lover's intro to RDF</a>
     </li>
+    <li>
+      <a href="../articles/storage.html">Working with Database Storage Backends in `rdflib`</a>
+    </li>
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -78,8 +84,11 @@
       <h1>The Data Lake and Schema On Read</h1>
                         <h4 class="author">Carl Boettiger</h4>
             
-            <h4 class="date">2018-02-20</h4>
-          </div>
+            <h4 class="date">2018-03-18</h4>
+      
+      <small>Source: <a href="https:/github.com/ropensci/rdflib/blob/master/vignettes/data-lake.Rmd"><code>vignettes/data-lake.Rmd</code></a></small>
+
+    </div>
 
     
     
@@ -88,27 +97,27 @@
 <p>This can serve as a very effective means of data integration (provided a reasonably consistent and diligent use of URIs in identifying subjects and properties (predicates)), since just about any data can be added to the lake without worrying about whether it comes in a schema that matches the existing architecture of the database. It is this flexibility not to have to define your database schema at the start that is the primary strength of the RDF approach.</p>
 <p>A key advantage of this approach is that it is equally as easy to extract your desired data.frame from non-rectangular data as it is from tables or relational database systems. While the previous vignette focused on simple examples including data from single <code>data.frames</code> or small JSON files, this vignette showcases the Data Lake approach on a more complex relational database organized over several tables (<code>nyflights13</code> data, used to teach <code>joins</code> and other relational data in <a href="http://r4ds.had.co.nz">Grolemund &amp; Wickham, 2017</a>), and also in a large non-tabular file returned from the GitHub API (e.g. as used in <a href="https://dcl-2017-04.github.io/curriculum/rectangling.html">Bryan &amp; Wickham, 2017</a> to teach data rectangling.)</p>
 <p>Load the necessary libraries to get started:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Data 
-<span class="kw">library</span>(nycflights13)
-<span class="kw">library</span>(repurrrsive)
-
-## for comparison approaches
-<span class="kw">library</span>(tidyverse)
-<span class="kw">library</span>(jsonlite)
-
-## Our focal package:
-<span class="kw">library</span>(rdflib)
-## experimental functions for rdflib package
-<span class="kw">source</span>(<span class="kw">system.file</span>(<span class="st">"examples/as_rdf.R"</span>, <span class="dt">package=</span><span class="st">"rdflib"</span>))
-<span class="kw">source</span>(<span class="kw">system.file</span>(<span class="st">"examples/tidy_schema.R"</span>, <span class="dt">package=</span><span class="st">"rdflib"</span>))</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">## Data </a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(nycflights13)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(repurrrsive)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">## for comparison approaches</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="kw">library</span>(jsonlite)</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">## Our focal package:</a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="kw">library</span>(rdflib)</a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">## experimental functions for rdflib package</a>
+<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="kw">source</span>(<span class="kw">system.file</span>(<span class="st">"examples/as_rdf.R"</span>, <span class="dt">package=</span><span class="st">"rdflib"</span>))</a>
+<a class="sourceLine" id="cb1-13" data-line-number="13"><span class="kw">source</span>(<span class="kw">system.file</span>(<span class="st">"examples/tidy_schema.R"</span>, <span class="dt">package=</span><span class="st">"rdflib"</span>))</a></code></pre></div>
 <p>Configure RDF storage:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#options(rdflib_storage = "BDB") </span>
-<span class="kw">options</span>(<span class="dt">rdflib_storage =</span> <span class="st">"memory"</span>) 
-
-<span class="co"># Use a smaller dataset if we do not have a BDB backend: </span>
-<span class="cf">if</span>(<span class="kw">getOption</span>(<span class="st">"rdflib_storage"</span>) <span class="op">!=</span><span class="st"> "BDB"</span>){
-  flights &lt;-<span class="st"> </span>flights[<span class="dv">1</span><span class="op">:</span><span class="fl">1e3</span>,]
-}</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">#options(rdflib_storage = "BDB") </span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">options</span>(<span class="dt">rdflib_storage =</span> <span class="st">"memory"</span>) </a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co"># Use a smaller dataset if we do not have a BDB backend: </span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="cf">if</span>(<span class="kw">getOption</span>(<span class="st">"rdflib_storage"</span>) <span class="op">!=</span><span class="st"> "BDB"</span>){</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">  flights &lt;-<span class="st"> </span>flights[<span class="dv">1</span><span class="op">:</span><span class="fl">1e3</span>,]</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">}</a></code></pre></div>
 <div id="relational-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#relational-data" class="anchor"></a>Relational data</h1>
@@ -116,12 +125,12 @@
 <h2 class="hasAnchor">
 <a href="#the-tidyverse-approach" class="anchor"></a>The <code>tidyverse</code> approach</h2>
 <p><code>tidyverse</code> operations are incredibly effective for working with relational data. These <code>dplyr</code> on the <code>nyflights13</code> dataset are easy to write and fast to execute:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span>flights <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">left_join</span>(airlines) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">left_join</span>(planes, <span class="dt">by=</span><span class="st">"tailnum"</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">select</span>(carrier, name, manufacturer, model) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">distinct</span>()
-<span class="kw">head</span>(df)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">df &lt;-<span class="st"> </span>flights <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span><span class="kw">left_join</span>(airlines) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="st">  </span><span class="kw">left_join</span>(planes, <span class="dt">by=</span><span class="st">"tailnum"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="st">  </span><span class="kw">select</span>(carrier, name, manufacturer, model) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="st">  </span><span class="kw">distinct</span>()</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="kw">head</span>(df)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 4
 ##   carrier name                   manufacturer     model    
 ##   &lt;chr&gt;   &lt;chr&gt;                  &lt;chr&gt;            &lt;chr&gt;    
@@ -138,45 +147,45 @@
 <h2 class="hasAnchor">
 <a href="#rdf-approach" class="anchor"></a>RDF approach</h2>
 <p>Okay, now let’s dump the <code>nyflights13</code> into the data lake. Foreign keys in any table must be represented as URIs and not literal strings:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">as_uri &lt;-<span class="st"> </span><span class="cf">function</span>(x, <span class="dt">base_uri =</span> <span class="st">"x:"</span>) <span class="kw">paste0</span>(base_uri, x)
-uri_flights &lt;-<span class="st"> </span>flights <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">tailnum =</span> <span class="kw">as_uri</span>(tailnum),
-         <span class="dt">carrier =</span> <span class="kw">as_uri</span>(carrier))</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">as_uri &lt;-<span class="st"> </span><span class="cf">function</span>(x, <span class="dt">base_uri =</span> <span class="st">"x:"</span>) <span class="kw">paste0</span>(base_uri, x)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">uri_flights &lt;-<span class="st"> </span>flights <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">tailnum =</span> <span class="kw">as_uri</span>(tailnum),</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">         <span class="dt">carrier =</span> <span class="kw">as_uri</span>(carrier))</a></code></pre></div>
 <p>Similarly, when reading into RDF we have to declare the key column for the table, and again establish a <code>base_uri</code> which will allow RDF methods to distinguish between URIs (subjects, predicates, and foreign keys) and literal strings.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>({
-  
-rdf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rdf.html">rdf</a></span>()
-
-<span class="kw">as_rdf</span>(airlines, <span class="dt">rdf =</span> rdf, <span class="dt">key =</span> <span class="st">"carrier"</span>, <span class="dt">vocab =</span> <span class="st">"x:"</span>)
-<span class="kw">as_rdf</span>(planes,  <span class="dt">rdf =</span> rdf, <span class="dt">key =</span> <span class="st">"tailnum"</span>, <span class="dt">vocab =</span> <span class="st">"x:"</span>)
-<span class="kw">as_rdf</span>(uri_flights, <span class="dt">rdf =</span> rdf, <span class="dt">key =</span> <span class="ot">NULL</span>, <span class="dt">vocab =</span> <span class="st">"x:"</span>)
-
-})</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">system.time</span>({</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">  </a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">rdf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rdf.html">rdf</a></span>()</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="kw">as_rdf</span>(airlines, <span class="dt">rdf =</span> rdf, <span class="dt">key =</span> <span class="st">"carrier"</span>, <span class="dt">vocab =</span> <span class="st">"x:"</span>)</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="kw">as_rdf</span>(planes,  <span class="dt">rdf =</span> rdf, <span class="dt">key =</span> <span class="st">"tailnum"</span>, <span class="dt">vocab =</span> <span class="st">"x:"</span>)</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="kw">as_rdf</span>(uri_flights, <span class="dt">rdf =</span> rdf, <span class="dt">key =</span> <span class="ot">NULL</span>, <span class="dt">vocab =</span> <span class="st">"x:"</span>)</a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9">})</a></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.782   0.028   0.821</code></pre>
+##   0.847   0.043   0.908</code></pre>
 <p>Note that flights does not have a natural key (somewhat surprisingly, <code>flight</code> number is not a unique key for this table, as the same flight number is reused on the same route at different times.) So, we will treat each row as a unique anonymous key by setting the key to <code>NULL</code>.</p>
 </div>
 <div id="schema-on-read" class="section level2">
 <h2 class="hasAnchor">
 <a href="#schema-on-read" class="anchor"></a>Schema on read</h2>
 <p>We simply define the columns we want and we immediately get back the desired <code>data.frame</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s &lt;-<span class="st"> </span>
-<span class="st">  'SELECT  ?carrier ?name ?manufacturer ?model ?dep_delay</span>
-<span class="st">WHERE {</span>
-<span class="st">?flight &lt;x:tailnum&gt;  ?tailnum .</span>
-<span class="st">?flight &lt;x:carrier&gt;  ?carrier .</span>
-<span class="st">?flight &lt;x:dep_delay&gt;  ?dep_delay .</span>
-<span class="st">?tailnum &lt;x:manufacturer&gt; ?manufacturer .</span>
-<span class="st">?tailnum &lt;x:model&gt; ?model .</span>
-<span class="st">?carrier &lt;x:name&gt; ?name</span>
-<span class="st">}'</span>
-
-<span class="kw">system.time</span>(
-df &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rdf_query.html">rdf_query</a></span>(rdf, s)
-)</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">s &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="st">  'SELECT  ?carrier ?name ?manufacturer ?model ?dep_delay</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="st">WHERE {</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="st">?flight &lt;x:tailnum&gt;  ?tailnum .</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="st">?flight &lt;x:carrier&gt;  ?carrier .</span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="st">?flight &lt;x:dep_delay&gt;  ?dep_delay .</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="st">?tailnum &lt;x:manufacturer&gt; ?manufacturer .</span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="st">?tailnum &lt;x:model&gt; ?model .</span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="st">?carrier &lt;x:name&gt; ?name</span></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="st">}'</span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="kw">system.time</span>(</a>
+<a class="sourceLine" id="cb8-13" data-line-number="13">df &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rdf_query.html">rdf_query</a></span>(rdf, s)</a>
+<a class="sourceLine" id="cb8-14" data-line-number="14">)</a></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.208   0.008   0.216</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(df)</code></pre></div>
+##   0.251   0.009   0.260</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">head</span>(df)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 5
 ##   carrier name                     manufacturer   model       dep_delay
 ##   &lt;chr&gt;   &lt;chr&gt;                    &lt;chr&gt;          &lt;chr&gt;       &lt;chr&gt;    
@@ -197,53 +206,53 @@ df &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rdf_quer
 <h2 class="hasAnchor">
 <a href="#the-tidyverse-approach-1" class="anchor"></a>The <code>tidyverse</code> approach</h2>
 <p>We start with data from <a href="https://dcl-2017-04.github.io/curriculum/rectangling.html">Bryan &amp; Wickham, 2017</a> lesson on data rectangling:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">"extdata/gh_repos.json"</span>, <span class="dt">package=</span><span class="st">"repurrrsive"</span>)
-gh_data &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/jsonlite/topics/read_json">read_json</a></span>(f)</code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">f &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">"extdata/gh_repos.json"</span>, <span class="dt">package=</span><span class="st">"repurrrsive"</span>)</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">gh_data &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/jsonlite/topics/read_json">read_json</a></span>(f)</a></code></pre></div>
 <p>The original lesson illustrates the power and reasonably concise syntax of the <code>tidyverse</code> package, <code>purrr</code>, to iterate over this complex structure to extract the necessary data. In this approach, nesting of the data is largely a nuisance to overcome rather than an asset to the data analyst:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gh_flat &lt;-<span class="st"> </span>gh_data <span class="op">%&gt;%</span><span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/flatten">flatten</a></span>()  <span class="co"># abandon nested structure and hope we didn't need it</span>
-
-gh_tibble &lt;-<span class="st"> </span><span class="kw">tibble</span>(
-  <span class="dt">name =</span>     gh_flat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map_chr</span>(<span class="st">"name"</span>),
-  <span class="dt">issues =</span>   gh_flat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map_int</span>(<span class="st">"open_issues_count"</span>),
-  <span class="dt">wiki =</span>     gh_flat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map_lgl</span>(<span class="st">"has_wiki"</span>),
-  <span class="dt">homepage =</span> gh_flat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map_chr</span>(<span class="st">"homepage"</span>, <span class="dt">.default =</span> <span class="st">""</span>),
-  <span class="dt">owner =</span>    gh_flat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map_chr</span>(<span class="kw">c</span>(<span class="st">"owner"</span>, <span class="st">"login"</span>))
-)
-
-gh_tibble <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(name) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">gh_flat &lt;-<span class="st"> </span>gh_data <span class="op">%&gt;%</span><span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/flatten">flatten</a></span>()  <span class="co"># abandon nested structure and hope we didn't need it</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">gh_tibble &lt;-<span class="st"> </span><span class="kw">tibble</span>(</a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">  <span class="dt">name =</span>     gh_flat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map_chr</span>(<span class="st">"name"</span>),</a>
+<a class="sourceLine" id="cb13-5" data-line-number="5">  <span class="dt">issues =</span>   gh_flat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map_int</span>(<span class="st">"open_issues_count"</span>),</a>
+<a class="sourceLine" id="cb13-6" data-line-number="6">  <span class="dt">wiki =</span>     gh_flat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map_lgl</span>(<span class="st">"has_wiki"</span>),</a>
+<a class="sourceLine" id="cb13-7" data-line-number="7">  <span class="dt">homepage =</span> gh_flat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map_chr</span>(<span class="st">"homepage"</span>, <span class="dt">.default =</span> <span class="st">""</span>),</a>
+<a class="sourceLine" id="cb13-8" data-line-number="8">  <span class="dt">owner =</span>    gh_flat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map_chr</span>(<span class="kw">c</span>(<span class="st">"owner"</span>, <span class="st">"login"</span>))</a>
+<a class="sourceLine" id="cb13-9" data-line-number="9">)</a>
+<a class="sourceLine" id="cb13-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb13-11" data-line-number="11">gh_tibble <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(name) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 5
 ##   name                         issues wiki  homepage owner  
 ##   &lt;chr&gt;                         &lt;int&gt; &lt;lgl&gt; &lt;chr&gt;    &lt;chr&gt;  
-## 1 2013-11_sfu                       1 T     ""       jennybc
-## 2 2014-01-27-miami                  4 T     ""       jennybc
-## 3 2014-05-12-ubc                    1 T     ""       jennybc
-## 4 2015_Coartic                      0 F     ""       jennybc
-## 5 2015-02-23_bryan-fields-talk      0 T     ""       jennybc
-## 6 2015-06-28_r-summit-talk          0 T     ""       jennybc</code></pre>
+## 1 2013-11_sfu                       1 TRUE  ""       jennybc
+## 2 2014-01-27-miami                  4 TRUE  ""       jennybc
+## 3 2014-05-12-ubc                    1 TRUE  ""       jennybc
+## 4 2015_Coartic                      0 FALSE ""       jennybc
+## 5 2015-02-23_bryan-fields-talk      0 TRUE  ""       jennybc
+## 6 2015-06-28_r-summit-talk          0 TRUE  ""       jennybc</code></pre>
 </div>
 <div id="rdf-on-non-tabular-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#rdf-on-non-tabular-data" class="anchor"></a>RDF on non-tabular data</h2>
 <p>The RDF approach merely treats JSON as JSON-LD within a given vocabulary. In this context, nesting implicitly provides important semantic information about relationships between the data, which are captured in the RDF triples. Here, we import the JSON data as RDF (and add it to our existing triplestore just for fun)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gh_rdf &lt;-<span class="st"> </span><span class="kw">as_rdf.list</span>(gh_data, <span class="dt">rdf =</span> rdf, <span class="dt">vocab =</span> <span class="st">"gh:"</span>)</code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">gh_rdf &lt;-<span class="st"> </span><span class="kw">as_rdf.list</span>(gh_data, <span class="dt">rdf =</span> rdf, <span class="dt">vocab =</span> <span class="st">"gh:"</span>)</a></code></pre></div>
 <p>And we can query it back out of the lake just by selecting the columns of interest.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s &lt;-<span class="st"> </span>
-<span class="st">  'SELECT ?name ?issues ?wiki ?homepage ?owner</span>
-<span class="st">WHERE {</span>
-<span class="st">?repo &lt;gh:homepage&gt;  ?homepage .</span>
-<span class="st">?repo &lt;gh:has_wiki&gt; ?wiki .</span>
-<span class="st">?repo &lt;gh:open_issues_count&gt; ?issues .</span>
-<span class="st">?repo &lt;gh:name&gt; ?name .</span>
-<span class="st">?repo &lt;gh:owner&gt; ?owner_id .</span>
-<span class="st">?owner_id &lt;gh:login&gt;  ?owner </span>
-<span class="st">}'</span>
-
-<span class="kw">system.time</span>(
-rdf_tibble &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rdf_query.html">rdf_query</a></span>(rdf, s)
-)</code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">s &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="st">  'SELECT ?name ?issues ?wiki ?homepage ?owner</span></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="st">WHERE {</span></a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="st">?repo &lt;gh:homepage&gt;  ?homepage .</span></a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="st">?repo &lt;gh:has_wiki&gt; ?wiki .</span></a>
+<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="st">?repo &lt;gh:open_issues_count&gt; ?issues .</span></a>
+<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="st">?repo &lt;gh:name&gt; ?name .</span></a>
+<a class="sourceLine" id="cb16-8" data-line-number="8"><span class="st">?repo &lt;gh:owner&gt; ?owner_id .</span></a>
+<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="st">?owner_id &lt;gh:login&gt;  ?owner </span></a>
+<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="st">}'</span></a>
+<a class="sourceLine" id="cb16-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb16-12" data-line-number="12"><span class="kw">system.time</span>(</a>
+<a class="sourceLine" id="cb16-13" data-line-number="13">rdf_tibble &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rdf_query.html">rdf_query</a></span>(rdf, s)</a>
+<a class="sourceLine" id="cb16-14" data-line-number="14">)</a></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.360   0.009   0.375</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(rdf_tibble)</code></pre></div>
+##   0.343   0.010   0.354</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw">head</span>(rdf_tibble)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 5
 ##   name        issues wiki  homepage owner      
 ##   &lt;chr&gt;        &lt;int&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;      
@@ -260,13 +269,13 @@ rdf_tibble &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <p><code>dplyr</code> provides a reasonably intuitive, powerful, and concise interface for many common SQL commands. Indeed, <code>dplyr</code> function calls are literally serialized to the corresponding SQL query when working with a relational database back-end (via <code>dbplyr</code>). Can a similar API be developed for SPARQL queries?</p>
 <p>SPARQL syntax is obviously inspired by SQL syntax, and includes many of the same operations found in SQL and <code>dplyr</code> (e.g. SELECT, WHERE, FILTER, DISTINCT) as well as other more RDF specific queries.</p>
 <p>If we are willing to make some assumptions about the most common queries, we can start to make some simplifying functions. For instance, in the above patterns, the variables being returned are always objects from the triples, with columns being named using the corresponding predicate. Assuming some additional convention to define the prefixes and indicate graph traversal (i.e. nested values), we could have constructed the above query from a call:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tidy_schema</span>(name, open_issues_count, has_wiki, homepage owner.login)</code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">tidy_schema</span>(name, open_issues_count, has_wiki, homepage owner.login)</a></code></pre></div>
 <p>Though to generalize to arbitrary labels and predicates this might need to support something like:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tidy_schema</span>(<span class="dt">list =</span> <span class="kw">list</span>(<span class="dt">name =</span> <span class="st">"gh:name"</span>, 
-                        <span class="dt">issues =</span> <span class="st">"gh:open_issues_count"</span>, 
-                        <span class="dt">wiki =</span> <span class="st">"gh:has_wiki"</span>, 
-                        <span class="dt">homepage =</span> <span class="st">"gh:homepage"</span>,
-                        <span class="dt">owner =</span> <span class="kw">list</span>(<span class="st">"gh:owner"</span>, <span class="dt">login =</span> <span class="st">"gh:login"</span>)))</code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw">tidy_schema</span>(<span class="dt">list =</span> <span class="kw">list</span>(<span class="dt">name =</span> <span class="st">"gh:name"</span>, </a>
+<a class="sourceLine" id="cb21-2" data-line-number="2">                        <span class="dt">issues =</span> <span class="st">"gh:open_issues_count"</span>, </a>
+<a class="sourceLine" id="cb21-3" data-line-number="3">                        <span class="dt">wiki =</span> <span class="st">"gh:has_wiki"</span>, </a>
+<a class="sourceLine" id="cb21-4" data-line-number="4">                        <span class="dt">homepage =</span> <span class="st">"gh:homepage"</span>,</a>
+<a class="sourceLine" id="cb21-5" data-line-number="5">                        <span class="dt">owner =</span> <span class="kw">list</span>(<span class="st">"gh:owner"</span>, <span class="dt">login =</span> <span class="st">"gh:login"</span>)))</a></code></pre></div>
 </div>
 </div>
 </div>

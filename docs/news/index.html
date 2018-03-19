@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>All news • rdflib</title>
+<title>Changelog • rdflib</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -18,13 +18,14 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Changelog" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -73,10 +74,13 @@
     <li>
       <a href="../articles/rdf_intro.html">A tidyverse lover's intro to RDF</a>
     </li>
+    <li>
+      <a href="../articles/storage.html">Working with Database Storage Backends in `rdflib`</a>
+    </li>
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -99,19 +103,21 @@
 
   <div class="col-md-9">
     <div class="page-header">
-      <h1>Change log <small>All releases</small></h1>
+      <h1>Change log <small></small></h1>
+      <small>Source: <a href='https:/github.com/ropensci/rdflib/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
     <div class="contents">
-    <div id="rdflib-0-1-0" class="section level1">
-<h1 class="hasAnchor">
-<a href="#rdflib-0-1-0" class="anchor"></a>rdflib 0.1.0</h1>
+    <div id="rdflib-0-1-0-2018-03-02" class="section level1">
+<h1 class="page-header">
+<a href="#rdflib-0-1-0-2018-03-02" class="anchor"></a>rdflib 0.1.0 (2018-03-02)<small> 2018-03-09 </small>
+</h1>
 <div id="new-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New Features</h2>
 <ul>
 <li>
-<code><a href="../reference/rdf.html">rdf()</a></code> supports BDB backend for disk-based storage for large triplestores <a href="https://github.com/cboettig/rdflib/issues/6">#6</a>
+<code><a href="../reference/rdf.html">rdf()</a></code> supports BDB backend for disk-based storage for large triplestores <a href="https://github.com/cboettig/rdflib/issues/6"><a href='https://github.com/ropensci/rdflib/issues/6'>#6</a></a>
 </li>
 <li>
 <code><a href="../reference/rdf_parse.html">rdf_parse()</a></code> gains an argument <code>rdf</code> to append triples to existing graph</li>
@@ -129,7 +135,7 @@
 <li><p>experimental <code>as_rdf</code> method now uses a poor-man’s nquad serializer to rapidly generate rdf (instead of slowly iterating over <code>add_rdf</code>).</p></li>
 <li>
 <code>rdf_add</code> argument for <code>object</code> can now take all atomic types (numeric, integer, string, Date, POSIX, logical) and will automatically declare the appropriate <code>datatype_uri</code> if the user has not manually specified this.</li>
-<li>Numerous improvements to documentation from rOpenSci onboarding feedback, see <a href="https://github.com/cboettig/rdflib/issues/9">#9</a> and <a href="https://github.com/cboettig/rdflib/issues/10">#10</a>
+<li>Numerous improvements to documentation from rOpenSci onboarding feedback, see <a href="https://github.com/cboettig/rdflib/issues/9"><a href='https://github.com/ropensci/rdflib/issues/9'>#9</a></a> and <a href="https://github.com/cboettig/rdflib/issues/10"><a href='https://github.com/ropensci/rdflib/issues/10'>#10</a></a>
 </li>
 <li>both functions and unit tests are broken out into separate files in their respective directories.</li>
 <li>additional example RDF data added in <code>extdata</code>
@@ -162,21 +168,23 @@
 </div>
 </div>
     <div id="rdflib-0-0-3-2018-01-02" class="section level1">
-<h1 class="hasAnchor">
-<a href="#rdflib-0-0-3-2018-01-02" class="anchor"></a>rdflib 0.0.3 (2018-01-02)</h1>
+<h1 class="page-header">
+<a href="#rdflib-0-0-3-2018-01-02" class="anchor"></a>rdflib 0.0.3 (2018-01-02)<small> Unreleased </small>
+</h1>
 <div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-1" class="anchor"></a>Bug Fixes</h2>
 <ul>
 <li>add paper.md</li>
 <li>add package level documentation</li>
-<li>set base uri when serializing json-ld to rdf (<a href="https://github.com/cboettig/rdflib/issues/5">#5</a>)</li>
+<li>set base uri when serializing json-ld to rdf (<a href="https://github.com/cboettig/rdflib/issues/5"><a href='https://github.com/ropensci/rdflib/issues/5'>#5</a></a>)</li>
 </ul>
 </div>
 </div>
     <div id="rdflib-0-0-2-2018-01-02" class="section level1">
-<h1 class="hasAnchor">
-<a href="#rdflib-0-0-2-2018-01-02" class="anchor"></a>rdflib 0.0.2 (2018-01-02)</h1>
+<h1 class="page-header">
+<a href="#rdflib-0-0-2-2018-01-02" class="anchor"></a>rdflib 0.0.2 (2018-01-02)<small> Unreleased </small>
+</h1>
 <div id="new-features-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-features-1" class="anchor"></a>New Features</h2>
@@ -189,8 +197,9 @@
 </div>
 </div>
     <div id="rdflib-0-0-1-2017-12-09" class="section level1">
-<h1 class="hasAnchor">
-<a href="#rdflib-0-0-1-2017-12-09" class="anchor"></a>rdflib 0.0.1 (2017-12-09)</h1>
+<h1 class="page-header">
+<a href="#rdflib-0-0-1-2017-12-09" class="anchor"></a>rdflib 0.0.1 (2017-12-09)<small> Unreleased </small>
+</h1>
 <ul>
 <li>Initial prototype</li>
 </ul>
@@ -202,7 +211,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#rdflib-0-1-0">0.1.0</a></li>
+        <li><a href="#rdflib-0-1-0-2018-03-02">0.1.0</a></li>
         <li><a href="#rdflib-0-0-3-2018-01-02">0.0.3</a></li>
         <li><a href="#rdflib-0-0-2-2018-01-02">0.0.2</a></li>
         <li><a href="#rdflib-0-0-1-2017-12-09">0.0.1</a></li>
@@ -226,3 +235,4 @@
 
   </body>
 </html>
+

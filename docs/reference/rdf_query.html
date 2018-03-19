@@ -18,13 +18,17 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Perform a SPARQL Query — rdf_query" />
+
+<meta property="og:description" content="Perform a SPARQL Query" />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -73,10 +77,13 @@
     <li>
       <a href="../articles/rdf_intro.html">A tidyverse lover's intro to RDF</a>
     </li>
+    <li>
+      <a href="../articles/storage.html">Working with Database Storage Backends in `rdflib`</a>
+    </li>
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -99,6 +106,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Perform a SPARQL Query</h1>
+    <small>Source: <a href='https:/github.com/ropensci/rdflib/blob/master/R/rdf_query.R'><code>R/rdf_query.R</code></a></small>
     </div>
 
     
@@ -120,7 +128,7 @@
     </tr>
     <tr>
       <th>data.frame</th>
-      <td><p>logical, should the resutls be returned as a data.frame?</p></td>
+      <td><p>logical, should the results be returned as a data.frame?</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -182,3 +190,4 @@ typed by its data URI.</p>
 
   </body>
 </html>
+

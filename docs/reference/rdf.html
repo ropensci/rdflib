@@ -18,13 +18,17 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Initialize an <code>rdf</code> Object — rdf" />
+
+<meta property="og:description" content="Initialize an rdf Object" />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -73,10 +77,13 @@
     <li>
       <a href="../articles/rdf_intro.html">A tidyverse lover's intro to RDF</a>
     </li>
+    <li>
+      <a href="../articles/storage.html">Working with Database Storage Backends in `rdflib`</a>
+    </li>
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -99,30 +106,70 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Initialize an <code>rdf</code> Object</h1>
+    <small>Source: <a href='https:/github.com/ropensci/rdflib/blob/master/R/rdf.R'><code>R/rdf.R</code></a></small>
     </div>
 
     
     <p>Initialize an <code>rdf</code> Object</p>
     
 
-    <pre class="usage"><span class='fu'>rdf</span>(<span class='kw'>storage</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"memory"</span>, <span class='st'>"BDB"</span>), <span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>new_db</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>rdf</span>(<span class='kw'>storage</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"memory"</span>, <span class='st'>"BDB"</span>, <span class='st'>"sqlite"</span>, <span class='st'>"postgres"</span>, <span class='st'>"mysql"</span>, <span class='st'>"virtuoso"</span>),
+  <span class='kw'>host</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>port</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>user</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>password</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>database</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>charset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>dir</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>dsn</span> <span class='kw'>=</span> <span class='st'>"Local Virtuoso"</span>,
+  <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"rdflib"</span>, <span class='kw'>new_db</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>fallback</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>storage</th>
-      <td><p>Use in-memory hashes ("memory"), or disk based storage ("BDB")?</p></td>
+      <td><p>Storage backend to use; see details</p></td>
     </tr>
     <tr>
-      <th>path</th>
-      <td><p>where should local database to store RDF triples be created, if
-configured for disk-based storage; see details.</p></td>
+      <th>host</th>
+      <td><p>host address for mysql, postgres, or viruoso storage</p></td>
+    </tr>
+    <tr>
+      <th>port</th>
+      <td><p>port for mysql (mysql storage defaults to mysql standard port, 3306)
+or postgres (postgres storage defaults to postgres standard port, 4321)</p></td>
+    </tr>
+    <tr>
+      <th>user</th>
+      <td><p>user name for postgres, mysql, or virtuoso</p></td>
+    </tr>
+    <tr>
+      <th>password</th>
+      <td><p>password for postgres, mysql, or vituoso</p></td>
+    </tr>
+    <tr>
+      <th>database</th>
+      <td><p>name of the database to be created/used</p></td>
+    </tr>
+    <tr>
+      <th>charset</th>
+      <td><p>charset for virtuoso database, if desired</p></td>
+    </tr>
+    <tr>
+      <th>dir</th>
+      <td><p>directory of where to write sqlite or berkeley database.</p></td>
+    </tr>
+    <tr>
+      <th>dsn</th>
+      <td><p>Virtuoso dsn, either "Local Virtuoso" or "Remote Virtuoso"</p></td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td><p>name for the storage object created. Default is usually fine.</p></td>
     </tr>
     <tr>
       <th>new_db</th>
-      <td><p>logical, default FALSE. should we create a new database on disk
-or attempt to connect to an existing database (at the path specified)?</p></td>
+      <td><p>logical, default FALSE. Create new database or connect to existing?</p></td>
+    </tr>
+    <tr>
+      <th>fallback</th>
+      <td><p>logical, default TRUE. If requested storage system cannot initialize,
+should <code>rdf()</code> fall back on memory (default) or throw an error (fallback=FALSE)?</p></td>
     </tr>
     </table>
     
@@ -136,18 +183,12 @@ or attempt to connect to an existing database (at the path specified)?</p></td>
 three pointers to external C objects managed by the redland library.
 These are the <code>world</code> object: basically a top-level pointer for
 all RDF models, and a <code>model</code> object: a collection of RDF statements,
-and a <code>storage</code> object, indicating how these statements are stored.
-    <code>rdflib</code> defaults to an in-memory hash-based storage structure.
+and a <code>storage</code> object, indicating how these statements are stored.</p>
+<p><code>rdflib</code> defaults to an in-memory hash-based storage structure.
 which should be best for most use cases. For very large triplestores,
-disk-based storage will be necessary. set <code>storage="BDB"</code> to use disk-based
-storage. Specify a path with the optional <code>path</code> argument, default uses
-the current working directory. Disk-based storage requires redland package
-to be installed from source with support for the Berkeley DB
-(libdb-dev on Ubuntu, berkeley-db on homebrew), otherwise this will
-fall back to in-memory storage with a warning. Check for working BDB
-support with the function <code><a href='rdf_has_bdb.html'>rdf_has_bdb()</a></code>.</p>
-<p>Typical use will be simply to initialize a container to which
-the user would manually add triples using <code><a href='rdf_add.html'>rdf_add</a></code>.</p>
+disk-based storage will be necessary. Enabling external storage devices
+will require additional libraries and custom compiling. See the storage
+vignette for details.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -182,3 +223,4 @@ the user would manually add triples using <code><a href='rdf_add.html'>rdf_add</
 
   </body>
 </html>
+
