@@ -1,12 +1,17 @@
 testthat::context("RDF Storage")
 
 testthat::test_that("SQLite Backend", {
-  testthat::skip_if_not(rdf_storage("sqlite", new_db = TRUE, check_only = TRUE))
-  testthat::expect_silent(r <- rdf(storage="sqlite", new_db = TRUE))
+  testthat::skip_if_not(rdf_storage("sqlite", new_db = TRUE, 
+                                    check_only = TRUE, name = "rdflib.sqlite"))
+  testthat::expect_silent(r <- rdf(storage="sqlite", 
+                                   new_db = TRUE,
+                                   name="rdflib.sqlite"))
   rdf_add(r, "", "dc:name", "bob")
   testthat::expect_match(format(r, "nquads"), "bob")
   testthat::expect_is(r, "rdf")
   rdf_free(r)
+  unlink("rdflib.sqlite")
+  
   
 })
 
