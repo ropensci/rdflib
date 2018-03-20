@@ -1,7 +1,7 @@
 FROM rocker/tidyverse:latest
 
 ## consider removing build deps
-RUN apt-get update && apt-get -y install \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -yq install \
     libxml2-dev \
     libcurl4-openssl-dev \
     libssl-dev \
@@ -22,8 +22,10 @@ RUN apt-get update && apt-get -y install \
     libiodbc2-dev \
     libsqlite3-dev \
     libmariadbclient-dev \
-    librdf-storage-virtuoso && \
-    git clone git://github.com/dajobe/raptor.git && \
+    librdf-storage-virtuoso \
+	virtuoso-server
+
+RUN git clone git://github.com/dajobe/raptor.git && \
     cd raptor && \
     ./autogen.sh && \
     make && \
@@ -39,11 +41,14 @@ RUN apt-get update && apt-get -y install \
     cd librdf && \
     ./autogen.sh && \
     make && \
-    make install && \
-    R -e "install.packages('remotes')" && \
+    make install
+
+RUN R -e "install.packages('remotes')" && \
     R -e "remotes::install_github('ropensci/redland-bindings/R/redland')" && \
     R -e "remotes::install_github('ropensci/rdflib', dep=TRUE)"
 
-
+RUN echo '[Local Virtuoso]\
+          \nDriver=/usr/lib/x86_64-linux-gnu/odbc/virtodbc.so\
+          \nAddress=localhost:1111' >> /etc/odbc.ini
 
 
