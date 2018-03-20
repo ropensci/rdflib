@@ -11,24 +11,17 @@ services:
       environment:
           - POSTGRES_PASSWORD=rdflib
 
-  virtuoso:
-    image: tenforce/virtuoso:1.3.1-virtuoso7.2.2
-    environment:
-      DBA_PASSWORD: "rdflib"
-      SPARQL_UPDATE: "true"
-      DEFAULT_GRAPH: "http://www.example.com/my-graph"
-    volumes:
-      - virtuoso_volume:/data
-
   rdflib:
     image: ropensci/rdflib
     volumes:
       - .:/data
+      - virtuoso_volume:/var/lib/virtuoso-opensource-6.1/db
     working_dir: /data
     depends_on:
       - postgres
       - mariadb
-      - virtuoso
 
 volumes:
   virtuoso_volume:
+
+

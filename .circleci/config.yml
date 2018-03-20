@@ -4,5 +4,7 @@ jobs:
     machine: true
     steps:
       - checkout
-      - run: docker-compose run rdflib R -e 'devtools::load_all(); x <- testthat::test_file("tests/testthat/test-rdf_storage.R"); testthat::expect_length(x$errors,0); testthat::expect_length(x$warnings,0)'
-#      - run: docker-compose run rdflib R -e 'x <- devtools::check(); testthat::expect_length(x$errors,0); testthat::expect_length(x$warnings,0)'
+      - run: docker-compose run rdflib R -f .circleci/test.R
+#      - run: docker-compose run rdflib R -e 'x <- devtools::check(); testthat::expect_length(x$errors,0); testthat::expect_length(x$warnings,0)
+
+
