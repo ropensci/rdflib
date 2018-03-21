@@ -51,4 +51,9 @@ RUN echo '[Local Virtuoso]\
           \nDriver=/usr/lib/x86_64-linux-gnu/odbc/virtodbc.so\
           \nAddress=localhost:1111' >> /etc/odbc.ini
 
+RUN mkdir -p /etc/services.d/virtuoso \
+  && echo '#!/usr/bin/with-contenv bash \
+           \n exec virtuoso-t -c /etc/virtuoso-opensource-6.1/virtuoso.ini' \
+           > /etc/services.d/virtuoso/run
+
 
