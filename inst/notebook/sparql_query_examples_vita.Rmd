@@ -141,7 +141,7 @@ Let's begin by reading in some `RDF/XML` data from CrossRef by querying a DOI an
 ```{r eval=FALSE}
 xml <- "ex.xml"
 
-"http://dx.doi.org/10.1002/ece3.2314" %>%
+"https://doi.org/10.1002/ece3.2314" %>%
   httr::GET(httr::add_headers(Accept="application/rdf+xml")) %>%
   httr::content(as = "parsed", type = "application/xml") %>%
   xml2::write_xml(xml)

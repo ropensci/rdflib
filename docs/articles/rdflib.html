@@ -172,7 +172,7 @@ coi &lt;-<span class="st"> </span>vita <span class="op">%&gt;%</span><span class
 <p>Let’s begin by reading in some <code>RDF/XML</code> data from CrossRef by querying a DOI and requesting <code>rdf+xml</code> MIME type (via Content Negotiation):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">xml &lt;-<span class="st"> "ex.xml"</span>
 
-<span class="st">"http://dx.doi.org/10.1002/ece3.2314"</span> <span class="op">%&gt;%</span>
+<span class="st">"https://doi.org/10.1002/ece3.2314"</span> <span class="op">%&gt;%</span>
 <span class="st">  </span>httr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/httr/topics/GET">GET</a></span>(httr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/httr/topics/add_headers">add_headers</a></span>(<span class="dt">Accept=</span><span class="st">"application/rdf+xml"</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span>httr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/httr/topics/content">content</a></span>(<span class="dt">as =</span> <span class="st">"parsed"</span>, <span class="dt">type =</span> <span class="st">"application/xml"</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span>xml2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/xml2/topics/write_xml">write_xml</a></span>(xml)</code></pre></div>

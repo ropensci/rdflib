@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:j.0="http://purl.org/dc/terms/" xmlns:j.1="http://prismstandard.org/namespaces/basic/2.1/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:j.2="http://purl.org/ontology/bibo/" xmlns:j.3="http://xmlns.com/foaf/0.1/">
-  <rdf:Description rdf:about="http://dx.doi.org/10.1002/ece3.2314">
+  <rdf:Description rdf:about="https://doi.org/10.1002/ece3.2314">
     <j.0:isPartOf>
       <j.2:Journal rdf:about="http://id.crossref.org/issn/2045-7758">
         <owl:sameAs>urn:issn:2045-7758</owl:sameAs>
