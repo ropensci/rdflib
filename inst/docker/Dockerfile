@@ -19,11 +19,11 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -yq install \
     libjq-dev \
     libpq-dev \
     libdb-dev \
-    libiodbc2-dev \
     libsqlite3-dev \
     libmariadbclient-dev \
     librdf-storage-virtuoso \
-	virtuoso-server
+	virtuoso-server \
+	unixodbc-dev
 
 RUN git clone git://github.com/dajobe/raptor.git && \
     cd raptor && \

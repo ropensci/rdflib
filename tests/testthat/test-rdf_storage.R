@@ -1,6 +1,7 @@
 testthat::context("RDF Storage")
 
 testthat::test_that("SQLite Backend", {
+  testthat::skip_on_cran()
   testthat::skip_if_not(rdf_storage("sqlite", new_db = TRUE, 
                                     check_only = TRUE, name = "rdflib.sqlite"))
   testthat::expect_silent(r <- rdf(storage="sqlite", 
@@ -17,6 +18,8 @@ testthat::test_that("SQLite Backend", {
 
 testthat::test_that("Postgres Backend", {
   testthat::skip_on_travis()
+  testthat::skip_on_cran()
+  
   testthat::skip_if_not(rdf_storage("postgres", 
                                     host="postgres", user="postgres",
                                     password="rdflib", new_db = TRUE,
@@ -36,6 +39,7 @@ testthat::test_that("Postgres Backend", {
 
 ## Note: `mysql` is the name default database created by mariadb
 testthat::test_that("MySQL Backend", {
+  testthat::skip_on_cran()
   testthat::skip_on_travis()
   testthat::skip_if_not(rdf_storage("mysql", host = "mariadb", 
                                     user="root", password="rdflib",
@@ -57,7 +61,9 @@ testthat::test_that("MySQL Backend", {
 
 testthat::test_that("Virtuoso Backend", {
   testthat::skip_on_travis()
-  ## FIXME Thiss skip check will pass even when database not present
+  testthat::skip_on_cran()
+  
+  ## FIXME This skip check will pass even when database not present
   testthat::skip_if_not(rdf_storage("virtuoso",
                                     user="dba", 
                                     password="dba", 
@@ -65,15 +71,14 @@ testthat::test_that("Virtuoso Backend", {
                                     new_db=TRUE,
                                     check_only = TRUE))
   
-  ## Fails to connect: librdf error - Virtuoso SQLConnect() failed
-  ## [IM002] [iODBC][Driver Manager]Data source name not found and no default driver specified.
-  ## Driver could not be loaded
+
   testthat::expect_silent(
     r <- rdf(storage="virtuoso", user="dba", 
              password="dba", dsn="Local Virtuoso", new_db = TRUE)
     )
   rdf_add(r, "", "dc:name", "bob")
-  expect_match(format(r, "nquads"), "bob")
+  
+  testthat::expect_match(format(r, "nquads"), "bob")
   testthat::expect_is(r, "rdf")
   rdf_free(r)
   

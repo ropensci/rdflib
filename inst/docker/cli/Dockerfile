@@ -21,11 +21,12 @@ RUN apt-get update && apt-get -y install \
     libjq-dev \
     libpq-dev \
     libdb-dev \
-    libiodbc2-dev \
     libsqlite3-dev \
     libmariadbclient-dev \
-    librdf-storage-virtuoso && \
-    git clone git://github.com/dajobe/raptor.git && \
+    librdf-storage-virtuoso \
+	unixodbc-dev
+
+RUN git clone git://github.com/dajobe/raptor.git && \
     cd raptor && \
     ./autogen.sh && \
     make && \
@@ -41,8 +42,8 @@ RUN apt-get update && apt-get -y install \
     cd librdf && \
     ./autogen.sh && \
     make && \
-    make install && \
-    R -e "install.packages(c('remotes','devtools'))" && \
+    make install
+RUN R -e "install.packages(c('remotes','devtools'))" && \
     R -e "remotes::install_github('ropensci/redland-bindings/R/redland')" && \
     R -e "remotes::install_github('ropensci/rdflib', dep=TRUE)"
 

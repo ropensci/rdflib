@@ -90,10 +90,10 @@ Similarly, when reading into RDF we have to declare the key column for the table
 and again establish a `base_uri` which will allow RDF methods to distinguish between URIs (subjects, predicates, and foreign keys) and literal strings.  
 
 ```{r write_rdf}
-system.time({
-  
 rdf <- rdf()
 
+system.time({
+  
 as_rdf(airlines, rdf = rdf, key = "carrier", vocab = "x:")
 as_rdf(planes,  rdf = rdf, key = "tailnum", vocab = "x:")
 as_rdf(uri_flights, rdf = rdf, key = NULL, vocab = "x:")
