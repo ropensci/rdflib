@@ -48,7 +48,7 @@ RUN R -e "install.packages('remotes')" && \
     R -e "remotes::install_github('ropensci/rdflib', dep=TRUE)"
 
 RUN echo '[Local Virtuoso]\
-          \nDriver=/usr/lib/x86_64-linux-gnu/odbc/virtodbc.so\
+          \nDriver=/usr/lib/x86_64-linux-gnu/odbc/virtodbc_r.so\
           \nAddress=localhost:1111' >> /etc/odbc.ini
 
 RUN mkdir -p /etc/services.d/virtuoso \
