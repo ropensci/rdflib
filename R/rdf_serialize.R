@@ -38,11 +38,11 @@ rdf_serialize <- function(rdf,
                                      "jsonld"),
                           namespace = NULL,
                           prefix = NULL,
-                          base = getOption("rdflib_base_uri", "localhost://"),
+                          base = getOption("rdf_base_uri", "localhost://"),
                           ...){
   
   format <- match.arg(format)
-  if(format == "guess"){
+  if(format == "guess" & !is.null(doc)){
     format <- guess_format(doc)
   }
   

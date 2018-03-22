@@ -157,18 +157,18 @@ testthat::test_that("we can serialize turtle with a baseUri", {
       "@id": "person_id",
       "schema:name": "Jane Doe"
     }'
-    options(rdflib_base_uri = "http://example.com/")
+    options(rdf_base_uri = "http://example.com/")
     rdf <- rdf_parse(ex, "jsonld")
     testthat::expect_output(cat(format(rdf, "nquads")), "http://example.com")
     rdf_free(rdf)
     
     
-    options(rdflib_base_uri = "")
+    options(rdf_base_uri = "")
     rdf <- rdf_parse(ex, "jsonld")
-    testthat::expect_silent(cat(format(rdf, "nquads")))
+    testthat::expect_length(rdf, 0)
     rdf_free(rdf)
     
-    options(rdflib_base_uri = NULL)
+    options(rdf_base_uri = NULL)
   })
   
   
@@ -202,8 +202,10 @@ testthat::test_that("we can parse from a url", {
 })
 
 testthat::test_that("we can parse from a text string", {
+  
+  
   rdf <- rdf_parse(doc)
-  txt <- format(rdf, format = "rdfxml")
+  txt <- rdf_serialize(rdf, format = "rdfxml")
   testthat::expect_is(txt, "character")
   roundtrip <- rdf_parse(txt, format="rdfxml")
   testthat::expect_is(roundtrip, "rdf")

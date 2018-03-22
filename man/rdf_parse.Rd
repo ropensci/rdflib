@@ -5,8 +5,8 @@
 \title{Parse RDF Files}
 \usage{
 rdf_parse(doc, format = c("guess", "rdfxml", "nquads", "ntriples", "turtle",
-  "jsonld"), rdf = NULL, base = getOption("rdflib_base_uri",
-  "localhost://"), ...)
+  "jsonld"), rdf = NULL, base = getOption("rdf_base_uri", "localhost://"),
+  ...)
 }
 \arguments{
 \item{doc}{path, URL, or literal string of the rdf document to parse}

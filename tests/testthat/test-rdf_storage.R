@@ -2,6 +2,7 @@ testthat::context("RDF Storage")
 
 testthat::test_that("SQLite Backend", {
   testthat::skip_on_cran()
+  
   testthat::skip_if_not(rdf_storage("sqlite", new_db = TRUE, 
                                     check_only = TRUE, name = "rdflib.sqlite"))
   testthat::expect_silent(r <- rdf(storage="sqlite", 
@@ -64,12 +65,7 @@ testthat::test_that("Virtuoso Backend", {
   testthat::skip_on_cran()
   
   ## FIXME This skip check will pass even when database not present
-  testthat::skip_if_not(rdf_storage("virtuoso",
-                                    user="dba", 
-                                    password="dba", 
-                                    dsn="Local Virtuoso",
-                                    new_db=TRUE,
-                                    check_only = TRUE))
+  testthat::skip_if_not(rdflib:::rdf_has_virtuoso())
   
 
   testthat::expect_silent(

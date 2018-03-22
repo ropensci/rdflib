@@ -187,16 +187,19 @@ is_null_pointer <- function(x){
 #'
 #'  Configurations via `options()`
 #' 
-#' `rdflib_print_format`:
+#' `rdf_print_format`:
 #'  
 #' - NULL or "nquads" (default)
 #' - any valid serializer name: e.g. "rdfxml", "jsonld", "turtle",  "ntriples"
 #'   
-#' `rdflib_base_uri`:
+#' `rdf_base_uri`:
 #' 
 #' - Default base URI to use (when serializing JSON-LD only at this time)
 #'     default is "localhost://"
-#'
+#'     
+#' `rdf_max_print`:
+#' 
+#' - maximum number of lines to print from rdf, default 10
 #'
 #'
 "_PACKAGE"

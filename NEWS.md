@@ -1,7 +1,16 @@
-# rdflib 0.1.0 (2018-03-02)
+# rdflib 0.2.0 
 
 ## New Features
 
+* `rdf()` supports all major storage backends: Virtuoso, SQLite, Postgres, MySQL,
+   in addition to existing support for BDB and memory-based storage.
+* `length()` method added to report length of triplestore
+* `print()` method gains `rdf_max_print()` option and does not print huge triplestores
+* `print()` method sumarizes total number of triples and backend
+
+# rdflib 0.1.0 (2018-03-02)
+
+## New Features
 
 * `rdf()` supports BDB backend for disk-based storage for large
    triplestores [#6](https://github.com/cboettig/rdflib/issues/6)

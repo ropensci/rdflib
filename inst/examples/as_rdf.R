@@ -16,7 +16,7 @@
 as_rdf <- function(x, 
                    rdf = rdf(),
                    vocab = NULL, 
-                   base = getOption("rdflib_base_uri", "localhost://"), 
+                   base = getOption("rdf_base_uri", "localhost://"), 
                    context = NULL, 
                    ...) UseMethod("as_rdf")
 
@@ -25,7 +25,7 @@ as_rdf <- function(x,
 as_rdf.list <- function(x, 
                         rdf = NULL,
                         vocab = NULL, 
-                        base = getOption("rdflib_base_uri", "localhost://"), 
+                        base = getOption("rdf_base_uri", "localhost://"), 
                         context = NULL){
   
   if(is.null(rdf)){
@@ -46,7 +46,7 @@ as_rdf.list <- function(x,
 # helper function (identical to plyr::compact)
 compact <- function (l) Filter(Negate(is.null), l)
 json_context <- function(vocab = NULL, 
-                         base = getOption("rdflib_base_uri", "localhost://"), 
+                         base = getOption("rdf_base_uri", "localhost://"), 
                          context = NULL){
   jsonlite::toJSON(
     compact(c(list("@vocab" = vocab,
@@ -69,7 +69,7 @@ json_context <- function(vocab = NULL,
 as_rdf.data.frame <- function(df,  
                               rdf = NULL, 
                               vocab = NULL, 
-                              base = getOption("rdflib_base_uri",
+                              base = getOption("rdf_base_uri",
                                                "localhost://"), 
                               context = NULL, 
                               key = NULL){

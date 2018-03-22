@@ -33,16 +33,21 @@ To learn more about rdflib, start with the vignettes:
 
 Configurations via \code{options()}
 
-\code{rdflib_print_format}:
+\code{rdf_print_format}:
 \itemize{
 \item NULL or "nquads" (default)
 \item any valid serializer name: e.g. "rdfxml", "jsonld", "turtle",  "ntriples"
 }
 
-\code{rdflib_base_uri}:
+\code{rdf_base_uri}:
 \itemize{
 \item Default base URI to use (when serializing JSON-LD only at this time)
 default is "localhost://"
+}
+
+\code{rdf_max_print}:
+\itemize{
+\item maximum number of lines to print from rdf, default 10
 }
 }
 \seealso{

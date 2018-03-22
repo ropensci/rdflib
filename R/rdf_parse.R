@@ -29,7 +29,7 @@ rdf_parse <- function(doc,
                                  "turtle",
                                  "jsonld"),
                       rdf = NULL,
-                      base = getOption("rdflib_base_uri", "localhost://"),
+                      base = getOption("rdf_base_uri", "localhost://"),
                       ...){
   
   format <- match.arg(format)
@@ -52,7 +52,7 @@ rdf_parse <- function(doc,
   if(format == "jsonld"){
     x <- jsonld::jsonld_to_rdf(doc, 
                                options = 
-           list(base = getOption("rdflib_base_uri", "localhost://"),
+           list(base = getOption("rdf_base_uri", "localhost://"),
                 format = "application/nquads"))
     writeLines(x, tmp_json)
     format <- "nquads"
