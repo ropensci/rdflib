@@ -3,8 +3,7 @@
 #' @inheritParams rdf_parse
 #' @inheritParams rdf_query
 #' @param doc file path to write out to. If null, will write to character.
-#' @param namespace string giving the namespace to set
-#' @param prefix string giving the prefix associated with the namespace
+#' @param namespace a named character containing the prefix to namespace bindings. \code{names(namespace)} are the prefixes, whereas \code{namespace} are the namespaces
 #' @param ... additional arguments to \code{redland::serializeToFile}
 #' @return rdf_serialize returns the output file path `doc` invisibly.
 #'   This makes it easier to use rdf_serialize in pipe chains with
@@ -19,15 +18,18 @@
 #' infile <- system.file("extdata", "dc.rdf", package="redland")
 #' out <- tempfile("file", fileext = ".rdf")
 #'
-#' rdf <- rdf_parse(infile)
-#' rdf_serialize(rdf, out)
+#' some_rdf <- rdf_parse(infile)
+#' rdf_add(some_rdf, subject = "http://www.dajobe.org/dave-beckett", predicate = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", object = "http://xmlns.com/foaf/0.1/Person")
+#' rdf_serialize(some_rdf, out)
 #'
 #' ## With a namespace
-#' rdf_serialize(rdf,
+#' rdf_serialize(some_rdf,
 #'           out,
-#'           namespace = "http://purl.org/dc/elements/1.1/",
-#'           prefix = "dc")
+#'           format = "turtle",
+#'           namespace = c(dc = "http://purl.org/dc/elements/1.1/", foaf = "http://xmlns.com/foaf/0.1/")
+#'           )
 #'
+#' readLines(out)
 rdf_serialize <- function(rdf,
                           doc = NULL,
                           format = c("guess",
@@ -37,7 +39,6 @@ rdf_serialize <- function(rdf,
                                      "turtle",
                                      "jsonld"),
                           namespace = NULL,
-                          prefix = NULL,
                           base = getOption("rdf_base_uri", "localhost://"),
                           ...){
   
@@ -59,11 +60,14 @@ rdf_serialize <- function(rdf,
     new("Serializer", rdf$world,
         name = format, mimeType = mimetype)
   
-  if(!is.null(namespace)){
-    redland::setNameSpace(serializer,
-                          rdf$world,
-                          namespace = namespace,
-                          prefix = prefix)
+  if(!is.null(namespace) && is.character(namespace) && length(namespace) >= 1){
+    ix = 1:length(namespace)
+    for (i in ix) {
+      redland::setNameSpace(serializer,
+                            rdf$world,
+                            namespace = namespace[i],
+                            prefix = names(namespace)[i]) 
+    }
   }
   
   if(is.null(doc)){
