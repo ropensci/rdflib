@@ -25,6 +25,7 @@ But don't let these appearances deceive you. RDF really is cool. If you've ever 
 library(rdflib)
 library(dplyr)
 library(tidyr)
+library(tibble)
 library(jsonld)
 ```
 
