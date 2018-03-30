@@ -5,7 +5,7 @@
 \title{Serialize an RDF Document}
 \usage{
 rdf_serialize(rdf, doc = NULL, format = c("guess", "rdfxml", "nquads",
-  "ntriples", "turtle", "jsonld"), namespace = NULL, prefix = NULL,
+  "ntriples", "turtle", "jsonld"), namespace = NULL,
   base = getOption("rdf_base_uri", "localhost://"), ...)
 }
 \arguments{
@@ -19,9 +19,7 @@ one of "rdfxml", "nquads", "ntriples", "turtle"
 or "jsonld". If not provided, will try to guess based
 on file extension and fall back on rdfxml.}
 
-\item{namespace}{string giving the namespace to set}
-
-\item{prefix}{string giving the prefix associated with the namespace}
+\item{namespace}{a named character containing the prefix to namespace bindings. \code{names(namespace)} are the prefixes, whereas \code{namespace} are the namespaces}
 
 \item{base}{the base URI to assume for any relative URIs (blank nodes)}
 
@@ -39,13 +37,16 @@ Serialize an RDF Document
 infile <- system.file("extdata", "dc.rdf", package="redland")
 out <- tempfile("file", fileext = ".rdf")
 
-rdf <- rdf_parse(infile)
-rdf_serialize(rdf, out)
+some_rdf <- rdf_parse(infile)
+rdf_add(some_rdf, subject = "http://www.dajobe.org/dave-beckett", predicate = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", object = "http://xmlns.com/foaf/0.1/Person")
+rdf_serialize(some_rdf, out)
 
 ## With a namespace
-rdf_serialize(rdf,
+rdf_serialize(some_rdf,
           out,
-          namespace = "http://purl.org/dc/elements/1.1/",
-          prefix = "dc")
+          format = "turtle",
+          namespace = c(dc = "http://purl.org/dc/elements/1.1/", foaf = "http://xmlns.com/foaf/0.1/")
+          )
 
+readLines(out)
 }
