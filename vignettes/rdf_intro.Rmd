@@ -23,7 +23,8 @@ But don't let these appearances deceive you. RDF really is cool. If you've ever 
 
 ```{r message = FALSE, warning=FALSE}
 library(rdflib)
-library(tidyverse)
+library(dplyr)
+library(tidyr)
 library(jsonld)
 ```
 
@@ -353,7 +354,6 @@ source(system.file("examples/as_rdf.R", package="rdflib"))
 source(system.file("examples/tidy_schema.R", package="rdflib"))
 
 ## Testing: Digest some data.frames into RDF and extract back
- library(tidyverse)
  cars <- mtcars %>% rownames_to_column("Model")
  x1 <- as_rdf(iris, NULL, "iris:")
  x2 <- as_rdf(cars, NULL, "mtcars:")
