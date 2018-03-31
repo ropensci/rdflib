@@ -66,7 +66,7 @@ rdf_serialize <- function(rdf,
     new("Serializer", rdf$world,
         name = format, mimeType = mimetype)
   
-  if(!is.null(namespace) && is.character(namespace) && length(namespace) >= 1){
+  if(!is.null(namespace) && is.character(namespace) && length(namespace) >= 1 && length(namespace) == length(prefix)){
     ix = 1:length(namespace)
     for (i in ix) {
       redland::setNameSpace(serializer,
