@@ -6,7 +6,8 @@
 \usage{
 rdf_serialize(rdf, doc = NULL, format = c("guess", "rdfxml", "nquads",
   "ntriples", "turtle", "jsonld"), namespace = NULL,
-  base = getOption("rdf_base_uri", "localhost://"), ...)
+  prefix = names(namespace), base = getOption("rdf_base_uri",
+  "localhost://"), ...)
 }
 \arguments{
 \item{rdf}{an existing rdf triplestore to extend with triples from
@@ -20,6 +21,8 @@ or "jsonld". If not provided, will try to guess based
 on file extension and fall back on rdfxml.}
 
 \item{namespace}{a named character containing the prefix to namespace bindings. \code{names(namespace)} are the prefixes, whereas \code{namespace} are the namespaces}
+
+\item{prefix}{(optional) for backward compatibility. See \code{namespace}. It contains the matching prefixes to the namespaces in \code{namespace} and is set automatically if you provide \code{namespace} as a named character vector.}
 
 \item{base}{the base URI to assume for any relative URIs (blank nodes)}
 
@@ -38,14 +41,18 @@ infile <- system.file("extdata", "dc.rdf", package="redland")
 out <- tempfile("file", fileext = ".rdf")
 
 some_rdf <- rdf_parse(infile)
-rdf_add(some_rdf, subject = "http://www.dajobe.org/dave-beckett", predicate = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", object = "http://xmlns.com/foaf/0.1/Person")
+rdf_add(some_rdf,
+    subject = "http://www.dajobe.org/dave-beckett",
+    predicate = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+    object = "http://xmlns.com/foaf/0.1/Person")
 rdf_serialize(some_rdf, out)
 
 ## With a namespace
 rdf_serialize(some_rdf,
           out,
           format = "turtle",
-          namespace = c(dc = "http://purl.org/dc/elements/1.1/", foaf = "http://xmlns.com/foaf/0.1/")
+          namespace = c(dc = "http://purl.org/dc/elements/1.1/",
+          foaf = "http://xmlns.com/foaf/0.1/")
           )
 
 readLines(out)
