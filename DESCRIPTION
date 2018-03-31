@@ -10,7 +10,11 @@ Authors@R: c(person("Carl", "Boettiger",
                   comment=c(ORCID = "0000-0002-0381-3766")),
              person("Anna", "Krystalli", 
                   role = "rev",
-                  comment=c(ORCID = "0000-0002-2378-4915")))                  
+                  comment=c(ORCID = "0000-0002-2378-4915")),
+             person("Viktor", "Senderov",
+                  email = "vsenderov@gmail.com",
+                  role = "ctb",
+                  comment = c(ORCID = "0000-0003-3340-5963")))
 Description: The Resource Description Framework, or 'RDF' is a widely used
              data representation model that forms the cornerstone of the 
              Semantic Web. 'RDF' represents data as a graph rather than 
