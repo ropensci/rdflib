@@ -33,25 +33,20 @@ length.rdf <- function(x){
 }
 
 #' @export
-print.rdf <- function(x, ...){
-  cat(format.rdf(x, ...), sep = "\n")
-}
-
-
-#' @importFrom stringi stri_unescape_unicode
-#' @export
 # @param max_print maximum number of lines to print of rdf preview
 # @param max_preview if number of triples exceeds this, no preview
 # will be displayed, since preview method must currently serialize
 # entire triplestore.
-format.rdf <- function(x,
-                       format = getOption("rdf_print_format", "nquads"),
-                       max_print = getOption("rdf_max_print", 10L),
-                       max_preview = 1e5,
-                       ...){
+print.rdf <- function(x,
+                      format = getOption("rdf_print_format", "nquads"),
+                      max_print = getOption("rdf_max_print", 10L),
+                      max_preview = 1e5,
+                      ...){
+  
   n <- redland::librdf_model_size(x$model@librdf_model)
   header <- paste0("Total of ", n, " triples, stored in ", x$storage@type, "\n",
-                  "-------------------------------\n")
+                   "-------------------------------\n")
+  
   if(n < max_preview){
     tmp <- tempfile()
     rdf_serialize(x, 
@@ -70,5 +65,26 @@ format.rdf <- function(x,
   } else {
     txt <- paste(header, "\n (preview supressed for performance)")
   }
+
+  cat(txt, sep = "\n")
+}
+
+
+#' @importFrom stringi stri_unescape_unicode
+#' @export
+format.rdf <- function(x,
+                       format = getOption("rdf_print_format", "nquads"),
+                       ...){
+    tmp <- tempfile()
+    rdf_serialize(x, 
+                  tmp,
+                  format = format,
+                  ...)
+    ## Fix encoding on nquads, ntriples 
+
+    txt <- paste0(header, stringi::stri_unescape_unicode(
+      paste(readLines(tmp, n = max_print), collapse = "\n")),
+      footer)
+    unlink(tmp)
   txt
 }

@@ -65,6 +65,7 @@ Other contributors:
 \itemize{
   \item Bryce Mecum (0000-0002-0381-3766) [NA]
   \item Anna Krystalli (0000-0002-2378-4915) [NA]
+  \item Viktor Senderov \email{vsenderov@gmail.com} (0000-0003-3340-5963) [contributor]
 }
 
 }
