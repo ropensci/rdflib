@@ -13,43 +13,87 @@ vignette: >
 
 # Draft / work-in-progress
 
+
 Often there's a JSON object/blob with some pattern I understand and want to extract without having to make explicit references to just how deep it is buried.  For instance, something like the example below:
 
+```{r}
+x <- '{
+"stuff": {
+   "buried": {
+      "deep": [
+       {
+        "goodstuff": "here",
+        "name": "Bob",
+        "secret_power": 5
+       },
+       {
+        "goodstuff": "here",
+        "name": "Amanda",
+        "secret_power": 4, 
+        "more_nested_stuff": { 
+            "a": 1,
+            "b": 2
+          }
+        }
+      ],
+      "alsodeep": 2342423234,
+      "deeper": {
+        "foo": [
+          {
+            "goodstuff": 5,
+            "name": "Barb"
+          },
+          {
+            "goodstuff": "here",
+            "name": "Scott"
+          }
+        ]
+      }
+    }
+}}'
 ```
-{
-"stuff": [{
-               "buried": [
-                               "deep": [
-                                             {
-                                              "goodstuff": "here",
-                                              "name": "Bob Rudis",
-                                              "secret_power": ..., 
-                                             },
-                                             {
-                                              "goodstuff": "here",
-                                              "name": "Amanda Dobbyn",
-                                              "secret_power": ..., 
-                                              "more_nested_stuff": { ... }
-                                             },
-   
-                                             ]
-                                ]
-              },
-              {
-               ...
-              }
-              ]
 
-}
+```{r}
+blob <- jsonlite::fromJSON(x, simplifyVector=FALSE)
+jq_out <- jqr::jq(x, 'recurse(.[]?) | objects | select(has("goodstuff"))')
+jq_out
+```
+
+Rectangularize jq results: 
+
+
+```{r}
+library(magrittr)
+library(jsonlite)
+jq_out  %>% jqr::combine() %>% fromJSON() 
+```
+With `dplyr` we could then filter out the parts that we don't need (`goodstuff != "here"`), rename columns, etc.  We would have to do further work to get higher values, like the `alsodeep` code from the parent element.
+
+
+```{r}
+
+library(rdflib)
+## experimental functions for rdflib package
+source(system.file("examples/as_rdf.R", package="rdflib"))
+blob <- as_rdf(jsonlite::fromJSON(x, simplifyVector=FALSE), vocab = "x:")
+```
+
+```{r}
+q <- '
+PREFIX x: <x:>
+SELECT ?name, ?power ?b ?id
+WHERE { 
+  ?object x:goodstuff "here" .
+  ?object x:name ?name .
+  OPTIONAL { ?object x:secret_power      ?power } .
+  OPTIONAL { ?object x:more_nested_stuff ?y .
+             ?y      x:b                 ?b} .
+  OPTIONAL {
+             ?parent x:deep ?object .
+             ?parent x:alsodeep ?id
+  }
+}'
+rdf_query(blob, q)
 ```
 
 Maybe I just want the value of the `name`s of anything found in JSON objects that also contain the key-value pair `"goodstuff": "here"`.  More generally, I'd like to just jump to that point in the "graph" and navigate from there, e.g. maybe I want to go up to the parent object and get some additional property, etc.  
-
-Maybe this can be done in JQ already, but it's not intuitive to me how to express it.  (particularly if I want to start "walking the graph" from that point without specifying just how I descended down to that node...
-
-```
-?s <goodstuff> "here"
-?s <name> ?name
-?parent <contains> ?s
-?parent <name> ?parent_name
-```
