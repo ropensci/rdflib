@@ -1,0 +1,55 @@
+---
+title: "List queries"
+author: "Carl Boettiger"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{rdflib Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  
+---
+
+# Draft / work-in-progress
+
+Often there's a JSON object/blob with some pattern I understand and want to extract without having to make explicit references to just how deep it is buried.  For instance, something like the example below:
+
+```
+{
+"stuff": [{
+               "buried": [
+                               "deep": [
+                                             {
+                                              "goodstuff": "here",
+                                              "name": "Bob Rudis",
+                                              "secret_power": ..., 
+                                             },
+                                             {
+                                              "goodstuff": "here",
+                                              "name": "Amanda Dobbyn",
+                                              "secret_power": ..., 
+                                              "more_nested_stuff": { ... }
+                                             },
+   
+                                             ]
+                                ]
+              },
+              {
+               ...
+              }
+              ]
+
+}
+```
+
+Maybe I just want the value of the `name`s of anything found in JSON objects that also contain the key-value pair `"goodstuff": "here"`.  More generally, I'd like to just jump to that point in the "graph" and navigate from there, e.g. maybe I want to go up to the parent object and get some additional property, etc.  
+
+Maybe this can be done in JQ already, but it's not intuitive to me how to express it.  (particularly if I want to start "walking the graph" from that point without specifying just how I descended down to that node...
+
+```
+?s <goodstuff> "here"
+?s <name> ?name
+?parent <contains> ?s
+?parent <name> ?parent_name
+```
