@@ -4,8 +4,8 @@ state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![Travis-CI Build
 Status](https://travis-ci.org/ropensci/rdflib.svg?branch=master)](https://travis-ci.org/ropensci/rdflib)
-[![AppVeyor Build
-Status](https://ci.appveyor.com/api/projects/status/github/cboettig/rdflib?branch=master&svg=true)](https://ci.appveyor.com/project/cboettig/rdflib)
+[![Build
+status](https://ci.appveyor.com/api/projects/status/n81e9wsh5bh0xrm6?svg=true)](https://ci.appveyor.com/project/cboettig/rdflib)
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/ropensci/rdflib/master.svg)](https://codecov.io/github/ropensci/rdflib?branch=master)
 [![CircleCI](https://circleci.com/gh/ropensci/rdflib.svg?style=svg)](https://circleci.com/gh/ropensci/rdflib "Docker tests")
@@ -82,6 +82,8 @@ x <- rdf_add(x,
     predicate="http://purl.org/dc/elements/1.1/language",
     object="en")
 x
+#> Total of 1 triples, stored in hashes
+#> -------------------------------
 #> <http://www.dajobe.org/> <http://purl.org/dc/elements/1.1/language> "en" .
 ```
 
@@ -90,6 +92,8 @@ Change the default display format (`nquads`) for graph objects:
 ``` r
 options(rdf_print_format = "jsonld")
 x
+#> Total of 1 triples, stored in hashes
+#> -------------------------------
 #> {
 #>   "@id": "http://www.dajobe.org/",
 #>   "http://purl.org/dc/elements/1.1/language": "en"
@@ -105,6 +109,8 @@ provided in the R package, `jsonld`.
 out <- tempfile()
 rdf_serialize(x, out, "jsonld")
 rdf_parse(out, format = "jsonld")
+#> Total of 1 triples, stored in hashes
+#> -------------------------------
 #> {
 #>   "@id": "http://www.dajobe.org/",
 #>   "http://purl.org/dc/elements/1.1/language": "en"
@@ -120,12 +126,11 @@ For more information on the JSON-LD RDF API, see
 
 Please also cite the underlying `redland` library when citing `rdflib`
 
-Boettiger C (2018). *rdflib: A high level wrapper around the redland
-package for common rdf applications*. doi: 10.5281/zenodo.1098478 (URL:
-<http://doi.org/10.5281/zenodo.1098478>), \<URL:
-<https://doi.org/10.5281/zenodo.1098478>\>.
+Carl Boettiger. (2018). rdflib: A high level wrapper around the redland
+package for common rdf applications (Version 0.1.0). Zenodo.
+<doi:10.5281/zenodo.1098478>
 
-Jones M, Slaughter P, Ooms J, Boettiger C and Chamberlain S (2016).
+Jones M, Slaughter P, Ooms J, Boettiger C, Chamberlain S (2016).
 *redland: RDF Library Bindings in R*. doi: 10.5063/F1VM496B (URL:
 <http://doi.org/10.5063/F1VM496B>), R package version 1.0.17-9, \<URL:
 <https://github.com/ropensci/redland-bindings/tree/master/R/redland>\>.
