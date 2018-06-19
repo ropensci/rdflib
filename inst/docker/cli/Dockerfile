@@ -42,8 +42,8 @@ RUN git clone git://github.com/dajobe/raptor.git && \
     make install
 
 RUN R -e "install.packages(c('remotes','devtools'))" && \
-    R -e "remotes::install_github('ropensci/redland-bindings/R/redland')" && \
-    R -e "remotes::install_github('ropensci/rdflib')"
+    R -e "remotes::install_github('ropensci/redland-bindings/R/redland', dep=TRUE)" && \
+    R -e "remotes::install_github('ropensci/rdflib', dep=TRUE)"
 
 
 
