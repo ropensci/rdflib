@@ -14,6 +14,8 @@ vignette: >
 
 ```{r include = FALSE}
 knitr::opts_chunk$set(message=FALSE, warning = FALSE)
+# Make sure virtuoso is up first
+system("virtuoso-t -c /etc/virtuoso-opensource-6.1/virtuoso.ini") 
 ```
 
 
@@ -45,14 +47,9 @@ source(system.file("examples/tidy_schema.R", package="rdflib"))
 
 Configure RDF storage:
 
-```{r options, include = TRUE}
-#options(rdflib_storage = "BDB") 
-options(rdflib_storage = "memory") 
-
-# Use a smaller dataset if we do not have a BDB backend: 
-if(getOption("rdflib_storage") != "BDB"){
-  flights <- flights[1:1e3,]
-}
+```{r}
+rdf <- rdf(storage="virtuoso", user="dba", 
+             password="dba", dsn="Local Virtuoso", new_db = TRUE)
 ```
 
 # Relational data
@@ -91,8 +88,6 @@ Similarly, when reading into RDF we have to declare the key column for the table
 and again establish a `base_uri` which will allow RDF methods to distinguish between URIs (subjects, predicates, and foreign keys) and literal strings.  
 
 ```{r write_rdf}
-rdf <- rdf()
-
 system.time({
   
 as_rdf(airlines, rdf = rdf, key = "carrier", vocab = "x:")

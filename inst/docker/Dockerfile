@@ -43,9 +43,9 @@ RUN git clone git://github.com/dajobe/raptor.git && \
     make && \
     make install
 
-RUN R -e "install.packages('remotes')" && \
-    R -e "remotes::install_github('ropensci/redland-bindings/R/redland')" && \
-    R -e "remotes::install_github('ropensci/rdflib', dep=TRUE)"
+RUN install2.r --deps TRUE --error \
+      redland \
+      rdflib
 
 RUN echo '[Local Virtuoso]\
           \nDriver=/usr/lib/x86_64-linux-gnu/odbc/virtodbc_r.so\
