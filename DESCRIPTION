@@ -1,6 +1,6 @@
 Package: rdflib
 Title: Tools to Manipulate and Query Semantic Data
-Version: 0.1.1.999
+Version: 0.1.1.9999
 Authors@R: c(person("Carl", "Boettiger", 
                   email = "cboettig@gmail.com", 
                   role = c("aut", "cre", "cph"),
@@ -40,7 +40,7 @@ Imports: redland,
     utils,
     stringi,
     readr
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 6.1.0
 Roxygen: list(markdown = TRUE)
 Suggests: magrittr,
     covr,
@@ -58,6 +58,5 @@ Suggests: magrittr,
     xml2,
     jsonlite,
     repurrrsive,
-    nycflights13,
-    codemetar
+    nycflights13
 VignetteBuilder: knitr
