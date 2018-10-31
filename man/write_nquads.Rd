@@ -20,4 +20,5 @@ write object out as nquads
 tmp <- tempfile(fileext = ".nq")
 library(datasets)
 write_nquads(iris, tmp)
+read_nquads(tmp)
 }

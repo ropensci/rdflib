@@ -351,7 +351,7 @@ So far, we have spent a lot of words describing how to transform data into RDF, 
 _Still working on writing this section_
 
 ```{r}
-source(system.file("examples/as_rdf.R", package="rdflib"))
+#source(system.file("examples/as_rdf.R", package="rdflib"))
 source(system.file("examples/tidy_schema.R", package="rdflib"))
 
 ## Testing: Digest some data.frames into RDF and extract back

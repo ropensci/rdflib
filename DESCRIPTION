@@ -34,23 +34,25 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/ropensci/rdflib
 BugReports: https://github.com/ropensci/rdflib/issues
-Imports: redland,
+Imports: 
+    redland,
     jsonld,
     methods,
     utils,
     stringi,
-    readr
+    readr,
+    dplyr,
+    tidyr
 RoxygenNote: 6.1.0
 Roxygen: list(markdown = TRUE)
-Suggests: magrittr,
+Suggests: 
+    magrittr,
     covr,
     testthat,
     knitr,
     rmarkdown,
     jqr,
     DT,
-    dplyr,
-    tidyr,
     tibble,
     purrr,
     lubridate,
