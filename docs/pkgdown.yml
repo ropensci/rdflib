@@ -3,7 +3,6 @@ pkgdown: 1.1.0
 pkgdown_sha: ~
 articles:
   data-lake: articles/data-lake.html
-  list_query: articles/list_query.html
   storage: articles/storage.html
   rdf_intro: rdf_intro.html
   slides: slides/slides.html
