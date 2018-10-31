@@ -98,7 +98,7 @@ poor_mans_nquads <- function(x, file, prefix = NULL, ...){
     warning(paste("prefix not declared, using", prefix))
   }
   
-  
+  prefix <- uri_prefix(prefix)
   ## Currently written to be base-R compatible, 
   ## but a tidyverse implementation may speed serialization.  
   ## However, this seems to be fast enough that it is rarely the bottleneck
