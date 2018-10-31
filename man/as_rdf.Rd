@@ -4,8 +4,9 @@
 \alias{as_rdf}
 \title{Coerce an object into RDF}
 \usage{
-as_rdf(x, rdf = rdf(), prefix = NULL, base = getOption("rdf_base_uri",
-  "localhost://"), context = NULL, ...)
+as_rdf(x, rdf = rdf(), prefix = NULL,
+  base = getOption("rdf_base_uri", "localhost://"), context = NULL,
+  ...)
 }
 \arguments{
 \item{x}{an object to coerce into RDF (list, list-like, or data.frame)}

@@ -42,23 +42,18 @@ write_nquads.rdf <- function(x, file, ...){
 #' @export
 write_nquads.data.frame <- function(x, 
                          file,
-                         prefix = NULL, 
-                         key_column = NULL){
-  
-  if (is.null(prefix)) {
-    prefix <- paste0(deparse(substitute(x)), ":")
-    warning(paste("prefix not declared, using", prefix))
-  }
+                         ...){
   
   
-  df <- normalize_table(x, key_column)
-  poor_mans_nquads(df, file, prefix)
+  
+  df <- normalize_table(x, ...)
+  poor_mans_nquads(df, file, ...)
 }
 
 
 #' @importFrom tidyr gather
 #' @importFrom dplyr left_join
-normalize_table <- function(df, key_column = NULL){
+normalize_table <- function(df, key_column = NULL, ...){
   ## gather looses col-classes, so pre-compute them (with base R)
   col_classes <- data.frame(datatype = 
                               vapply(df, 
@@ -96,7 +91,13 @@ normalize_table <- function(df, key_column = NULL){
 
 ## x is a data.frame with columns: subject, predicate, object, & datatype
 #' @importFrom utils write.table
-poor_mans_nquads <- function(x, loc, prefix){
+poor_mans_nquads <- function(x, file, prefix = NULL, ...){
+  
+  if (is.null(prefix)) {
+    prefix <- paste0(deparse(substitute(x)), ":")
+    warning(paste("prefix not declared, using", prefix))
+  }
+  
   
   ## Currently written to be base-R compatible, 
   ## but a tidyverse implementation may speed serialization.  
@@ -142,7 +143,7 @@ poor_mans_nquads <- function(x, loc, prefix){
   
   ## drop datatype
   x <- x[c("subject", "predicate", "object", "graph")]       
-  utils::write.table(x, loc, col.names = FALSE, quote = FALSE, row.names = FALSE)
+  utils::write.table(x, file, col.names = FALSE, quote = FALSE, row.names = FALSE)
 }
 
 

@@ -7,18 +7,19 @@
 #' @param prefix A default vocabulary (URI prefix) to assume for all predicates
 #' @param base A base URI to assume for blank subject nodes
 #' @param context a named list mapping any string to a URI
-#' @param ... additional arguments, specific to certain types
+#' @param key_column name of a column which should be 
+#' treated as the primary key in a table. must be unique
 #' @export
 #' 
 #' @examples 
 #' as_rdf(mtcars)
 #' as_rdf(list(repo = "rdflib", owner = list("id", "ropensci")))
 as_rdf <- function(x, 
-                   rdf = rdf(),
+                   rdf = NULL,
                    prefix = NULL, 
                    base = getOption("rdf_base_uri", "localhost://"), 
-                   context = NULL, 
-                   ...) UseMethod("as_rdf")
+                   context = NULL,
+                   key_column = NULL) UseMethod("as_rdf")
 
 
 #' @export
@@ -26,7 +27,8 @@ as_rdf.list <- function(x,
                         rdf = NULL,
                         prefix = NULL, 
                         base = getOption("rdf_base_uri", "localhost://"), 
-                        context = NULL){
+                        context = NULL,
+                        key_column = NULL){
   
   if(is.null(rdf)){
     rdf <- rdf()  
@@ -68,18 +70,20 @@ json_context <- function(prefix = NULL,
 
 ## tidy data to rdf
 #' @export
-as_rdf.data.frame <- function(df,  
-                              rdf = rdf(), 
+as_rdf.data.frame <- function(x,  
+                              rdf = NULL, 
                               prefix = NULL, 
                               base = getOption("rdf_base_uri",
                                                "localhost://"), 
                               context = NULL, 
                               key_column = NULL){
   
-  file = tempfile()
-  write_nquads(df, file, prefix, key_column)
+  if(is.null(rdf)){
+    rdf <- rdf()  
+  }
+  file <- tempfile()
+  write_nquads(x, file = file, prefix = prefix, key_column = key_column)
   rdf <- rdf_parse(file, rdf = rdf, format = "nquads")
-
   unlink(file)
   invisible(rdf)
 }
