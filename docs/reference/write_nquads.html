@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Perform a SPARQL Query — rdf_query • rdflib</title>
+<title>write object out as nquads — write_nquads • rdflib</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Perform a SPARQL Query — rdf_query" />
+<meta property="og:title" content="write object out as nquads — write_nquads" />
 
-<meta property="og:description" content="Perform a SPARQL Query" />
+<meta property="og:description" content="write object out as nquads" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -124,74 +124,60 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Perform a SPARQL Query</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ropensci/rdflib/blob/master/R/rdf_query.R'><code>R/rdf_query.R</code></a></small>
-    <div class="hidden name"><code>rdf_query.Rd</code></div>
+    <h1>write object out as nquads</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ropensci/rdflib/blob/master/R/write_nquads.R'><code>R/write_nquads.R</code></a></small>
+    <div class="hidden name"><code>write_nquads.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Perform a SPARQL Query</p>
+    <p>write object out as nquads</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>rdf_query</span>(<span class='no'>rdf</span>, <span class='no'>query</span>, <span class='kw'>data.frame</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>write_nquads</span>(<span class='no'>x</span>, <span class='no'>file</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>rdf</th>
-      <td><p>an rdf object (e.g. from <code><a href='rdf_parse.html'>rdf_parse</a></code>)</p></td>
+      <th>x</th>
+      <td><p>an object that can be represented as nquads</p></td>
     </tr>
     <tr>
-      <th>query</th>
-      <td><p>a SPARQL query, as text string</p></td>
-    </tr>
-    <tr>
-      <th>data.frame</th>
-      <td><p>logical, should the results be returned as a data.frame?</p></td>
+      <th>file</th>
+      <td><p>output filename</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>additional arguments to a redland initialize-Query</p></td>
+      <td><p>additional parameters, see examples</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>a data.frame of all query results (default.)  Columns will
-be named according to variable names in the SPARQL query. Returned
-object values will be coerced to match the corresponding R type
-to any associated datatype URI, if provided. If a column would
-result in mixed classes (e.g. strings and numerics), all types
-in the column will be coerced to character strings. If <code>data.frame</code>
-is false, results will be returned as a list with each element
-typed by its data URI.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>doc</span> <span class='kw'>&lt;-</span> <span class='fu'>system.file</span>(<span class='st'>"extdata"</span>, <span class='st'>"dc.rdf"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"redland"</span>)
-
-<span class='no'>sparql</span> <span class='kw'>&lt;-</span>
-<span class='st'>'PREFIX dc: &lt;http://purl.org/dc/elements/1.1/&gt;
- SELECT ?a ?c
- WHERE { ?a dc:creator ?c . }'</span>
-
-<span class='no'>rdf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rdf_parse.html'>rdf_parse</a></span>(<span class='no'>doc</span>)
-<span class='fu'>rdf_query</span>(<span class='no'>rdf</span>, <span class='no'>sparql</span>)</div><div class='output co'>#&gt; # A tibble: 1 x 2
-#&gt;   a                      c           
-#&gt;   &lt;chr&gt;                  &lt;chr&gt;       
-#&gt; 1 http://www.dajobe.org/ Dave Beckett</div><div class='input'>
-</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>tmp</span> <span class='kw'>&lt;-</span> <span class='fu'>tempfile</span>(<span class='kw'>fileext</span> <span class='kw'>=</span> <span class='st'>".nq"</span>)
+<span class='fu'>library</span>(<span class='no'>datasets</span>)
+<span class='fu'>write_nquads</span>(<span class='no'>iris</span>, <span class='no'>tmp</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: prefix not declared, using df:</span></div><div class='input'><span class='fu'><a href='read_nquads.html'>read_nquads</a></span>(<span class='no'>tmp</span>)</div><div class='output co'>#&gt; Total of 750 triples, stored in hashes
+#&gt; -------------------------------
+#&gt; &lt;df:28&gt; &lt;df:Sepal.Width&gt; "3.5"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+#&gt; &lt;df:3&gt; &lt;df:Sepal.Width&gt; "3.2"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+#&gt; &lt;df:126&gt; &lt;df:Petal.Width&gt; "1.8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+#&gt; &lt;df:38&gt; &lt;df:Petal.Width&gt; "0.1"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+#&gt; &lt;df:111&gt; &lt;df:Sepal.Length&gt; "6.5"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+#&gt; &lt;df:149&gt; &lt;df:Sepal.Width&gt; "3.4"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+#&gt; &lt;df:84&gt; &lt;df:Sepal.Length&gt; "6"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+#&gt; &lt;df:87&gt; &lt;df:Petal.Width&gt; "1.5"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+#&gt; &lt;df:42&gt; &lt;df:Species&gt; "setosa"^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .
+#&gt; &lt;df:138&gt; &lt;df:Petal.Width&gt; "1.8"^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .
+#&gt; 
+#&gt; ... with 740 more triples</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-      
+            
       <li><a href="#examples">Examples</a></li>
     </ul>
 
