@@ -52,10 +52,22 @@ xs_class <- function(x){
                  "http://www.w3.org/2001/XMLSchema#",
                  type)
   ## consistent return length, character(1)
-  if(length(string) == 0){
+  if (length(string) == 0) {
     string <- as.character(NA)
   }
   string
 }
+
+
+uri_prefix <- function(x){
+  abs_uri <- grepl("^\\w+://", x)
+  if (abs_uri) {
+    if (!grepl("[#/]$", x)) return(paste0(x, "#"))
+    return(x)
+  }
+  if (!grepl(":$", x)) return(paste0(x, ":"))
+  x
+}
+
 
 
