@@ -4,9 +4,8 @@
 \alias{as_rdf}
 \title{Coerce an object into RDF}
 \usage{
-as_rdf(x, rdf = rdf(), prefix = NULL,
-  base = getOption("rdf_base_uri", "localhost://"), context = NULL,
-  ...)
+as_rdf(x, rdf = NULL, prefix = NULL, base = getOption("rdf_base_uri",
+  "localhost://"), context = NULL, key_column = NULL)
 }
 \arguments{
 \item{x}{an object to coerce into RDF (list, list-like, or data.frame)}
@@ -19,7 +18,8 @@ as_rdf(x, rdf = rdf(), prefix = NULL,
 
 \item{context}{a named list mapping any string to a URI}
 
-\item{...}{additional arguments, specific to certain types}
+\item{key_column}{name of a column which should be
+treated as the primary key in a table. must be unique}
 }
 \description{
 Coerce an object into RDF
