@@ -41,6 +41,10 @@ RUN git clone git://github.com/dajobe/raptor.git && \
     make && \
     make install
 
-RUN install2.r --error --deps TRUE rdflib
+RUN R -e "install.packages(c('remotes','devtools'))" && \
+    R -e "remotes::install_github('ropensci/redland-bindings/R/redland')" && \
+    R -e "remotes::install_github('ropensci/rdflib')"
+
+
 
 

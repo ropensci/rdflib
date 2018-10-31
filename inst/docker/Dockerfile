@@ -22,8 +22,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -yq install \
     libsqlite3-dev \
     libmariadbclient-dev \
     librdf-storage-virtuoso \
-    virtuoso-server \
-    unixodbc-dev
+	virtuoso-server \
+	unixodbc-dev
 
 RUN git clone git://github.com/dajobe/raptor.git && \
     cd raptor && \
@@ -43,9 +43,9 @@ RUN git clone git://github.com/dajobe/raptor.git && \
     make && \
     make install
 
-RUN install2.r --deps TRUE --error \
-      redland \
-      rdflib
+RUN R -e "install.packages('remotes')" && \
+    R -e "remotes::install_github('ropensci/redland-bindings/R/redland')" && \
+    R -e "remotes::install_github('ropensci/rdflib', dep=TRUE)"
 
 RUN echo '[Local Virtuoso]\
           \nDriver=/usr/lib/x86_64-linux-gnu/odbc/virtodbc_r.so\

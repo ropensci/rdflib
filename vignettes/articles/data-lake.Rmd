@@ -13,9 +13,7 @@ vignette: >
 
 
 ```{r include = FALSE}
-knitr::opts_chunk$set(message=FALSE, warning = FALSE)
-# Make sure virtuoso is up first
-system("virtuoso-t -c /etc/virtuoso-opensource-6.1/virtuoso.ini") 
+knitr::opts_chunk$set(message=FALSE, warning = FALSE, cache = TRUE)
 ```
 
 
@@ -40,16 +38,20 @@ library(jsonlite)
 ## Our focal package:
 library(rdflib)
 ## experimental functions for rdflib package
-source(system.file("examples/as_rdf.R", package="rdflib"))
 source(system.file("examples/tidy_schema.R", package="rdflib"))
 
 ```
 
-Configure RDF storage:
+Configure RDF storage to use the Virtuoso backend.
 
-```{r}
-rdf <- rdf(storage="virtuoso", user="dba", 
-             password="dba", dsn="Local Virtuoso", new_db = TRUE)
+```{r options, include = TRUE}
+rdf <- rdf(storage = "virtuoso", 
+                   user = "dba", 
+                   password = "dba", 
+                   dsn = "Local Virtuoso", 
+                   new_db = TRUE
+                   )
+
 ```
 
 # Relational data
@@ -88,11 +90,12 @@ Similarly, when reading into RDF we have to declare the key column for the table
 and again establish a `base_uri` which will allow RDF methods to distinguish between URIs (subjects, predicates, and foreign keys) and literal strings.  
 
 ```{r write_rdf}
+
 system.time({
   
-as_rdf(airlines, rdf = rdf, key = "carrier", vocab = "x:")
-as_rdf(planes,  rdf = rdf, key = "tailnum", vocab = "x:")
-as_rdf(uri_flights, rdf = rdf, key = NULL, vocab = "x:")
+as_rdf(airlines, rdf = rdf, key = "carrier", prefix = "x:")
+as_rdf(planes,  rdf = rdf, key = "tailnum", prefix = "x:")
+as_rdf(uri_flights, rdf = rdf, key = NULL, prefix = "x:")
 
 })
 ```
@@ -166,7 +169,7 @@ gh_tibble %>% arrange(name) %>% head()
 The RDF approach merely treats JSON as JSON-LD within a given vocabulary.  In this context, nesting implicitly provides important semantic information about relationships between the data, which are captured in the RDF triples. Here, we import the JSON data as RDF (and add it to our existing triplestore just for fun)
 
 ```{r gh_add}
-gh_rdf <- as_rdf.list(gh_data, rdf = rdf, vocab = "gh:")
+gh_rdf <- as_rdf(gh_data, rdf = rdf, prefix = "gh:")
 ```
 
 

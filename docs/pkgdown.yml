@@ -1,8 +1,9 @@
-pandoc: 2.1.1
-pkgdown: 0.1.0.9000
-pkgdown_sha: 9fcc3acd70db8ea9ccb2d55efe7cd573eecbbb4b
+pandoc: 1.19.2.1
+pkgdown: 1.1.0
+pkgdown_sha: ~
 articles:
-  data-lake: data-lake.html
+  data-lake: articles/data-lake.html
+  storage: articles/storage.html
   rdf_intro: rdf_intro.html
-  storage: storage.html
+  slides: slides/slides.html
 

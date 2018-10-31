@@ -10,14 +10,14 @@
   "codeRepository": "https://github.com/ropensci/rdflib",
   "issueTracker": "https://github.com/ropensci/rdflib/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.1.1.999",
+  "version": "0.1.1.9999",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.5.0",
+    "version": "3.5.1",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.5.0 (2018-04-23)",
+  "runtimePlatform": "R version 3.5.1 (2018-07-02)",
   "author": [
     {
       "@type": "Person",
@@ -132,30 +132,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "dplyr",
-      "name": "dplyr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=dplyr"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "tidyr",
-      "name": "tidyr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=tidyr"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "tibble",
       "name": "tibble",
       "provider": {
@@ -249,18 +225,6 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=nycflights13"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "codemetar",
-      "name": "codemetar",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=codemetar"
     }
   ],
   "softwareRequirements": [
@@ -321,11 +285,35 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=readr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "dplyr",
+      "name": "dplyr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=dplyr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "tidyr",
+      "name": "tidyr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=tidyr"
     }
   ],
   "contIntegration": "https://travis-ci.org/ropensci/rdflib",
   "readme": "https://github.com/ropensci/rdflib/blob/master/README.md",
-  "fileSize": "63.334KB",
+  "fileSize": "12104.064KB",
   "releaseNotes": "https://github.com/ropensci/rdflib/blob/master/NEWS.md",
   "citation": [
     {
@@ -367,6 +355,11 @@
     "url": "https://github.com/ropensci/onboarding/issues/169",
     "provider": "http://ropensci.org"
   },
-  "keywords": ["r", "rstats", "r-package"],
+  "keywords": [
+    "r",
+    "rstats",
+    "r-package",
+    "peer-reviewed"
+  ],
   "relatedLink": "https://CRAN.R-project.org/package=rdflib"
 }

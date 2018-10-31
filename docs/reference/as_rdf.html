@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • rdflib</title>
+<title>Coerce an object into RDF — as_rdf • rdflib</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,7 +30,10 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Coerce an object into RDF — as_rdf" />
+
+<meta property="og:description" content="Coerce an object into RDF" />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -46,7 +49,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -116,108 +119,64 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Coerce an object into RDF</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ropensci/rdflib/blob/master/R/as_rdf.R'><code>R/as_rdf.R</code></a></small>
+    <div class="hidden name"><code>as_rdf.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    
+    <p>Coerce an object into RDF</p>
+    
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
-
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="as_rdf.html">as_rdf()</a></code> </p>
-        </td>
-        <td><p>Coerce an object into RDF</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="c.rdf.html">c(<i>&lt;rdf&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Concatenate rdf Objects.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rdf.html">rdf()</a></code> </p>
-        </td>
-        <td><p>Initialize an <code>rdf</code> Object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rdf_add.html">rdf_add()</a></code> </p>
-        </td>
-        <td><p>Add RDF Triples</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rdf_free.html">rdf_free()</a></code> </p>
-        </td>
-        <td><p>Free Memory Associated with RDF object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rdf_has_bdb.html">rdf_has_bdb()</a></code> </p>
-        </td>
-        <td><p>Check for BDB support</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rdf_parse.html">rdf_parse()</a></code> </p>
-        </td>
-        <td><p>Parse RDF Files</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rdf_query.html">rdf_query()</a></code> </p>
-        </td>
-        <td><p>Perform a SPARQL Query</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rdf_serialize.html">rdf_serialize()</a></code> </p>
-        </td>
-        <td><p>Serialize an RDF Document</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rdflib-package.html">rdflib-package</a></code> </p>
-        </td>
-        <td><p>rdflib: Tools to Manipulate and Query Semantic Data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="read_nquads.html">read_nquads()</a></code> </p>
-        </td>
-        <td><p>read an nquads file</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="write_nquads.html">write_nquads()</a></code> </p>
-        </td>
-        <td><p>write object out as nquads</p></td>
-      </tr>
-    </tbody>
+    <pre class="usage"><span class='fu'>as_rdf</span>(<span class='no'>x</span>, <span class='kw'>rdf</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>base</span> <span class='kw'>=</span> <span class='fu'>getOption</span>(<span class='st'>"rdf_base_uri"</span>,
+  <span class='st'>"localhost://"</span>), <span class='kw'>context</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>key_column</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>an object to coerce into RDF (list, list-like, or data.frame)</p></td>
+    </tr>
+    <tr>
+      <th>rdf</th>
+      <td><p>An existing rdf object, (by default a new object will be initialized)</p></td>
+    </tr>
+    <tr>
+      <th>prefix</th>
+      <td><p>A default vocabulary (URI prefix) to assume for all predicates</p></td>
+    </tr>
+    <tr>
+      <th>base</th>
+      <td><p>A base URI to assume for blank subject nodes</p></td>
+    </tr>
+    <tr>
+      <th>context</th>
+      <td><p>a named list mapping any string to a URI</p></td>
+    </tr>
+    <tr>
+      <th>key_column</th>
+      <td><p>name of a column which should be
+treated as the primary key in a table. must be unique</p></td>
+    </tr>
     </table>
-  </div>
+    
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>as_rdf</span>(<span class='no'>mtcars</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: prefix not declared, using df:</span></div><div class='input'><span class='fu'>as_rdf</span>(<span class='fu'>list</span>(<span class='kw'>repo</span> <span class='kw'>=</span> <span class='st'>"rdflib"</span>, <span class='kw'>owner</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"id"</span>, <span class='st'>"ropensci"</span>)))</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#arguments">Arguments</a></li>
+            
+      <li><a href="#examples">Examples</a></li>
     </ul>
+
   </div>
 </div>
 

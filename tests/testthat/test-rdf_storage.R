@@ -67,8 +67,11 @@ testthat::test_that("Virtuoso Backend", {
   testthat::skip_if_not(rdflib:::rdf_has_virtuoso())
   
   testthat::expect_silent(
-    r <- rdf(storage="virtuoso", user="dba", 
-             password="dba", dsn="Local Virtuoso", new_db = TRUE)
+    r <- rdf(storage = "virtuoso", 
+             user = "dba", 
+             password = "dba", 
+             dsn = "Local Virtuoso", 
+             new_db = TRUE)
     )
   rdf_add(r, "", "dc:name", "bob")
   
