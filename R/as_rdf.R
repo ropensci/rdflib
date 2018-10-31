@@ -6,7 +6,7 @@
 #' @param rdf An existing rdf object, (by default a new object will be initialized)
 #' @param prefix A default vocabulary (URI prefix) to assume for all predicates
 #' @param base A base URI to assume for blank subject nodes
-#' @param context: a named list mapping any string to a URI
+#' @param context a named list mapping any string to a URI
 #' @param ... additional arguments, specific to certain types
 #' @export
 #' 
@@ -32,7 +32,7 @@ as_rdf.list <- function(x,
     rdf <- rdf()  
   }
   ## unbox length-1 lists so we can apply a context successfully
-  if(is(x, "list") && length(x) == 1) x <- x[[1]]
+  if(is.list(x) && length(x) == 1) x <- x[[1]]
   
   json <- jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE, force = TRUE)
   jsonld_context <- json_context(prefix, base, context)
@@ -96,7 +96,7 @@ iterative_rdf_add <- function(df, prefix = "x:", base = prefix){
       rdf_add(rdf, 
               subject = paste0(base, as.character(rownames[[i]])),
               predicate = paste0(prefix, colnames[[j]]),
-              object = x$object[[i]])
+              object = df$object[[i]])
     }
   }
   invisible(rdf)

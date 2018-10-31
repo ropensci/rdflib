@@ -62,7 +62,7 @@ normalize_table <- function(df, key_column = NULL){
   ## gather looses col-classes, so pre-compute them (with base R)
   col_classes <- data.frame(datatype = 
                               vapply(df, 
-                                     rdflib:::xs_class, 
+                                     xs_class, 
                                      character(1)))
   col_classes$predicate <- rownames(col_classes)
   rownames(col_classes) <- NULL

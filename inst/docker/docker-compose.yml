@@ -1,0 +1,31 @@
+version: '3'
+services:
+
+  mariadb:
+      image: mariadb
+      environment:
+          - MYSQL_ROOT_PASSWORD=rdflib
+
+  postgres:
+      image: postgres
+      environment:
+          - POSTGRES_PASSWORD=rdflib
+
+  rdflib:
+    image: ropensci/rdflib
+    volumes:
+      - ../../..:/home/rstudio/data
+      - virtuoso_volume:/var/lib/virtuoso-opensource-6.1/db
+    working_dir: /home/rstudio/data
+    depends_on:
+      - postgres
+      - mariadb
+    ports:
+      - 8787:8787
+    environment:
+      - PASSWORD=rdflib
+
+volumes:
+  virtuoso_volume:
+
+
