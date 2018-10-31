@@ -22,9 +22,14 @@ By default, `rdflib` stores triples in memory, which can be read in from and wri
 
 ### Installation
 
-Unfortunately, at this time, support for these storage devices is not included in the prebuild Mac and Windows binaries of the `redland` R package.  Users wanting to take advantage of disk-based storage must instead build and install the `redland` R package from source; and in some cases, also build the `redland` C libraries from source.  This package provides a [Dockerfile]() containing a portable recipe for building the library with support for the 5 main backend storage devices: SQLite, MySQL, PostgreSQL, Virtuoso, and Berkeley DB.  This vignette documents the installation and use of these devices.  
+Unfortunately, at this time, support for these storage devices is not included in the prebuild Mac and Windows binaries of the `redland` R package.  Users wanting to take advantage of disk-based storage must instead build and install the `redland` R package from source; and in some cases, also build the `redland` C libraries from source.  This package provides a [Dockerfile](https://github.com/ropensci/rdflib/blob/master/inst/docker/Dockerfile) containing a portable recipe for building the library with support for the 5 main backend storage devices: SQLite, MySQL, PostgreSQL, Virtuoso, and Berkeley DB.  This vignette documents the installation and use of these devices.  
 
 Also see the [official documentation](http://librdf.org/docs/api/redland-storage-modules.html) for the redland C library discussing all supported storage devices.  
+
+
+## SQLite
+
+[SQLite](https://en.wikipedia.org/wiki/SQLite) is probably the easiest disk-based storage option to deploy, requiring little or no extra setup.  
 
 ## Berkeley DB
 
@@ -32,22 +37,44 @@ The [Berkeley DB](https://en.wikipedia.org/wiki/Berkeley_DB) is a simple key-val
 
 > It is the most mature and primary persistent store and suitable for large models, tested in the 2-3 million range.
 
-Berkeley DB is the easiest of the disk-based storage options to set up.  Install both the redland libraries and the berkeley-db libraries, and then install `redland` from source.  
+Berkeley DB is a simple disk-based storage option.  Install both the redland libraries and the berkeley-db libraries, and then install `redland` from source.  
 
 
-## Alternative backends
+## Virtuoso
 
-Compile redland from source, or use docker directly.
+Unless you are already using it (because you already work with RDF data), a Virtuoso database is one of the more cumbersome to set up, but also quite probably one of the faster options.
+
+## MySQL & Postgres
+
+MySQL (or MariaDB) and Postgres backends 
+
+## Benchmarks
+
+```{r}
+library(rdflib)
+library(nycflights13)
+library(tictoc)
+example <- flights[1:1e4,] # a subset for testing
+
+write_nquads(example, "flights.nq", prefix = "flights")
+```
 
 ```{r}
 triplestore <- rdf(storage="sqlite", new_db = TRUE, name="rdflib.sqlite")
 
+tic()
+read_nquads("flights.nq", rdf = triplestore)
+toc()
 
-## Basic test
-rdf_add(triplestore, "", "dc:name", "bob")
-testthat::expect_match(format(triplestore, "nquads"), "bob")
-testthat::expect_is(triplestore, "rdf")
+triplestore
+```
 
+```{r}
+
+
+  rdf_add(triplestore, "", "dc:name", "bob")
+  testthat::expect_match(format(triplestore, "nquads"), "bob")
+  testthat::expect_is(triplestore, "rdf")
 
 ## Tidy    
 rdf_free(triplestore)
