@@ -13,7 +13,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval=FALSE
+  eval = TRUE
 )
 ```
 
@@ -27,28 +27,9 @@ Unfortunately, at this time, support for these storage devices is not included i
 Also see the [official documentation](http://librdf.org/docs/api/redland-storage-modules.html) for the redland C library discussing all supported storage devices.  
 
 
-## SQLite
-
-[SQLite](https://en.wikipedia.org/wiki/SQLite) is probably the easiest disk-based storage option to deploy, requiring little or no extra setup.  
-
-## Berkeley DB
-
-The [Berkeley DB](https://en.wikipedia.org/wiki/Berkeley_DB) is a simple key-value store 
-
-> It is the most mature and primary persistent store and suitable for large models, tested in the 2-3 million range.
-
-Berkeley DB is a simple disk-based storage option.  Install both the redland libraries and the berkeley-db libraries, and then install `redland` from source.  
-
-
-## Virtuoso
-
-Unless you are already using it (because you already work with RDF data), a Virtuoso database is one of the more cumbersome to set up, but also quite probably one of the faster options.
-
-## MySQL & Postgres
-
-MySQL (or MariaDB) and Postgres backends 
-
 # Benchmarks
+
+Here we show examples of reading in a modest set of 190,000 triples from an `nquads` file and executing a simple SPARQL query using each the five backends supported by `rdflib`.  First we load the libraries and prepare an example file by triple-ifying 10,000 rows of the `flights` data.frame:
 
 ```{r}
 library(rdflib)
@@ -61,6 +42,8 @@ write_nquads(example, "flights.nq", prefix = "flights")
 ```
 
 ## In Memory
+
+Because the dataset is small enough to easily fit in memory, the default in-memory option is an obvious choice with excellent performance.  Note that this option will not be possible with larger triplestores (e.g. with millions or more triples).  Our testing has found that even on machines with 100GB+ of RAM, the redland in-memory backend is not able to take advantage of that additional memory and disk-based backends are required. 
 
 ```{r}
 triplestore <- rdf()
@@ -88,12 +71,17 @@ rdf_free(triplestore)
 ```
 
 
-## SQLite
+## BDB
+
+The [Berkeley DB](https://en.wikipedia.org/wiki/Berkeley_DB) is a simple key-value store 
+
+> It is the most mature and primary persistent store and suitable for large models, tested in the 2-3 million range.
+
+Berkeley DB is a simple disk-based storage option.  Install both the redland libraries and the berkeley-db (e.g. `bd-dev` on Debian/Ubuntu) libraries, and then install `redland` from source.  BDB is relatively fast for data too large for memory.
 
 
 ```{r}
-triplestore <- rdf(storage="sqlite", new_db = TRUE, name="rdflib.sqlite")
-
+triplestore <- rdf(storage="BDB", new_db = TRUE)
 system.time(
   read_nquads("flights.nq", rdf = triplestore)
 )
@@ -108,9 +96,44 @@ df <- rdf_query(triplestore, query)
 
 ```{r}
 rdf_free(triplestore)
+## Becuase BDB is just a hash table, redland needs three separate files:
+unlink("rdflib-po2s.db")
+unlink("rdflib-so2p.db")
+unlink("rdflib-sp2o.db")
 ```
 
+## Virtuoso
+
+Unlike the other backends which use general purpose relational databases or key-value stores, [Virtuoso](https://en.wikipedia.org/wiki/Virtuoso_Universal_Server) dedicated to RDF-based data.  Virtuoso is a popular open source database for RDF with a rich set of built-in interfaces and features, but we can also interact with it directly through the `redland` bindings just like we do any other backend in `rdflib`.  Virtuoso setup may be slightly more involved for individuals unfamiliar with it, but will probably provide the best performance in the case of very large triplestores.  The example below shows a new database setup, but `rdflib` can also connect to any existing Virtuoso database. 
+
+```{r}
+triplestore <- rdf(storage = "virtuoso", 
+                   user = "dba", 
+                   password = "dba", 
+                   dsn = "Local Virtuoso"
+                   )
+
+system.time(
+  read_nquads("flights.nq", rdf = triplestore)
+)
+```
+
+
+```{r}
+system.time(
+df <- rdf_query(triplestore, query)
+)
+```
+
+
+```{r}
+rdf_free(triplestore)
+```
+
+
 ## POSTGRES
+
+Postgres and MySQL are ubiquitious relational databases.  
 
 ```{r}
 triplestore <- rdf(storage = "postgres", 
@@ -163,39 +186,17 @@ rdf_free(triplestore)
 ```
 
 
-## Virtuoso
+
+
+## SQLite
+
+
+[SQLite](https://en.wikipedia.org/wiki/SQLite) is relatively easy to set up, but appears to have rather poor overall performance.
 
 
 ```{r}
-triplestore <- rdf(storage = "virtuoso", 
-                   user = "dba", 
-                   password = "dba", 
-                   dsn = "Local Virtuoso", 
-                   new_db = TRUE
-                   )
+triplestore <- rdf(storage="sqlite", new_db = TRUE, name="rdflib.sqlite")
 
-system.time(
-  read_nquads("flights.nq", rdf = triplestore)
-)
-```
-
-
-```{r}
-system.time(
-df <- rdf_query(triplestore, query)
-)
-```
-
-
-```{r}
-rdf_free(triplestore)
-```
-
-## BDB
-
-
-```{r}
-triplestore <- rdf(storage="BDB", new_db = TRUE)
 system.time(
   read_nquads("flights.nq", rdf = triplestore)
 )
@@ -210,12 +211,7 @@ df <- rdf_query(triplestore, query)
 
 ```{r}
 rdf_free(triplestore)
-unlink("rdflib-po2s.db")
-unlink("rdflib-so2p.db")
-unlink("rdflib-sp2o.db")
 ```
-
-
 
 
 # Testing
