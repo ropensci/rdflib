@@ -7,4 +7,5 @@ inst/doc
 *_cache
 *.nq
 *.sqlite
+*.tar.gz
 

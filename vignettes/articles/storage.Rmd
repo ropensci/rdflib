@@ -37,8 +37,15 @@ library(nycflights13)
 ```
 
 ```{r}
-example <- flights[1:1e4,] # a subset for testing
-write_nquads(example, "flights.nq", prefix = "flights")
+example <- flights[1e4,]
+
+system.time(
+write_nquads(example, "example.nq", prefix = "flights")
+)
+
+system.time(
+write_nquads(flights, "flights.nq", prefix = "flights")
+)
 ```
 
 ## In Memory
@@ -47,20 +54,27 @@ Because the dataset is small enough to easily fit in memory, the default in-memo
 
 ```{r}
 triplestore <- rdf()
+```
+
+```{r}
+
 system.time(
-  read_nquads("flights.nq", rdf = triplestore)
+  read_nquads("example.nq", rdf = triplestore) # smaller set
 )
+
 ```
 
 ```{r}
 query <- 
   'SELECT  ?carrier ?flight ?origin ?dep_delay
 WHERE {
-?flight <x:carrier>  ?carrier .
-?flight <x:dep_delay>  ?dep_delay .
-?flight <x:origin> ?origin
+?flight <flights:carrier>  ?carrier .
+?flight <flights:dep_delay>  ?dep_delay .
+?flight <flights:origin> ?origin
 }'
+```
 
+```{r}
 system.time(
 df <- rdf_query(triplestore, query)
 )
@@ -123,12 +137,31 @@ system.time(
 system.time(
 df <- rdf_query(triplestore, query)
 )
+df <- rdf_query(triplestore, "SELECT ?s ?p ?o WHERE{ ?s ?p ?o }")
+df
 ```
 
 
 ```{r}
 rdf_free(triplestore)
 ```
+
+Or on remote virtuoso:
+
+
+```{r}
+triplestore <- rdf(storage = "virtuoso", 
+                   user = "dba", 
+                   password = "dba", 
+                   host = "virtuoso:1111"
+                   )
+
+system.time(
+  read_nquads("flights.nq", rdf = triplestore)
+)
+```
+
+
 
 
 ## POSTGRES
@@ -168,7 +201,7 @@ triplestore <- rdf(storage = "mysql",
                    database = "mysql",
                    new_db = TRUE
                   )
-system.time(
+profvis::profvis(
   read_nquads("flights.nq", rdf = triplestore)
 )
   
