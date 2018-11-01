@@ -9,9 +9,9 @@ uri_flights <- flights %>%
          carrier = as_uri(carrier))
 
   
-df1 <- rdflib:::normalize_table(airlines, key = "carrier", vocab = "x:")
-df2 <- rdflib:::normalize_table(planes,   key = "tailnum", vocab = "x:")
-df3 <- rdflib:::normalize_table(uri_flights, key = NULL, vocab = "x:")
+df1 <- rdflib:::normalize_table(airlines, key = "carrier", prefix = "x:")
+df2 <- rdflib:::normalize_table(planes,   key = "tailnum", prefix = "x:")
+df3 <- rdflib:::normalize_table(uri_flights, key = NULL, prefix = "x:")
 
 df <- bind_rows(df1,df2,df3)
 

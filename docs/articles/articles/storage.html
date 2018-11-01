@@ -92,7 +92,7 @@
 </h1>
                         <h4 class="author">Carl Boettiger</h4>
             
-            <h4 class="date">2018-10-31</h4>
+            <h4 class="date">2018-11-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/rdflib/blob/master/vignettes/articles/storage.Rmd"><code>vignettes/articles/storage.Rmd</code></a></small>
       <div class="hidden name"><code>storage.Rmd</code></div>
@@ -125,7 +125,7 @@
   <span class="kw"><a href="../../reference/read_nquads.html">read_nquads</a></span>(<span class="st">"flights.nq"</span>, <span class="dt">rdf =</span> triplestore)
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   1.212   0.044   1.259</span></code></pre></div>
+<span class="co">#&gt;   1.156   0.028   1.188</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">query &lt;-<span class="st"> </span>
 <span class="st">  'SELECT  ?carrier ?flight ?origin ?dep_delay</span>
 <span class="st">WHERE {</span>
@@ -138,7 +138,7 @@
 df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_query.html">rdf_query</a></span>(triplestore, query)
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.512   0.012   0.526</span></code></pre></div>
+<span class="co">#&gt;   0.496   0.012   0.510</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/rdf_free.html">rdf_free</a></span>(triplestore)</code></pre></div>
 </div>
 <div id="bdb" class="section level2">
@@ -154,12 +154,12 @@ df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_q
   <span class="kw"><a href="../../reference/read_nquads.html">read_nquads</a></span>(<span class="st">"flights.nq"</span>, <span class="dt">rdf =</span> triplestore)
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   2.520   0.552   3.074</span></code></pre></div>
+<span class="co">#&gt;   2.336   0.484   2.820</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(
 df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_query.html">rdf_query</a></span>(triplestore, query)
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.556   0.016   0.573</span></code></pre></div>
+<span class="co">#&gt;   0.548   0.008   0.558</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/rdf_free.html">rdf_free</a></span>(triplestore)
 ## Becuase BDB is just a hash table, redland needs three separate files:
 <span class="kw">unlink</span>(<span class="st">"rdflib-po2s.db"</span>)
@@ -180,12 +180,12 @@ df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_q
   <span class="kw"><a href="../../reference/read_nquads.html">read_nquads</a></span>(<span class="st">"flights.nq"</span>, <span class="dt">rdf =</span> triplestore)
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   7.112   5.620 226.473</span></code></pre></div>
+<span class="co">#&gt;   7.432   6.648 239.139</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(
 df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_query.html">rdf_query</a></span>(triplestore, query)
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;  52.604  32.908 453.281</span></code></pre></div>
+<span class="co">#&gt;  50.868  32.964 455.013</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/rdf_free.html">rdf_free</a></span>(triplestore)</code></pre></div>
 </div>
 <div id="postgres" class="section level2">
@@ -201,12 +201,12 @@ df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_q
   <span class="kw"><a href="../../reference/read_nquads.html">read_nquads</a></span>(<span class="st">"flights.nq"</span>, <span class="dt">rdf =</span> triplestore)
 )
 <span class="co">#&gt;     user   system  elapsed </span>
-<span class="co">#&gt;   29.984   59.836 2904.919</span></code></pre></div>
+<span class="co">#&gt;   29.472   61.588 2823.625</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(
 df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_query.html">rdf_query</a></span>(triplestore, query)
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.004   0.000   0.226</span></code></pre></div>
+<span class="co">#&gt;   0.004   0.000   0.216</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/rdf_free.html">rdf_free</a></span>(triplestore)</code></pre></div>
 </div>
 <div id="mysql" class="section level2">
@@ -223,12 +223,12 @@ df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_q
   <span class="kw"><a href="../../reference/read_nquads.html">read_nquads</a></span>(<span class="st">"flights.nq"</span>, <span class="dt">rdf =</span> triplestore)
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;  11.268  24.488 148.203</span></code></pre></div>
+<span class="co">#&gt;  10.992  26.544 159.376</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(
 df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_query.html">rdf_query</a></span>(triplestore, query)
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.004   0.000   1.801</span></code></pre></div>
+<span class="co">#&gt;   0.000   0.000   2.055</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/rdf_free.html">rdf_free</a></span>(triplestore)</code></pre></div>
 </div>
 <div id="sqlite" class="section level2">
@@ -241,12 +241,12 @@ df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_q
   <span class="kw"><a href="../../reference/read_nquads.html">read_nquads</a></span>(<span class="st">"flights.nq"</span>, <span class="dt">rdf =</span> triplestore)
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt; 180.920  57.488 806.635</span></code></pre></div>
+<span class="co">#&gt; 204.236  59.024 842.972</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(
 df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_query.html">rdf_query</a></span>(triplestore, query)
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.024   0.000   0.022</span></code></pre></div>
+<span class="co">#&gt;   0.028   0.000   0.030</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/rdf_free.html">rdf_free</a></span>(triplestore)</code></pre></div>
 </div>
 </div>

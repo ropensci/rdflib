@@ -91,7 +91,7 @@
       <h1>The Data Lake and Schema On Read</h1>
                         <h4 class="author">Carl Boettiger</h4>
             
-            <h4 class="date">2018-10-31</h4>
+            <h4 class="date">2018-11-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/rdflib/blob/master/vignettes/articles/data-lake.Rmd"><code>vignettes/articles/data-lake.Rmd</code></a></small>
       <div class="hidden name"><code>data-lake.Rmd</code></div>
@@ -166,7 +166,7 @@ uri_flights &lt;-<span class="st"> </span>flights <span class="op">%&gt;%</span>
 
 })</code></pre></div>
 <pre><code>##     user   system  elapsed 
-##  265.884  201.896 7519.077</code></pre>
+##  278.760  217.992 7933.324</code></pre>
 <p>Note that flights does not have a natural key (somewhat surprisingly, <code>flight</code> number is not a unique key for this table, as the same flight number is reused on the same route at different times.) So, we will treat each row as a unique anonymous key by setting the key to <code>NULL</code>.</p>
 </div>
 <div id="schema-on-read" class="section level2">
@@ -188,7 +188,7 @@ uri_flights &lt;-<span class="st"> </span>flights <span class="op">%&gt;%</span>
 df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_query.html">rdf_query</a></span>(rdf, s)
 )</code></pre></div>
 <pre><code>##    user  system elapsed 
-##  77.664  57.804 565.467</code></pre>
+##  75.612  60.408 588.686</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(df)</code></pre></div>
 <pre><code>## # A tibble: 6 x 5
 ##   carrier name                     manufacturer model     dep_delay
@@ -255,7 +255,7 @@ gh_tibble <span class="op">%&gt;%</span><span class="st"> </span><span class="kw
 rdf_tibble &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_query.html">rdf_query</a></span>(rdf, s)
 )</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.048   0.036   0.440</code></pre>
+##   0.052   0.032   0.425</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(rdf_tibble)</code></pre></div>
 <pre><code>## # A tibble: 6 x 5
 ##   name                         issues  wiki homepage owner      
