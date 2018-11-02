@@ -42,15 +42,10 @@ source(system.file("examples/tidy_schema.R", package="rdflib"))
 
 ```
 
-Configure RDF storage to use the Virtuoso backend.
+Configure RDF storage to use the BDB backend for on-disk storage.
 
 ```{r options, include = TRUE}
-rdf <- rdf(storage = "virtuoso", 
-                   user = "dba", 
-                   password = "dba", 
-                   dsn = "Local Virtuoso", 
-                   new_db = TRUE
-                   )
+rdf <- rdf(storage = "bdb", new_db = TRUE)
 
 ```
 
@@ -80,22 +75,29 @@ This example uses only data that is already part of the relational database.  Ad
 Okay, now let's dump the `nyflights13` into the data lake. Foreign keys in any table must be represented as URIs and not literal strings: 
 
 ```{r as_uri}
-as_uri <- function(x, base_uri = "x:") paste0(base_uri, x)
 uri_flights <- flights %>% 
-  mutate(tailnum = as_uri(tailnum),
-         carrier = as_uri(carrier))
+  mutate(tailnum = paste0("planes:", tailnum),
+         carrier = paste0("airlines:", carrier))
 ```
 
-Similarly, when reading into RDF we have to declare the key column for the table,
-and again establish a `base_uri` which will allow RDF methods to distinguish between URIs (subjects, predicates, and foreign keys) and literal strings.  
+We write the `data.frame`s out as nquads.  Recall that each cell of a `data.frame` can be represented as a triple, in which the column is the predicate, the primary key (or row number) the subject, and the cell value the object.  We turn column names and primary keys into URIs using a prefix based on the table name.  (Note that `rdflib` does this conversion by merely munging cells and calling `write.table`, it is not a standard `redland` library transform).
+
+```{r into_quads}
+system.time({
+  write_nquads(airlines,  "airlines.nq", key = "carrier", prefix = "airlines:")
+  write_nquads(planes,  "planes.nq", key = "tailnum", prefix = "planes:")
+  write_nquads(uri_flights,  "flights.nq", prefix = "flights:")
+})
+```
+
+We can now read these into our RDF data lake:
 
 ```{r write_rdf}
 
 system.time({
-  
-as_rdf(airlines, rdf = rdf, key = "carrier", prefix = "x:")
-as_rdf(planes,  rdf = rdf, key = "tailnum", prefix = "x:")
-as_rdf(uri_flights, rdf = rdf, key = NULL, prefix = "x:")
+  read_nquads("airlines.nq", rdf = rdf)
+  read_nquads("flights.nq", rdf = rdf)
+  read_nquads("planes.nq", rdf = rdf)
 
 })
 ```
@@ -111,12 +113,12 @@ We simply define the columns we want and we immediately get back the desired `da
 s <- 
   'SELECT  ?carrier ?name ?manufacturer ?model ?dep_delay
 WHERE {
-?flight <x:tailnum>  ?tailnum .
-?flight <x:carrier>  ?carrier .
-?flight <x:dep_delay>  ?dep_delay .
-?tailnum <x:manufacturer> ?manufacturer .
-?tailnum <x:model> ?model .
-?carrier <x:name> ?name
+?flight <flights:tailnum>  ?tailnum .
+?flight <flights:carrier>  ?carrier .
+?flight <flights:dep_delay>  ?dep_delay .
+?tailnum <planes:manufacturer> ?manufacturer .
+?tailnum <planes:model> ?model .
+?carrier <airlines:name> ?name
 }'
 
 system.time(

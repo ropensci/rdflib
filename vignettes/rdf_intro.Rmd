@@ -398,14 +398,3 @@ rdf_query(rdf, sparql)
 In the following vignette, "The Data Lake and Schema On Read," we explore more complex examples with multiple tables from a relational database and nested JSON data.  These highlight the power of SPARQL as a *Graph* query language. 
 
 
-
-# Going further
-
-```{r}
-options("rdf_print_format" =  "jsonld")
-```
-
-
-## Database backends
-
-Examples using BDB
