@@ -60,9 +60,6 @@
     <li>
       <a href="../../articles/rdf_intro.html">A tidyverse lover's intro to RDF</a>
     </li>
-    <li>
-      <a href="../../articles/slides/slides.html">RDF for Tidyverse Lovers</a>
-    </li>
   </ul>
 </li>
 <li>
@@ -91,7 +88,7 @@
       <h1>The Data Lake and Schema On Read</h1>
                         <h4 class="author">Carl Boettiger</h4>
             
-            <h4 class="date">2018-11-01</h4>
+            <h4 class="date">2018-11-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/rdflib/blob/master/vignettes/articles/data-lake.Rmd"><code>vignettes/articles/data-lake.Rmd</code></a></small>
       <div class="hidden name"><code>data-lake.Rmd</code></div>
@@ -117,13 +114,8 @@
 <span class="kw">library</span>(rdflib)
 ## experimental functions for rdflib package
 <span class="kw">source</span>(<span class="kw">system.file</span>(<span class="st">"examples/tidy_schema.R"</span>, <span class="dt">package=</span><span class="st">"rdflib"</span>))</code></pre></div>
-<p>Configure RDF storage to use the Virtuoso backend.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rdf &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf.html">rdf</a></span>(<span class="dt">storage =</span> <span class="st">"virtuoso"</span>, 
-                   <span class="dt">user =</span> <span class="st">"dba"</span>, 
-                   <span class="dt">password =</span> <span class="st">"dba"</span>, 
-                   <span class="dt">dsn =</span> <span class="st">"Local Virtuoso"</span>, 
-                   <span class="dt">new_db =</span> <span class="ot">TRUE</span>
-                   )</code></pre></div>
+<p>Configure RDF storage to use the BDB backend for on-disk storage.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rdf &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf.html">rdf</a></span>(<span class="dt">storage =</span> <span class="st">"BDB"</span>, <span class="dt">new_db =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <div id="relational-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#relational-data" class="anchor"></a>Relational data</h1>
@@ -153,20 +145,26 @@
 <h2 class="hasAnchor">
 <a href="#rdf-approach" class="anchor"></a>RDF approach</h2>
 <p>Okay, now let’s dump the <code>nyflights13</code> into the data lake. Foreign keys in any table must be represented as URIs and not literal strings:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">as_uri &lt;-<span class="st"> </span><span class="cf">function</span>(x, <span class="dt">base_uri =</span> <span class="st">"x:"</span>) <span class="kw">paste0</span>(base_uri, x)
-uri_flights &lt;-<span class="st"> </span>flights <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">tailnum =</span> <span class="kw">as_uri</span>(tailnum),
-         <span class="dt">carrier =</span> <span class="kw">as_uri</span>(carrier))</code></pre></div>
-<p>Similarly, when reading into RDF we have to declare the key column for the table, and again establish a <code>base_uri</code> which will allow RDF methods to distinguish between URIs (subjects, predicates, and foreign keys) and literal strings.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">uri_flights &lt;-<span class="st"> </span>flights <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">tailnum =</span> <span class="kw">paste0</span>(<span class="st">"planes:"</span>, tailnum),
+         <span class="dt">carrier =</span> <span class="kw">paste0</span>(<span class="st">"airlines:"</span>, carrier))</code></pre></div>
+<p>We write the <code>data.frame</code>s out as nquads. Recall that each cell of a <code>data.frame</code> can be represented as a triple, in which the column is the predicate, the primary key (or row number) the subject, and the cell value the object. We turn column names and primary keys into URIs using a prefix based on the table name. (Note that <code>rdflib</code> does this conversion by merely munging cells and calling <code>write.table</code>, it is not a standard <code>redland</code> library transform).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>({
-  
-<span class="kw"><a href="../../reference/as_rdf.html">as_rdf</a></span>(airlines, <span class="dt">rdf =</span> rdf, <span class="dt">key =</span> <span class="st">"carrier"</span>, <span class="dt">prefix =</span> <span class="st">"x:"</span>)
-<span class="kw"><a href="../../reference/as_rdf.html">as_rdf</a></span>(planes,  <span class="dt">rdf =</span> rdf, <span class="dt">key =</span> <span class="st">"tailnum"</span>, <span class="dt">prefix =</span> <span class="st">"x:"</span>)
-<span class="kw"><a href="../../reference/as_rdf.html">as_rdf</a></span>(uri_flights, <span class="dt">rdf =</span> rdf, <span class="dt">key =</span> <span class="ot">NULL</span>, <span class="dt">prefix =</span> <span class="st">"x:"</span>)
+  <span class="kw"><a href="../../reference/write_nquads.html">write_nquads</a></span>(airlines,  <span class="st">"airlines.nq"</span>, <span class="dt">key =</span> <span class="st">"carrier"</span>, <span class="dt">prefix =</span> <span class="st">"airlines:"</span>)
+  <span class="kw"><a href="../../reference/write_nquads.html">write_nquads</a></span>(planes,  <span class="st">"planes.nq"</span>, <span class="dt">key =</span> <span class="st">"tailnum"</span>, <span class="dt">prefix =</span> <span class="st">"planes:"</span>)
+  <span class="kw"><a href="../../reference/write_nquads.html">write_nquads</a></span>(uri_flights,  <span class="st">"flights.nq"</span>, <span class="dt">prefix =</span> <span class="st">"flights:"</span>)
+})</code></pre></div>
+<pre><code>##    user  system elapsed 
+##  24.404   0.856  25.336</code></pre>
+<p>We can now read these into our RDF data lake:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>({
+  <span class="kw"><a href="../../reference/read_nquads.html">read_nquads</a></span>(<span class="st">"airlines.nq"</span>, <span class="dt">rdf =</span> rdf)
+  <span class="kw"><a href="../../reference/read_nquads.html">read_nquads</a></span>(<span class="st">"flights.nq"</span>, <span class="dt">rdf =</span> rdf)
+  <span class="kw"><a href="../../reference/read_nquads.html">read_nquads</a></span>(<span class="st">"planes.nq"</span>, <span class="dt">rdf =</span> rdf)
 
 })</code></pre></div>
-<pre><code>##     user   system  elapsed 
-##  278.760  217.992 7933.324</code></pre>
+<pre><code>##    user  system elapsed 
+##  93.732  35.364 129.692</code></pre>
 <p>Note that flights does not have a natural key (somewhat surprisingly, <code>flight</code> number is not a unique key for this table, as the same flight number is reused on the same route at different times.) So, we will treat each row as a unique anonymous key by setting the key to <code>NULL</code>.</p>
 </div>
 <div id="schema-on-read" class="section level2">
@@ -176,29 +174,29 @@ uri_flights &lt;-<span class="st"> </span>flights <span class="op">%&gt;%</span>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s &lt;-<span class="st"> </span>
 <span class="st">  'SELECT  ?carrier ?name ?manufacturer ?model ?dep_delay</span>
 <span class="st">WHERE {</span>
-<span class="st">?flight &lt;x:tailnum&gt;  ?tailnum .</span>
-<span class="st">?flight &lt;x:carrier&gt;  ?carrier .</span>
-<span class="st">?flight &lt;x:dep_delay&gt;  ?dep_delay .</span>
-<span class="st">?tailnum &lt;x:manufacturer&gt; ?manufacturer .</span>
-<span class="st">?tailnum &lt;x:model&gt; ?model .</span>
-<span class="st">?carrier &lt;x:name&gt; ?name</span>
+<span class="st">?flight &lt;flights:tailnum&gt;  ?tailnum .</span>
+<span class="st">?flight &lt;flights:carrier&gt;  ?carrier .</span>
+<span class="st">?flight &lt;flights:dep_delay&gt;  ?dep_delay .</span>
+<span class="st">?tailnum &lt;planes:manufacturer&gt; ?manufacturer .</span>
+<span class="st">?tailnum &lt;planes:model&gt; ?model .</span>
+<span class="st">?carrier &lt;airlines:name&gt; ?name</span>
 <span class="st">}'</span>
 
 <span class="kw">system.time</span>(
 df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_query.html">rdf_query</a></span>(rdf, s)
 )</code></pre></div>
 <pre><code>##    user  system elapsed 
-##  75.612  60.408 588.686</code></pre>
+##  26.280   0.992  27.279</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(df)</code></pre></div>
 <pre><code>## # A tibble: 6 x 5
-##   carrier name                     manufacturer model     dep_delay
-##   &lt;chr&gt;   &lt;chr&gt;                    &lt;chr&gt;        &lt;chr&gt;     &lt;chr&gt;    
-## 1 x:EV    ExpressJet Airlines Inc. EMBRAER      EMB-145XR -4       
-## 2 x:EV    ExpressJet Airlines Inc. EMBRAER      EMB-145XR 48       
-## 3 x:EV    ExpressJet Airlines Inc. EMBRAER      EMB-145XR 39       
-## 4 x:EV    ExpressJet Airlines Inc. EMBRAER      EMB-145XR -2       
-## 5 x:EV    ExpressJet Airlines Inc. EMBRAER      EMB-145XR -4       
-## 6 x:EV    ExpressJet Airlines Inc. EMBRAER      EMB-145XR 26</code></pre>
+##   carrier     name                   manufacturer model     dep_delay
+##   &lt;chr&gt;       &lt;chr&gt;                  &lt;chr&gt;        &lt;chr&gt;     &lt;chr&gt;    
+## 1 airlines:UA United Air Lines Inc.  BOEING       737-824   2        
+## 2 airlines:UA United Air Lines Inc.  BOEING       737-824   4        
+## 3 airlines:AA American Airlines Inc. BOEING       757-223   2        
+## 4 airlines:B6 JetBlue Airways        AIRBUS       A320-232  -1       
+## 5 airlines:DL Delta Air Lines Inc.   BOEING       757-232   -6       
+## 6 airlines:UA United Air Lines Inc.  BOEING       737-924ER -4</code></pre>
 <p>Note that in place of joins, we give more semantically meaningful statements about the data: e.g. <code>manufacturer</code> is a property of a <code>tailnum</code> (corresponding to a particular physical aircraft), not of a <code>flight</code> number. Departure delay <code>dep_delay</code> is a property of a flight, not of an aircraft (<code>tailnum</code>).</p>
 <p>This is reminiscent of the way in which these data are organized in the relational database tables to begin with: we find <code>deb_delay</code> in the <code>flights</code> table and <code>manufacturer</code> in the <code>planes</code> table. Good relational design encourages this, but to work with the data the user is often left having to do the required joins, which also creates tables where these semantics are less clear.</p>
 </div>
@@ -255,17 +253,17 @@ gh_tibble <span class="op">%&gt;%</span><span class="st"> </span><span class="kw
 rdf_tibble &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_query.html">rdf_query</a></span>(rdf, s)
 )</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.052   0.032   0.425</code></pre>
+##  18.760   0.348  19.113</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(rdf_tibble)</code></pre></div>
 <pre><code>## # A tibble: 6 x 5
-##   name                         issues  wiki homepage owner      
-##   &lt;chr&gt;                         &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;      
-## 1 after                             0     1 _:b1     gaborcsardi
-## 2 2014-01-27-miami                  4     1 _:b114   jennybc    
-## 3 2014-05-12-ubc                    1     1 _:b119   jennybc    
-## 4 baseimports                       0     1 _:b13    gaborcsardi
-## 5 2015-02-23_bryan-fields-talk      0     1 _:b123   jennybc    
-## 6 2015-06-28_r-summit-talk          0     1 _:b128   jennybc</code></pre>
+##   name        issues wiki  homepage owner      
+##   &lt;chr&gt;        &lt;int&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;      
+## 1 after            0 true  _:b1     gaborcsardi
+## 2 argufy           6 true  _:b5     gaborcsardi
+## 3 ask              4 true  _:b9     gaborcsardi
+## 4 baseimports      0 true  _:b13    gaborcsardi
+## 5 citest           0 true  _:b17    gaborcsardi
+## 6 clisymbols       0 true  &lt;NA&gt;     gaborcsardi</code></pre>
 </div>
 <div id="going-further-a-dplyr-style-syntax-for-sparql" class="section level2">
 <h2 class="hasAnchor">

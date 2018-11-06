@@ -45,7 +45,7 @@ source(system.file("examples/tidy_schema.R", package="rdflib"))
 Configure RDF storage to use the BDB backend for on-disk storage.
 
 ```{r options, include = TRUE}
-rdf <- rdf(storage = "bdb", new_db = TRUE)
+rdf <- rdf(storage = "BDB", new_db = TRUE)
 
 ```
 
