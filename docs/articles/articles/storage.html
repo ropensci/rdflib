@@ -60,9 +60,6 @@
     <li>
       <a href="../../articles/rdf_intro.html">A tidyverse lover's intro to RDF</a>
     </li>
-    <li>
-      <a href="../../articles/slides/slides.html">RDF for Tidyverse Lovers</a>
-    </li>
   </ul>
 </li>
 <li>
@@ -92,7 +89,7 @@
 </h1>
                         <h4 class="author">Carl Boettiger</h4>
             
-            <h4 class="date">2018-11-01</h4>
+            <h4 class="date">2018-11-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/rdflib/blob/master/vignettes/articles/storage.Rmd"><code>vignettes/articles/storage.Rmd</code></a></small>
       <div class="hidden name"><code>storage.Rmd</code></div>
@@ -114,31 +111,42 @@
 <p>Here we show examples of reading in a modest set of 190,000 triples from an <code>nquads</code> file and executing a simple SPARQL query using each the five backends supported by <code>rdflib</code>. First we load the libraries and prepare an example file by triple-ifying 10,000 rows of the <code>flights</code> data.frame:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rdflib)
 <span class="kw">library</span>(nycflights13)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">example &lt;-<span class="st"> </span>flights[<span class="dv">1</span><span class="op">:</span><span class="fl">1e4</span>,] <span class="co"># a subset for testing</span>
-<span class="kw"><a href="../../reference/write_nquads.html">write_nquads</a></span>(example, <span class="st">"flights.nq"</span>, <span class="dt">prefix =</span> <span class="st">"flights"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">example &lt;-<span class="st"> </span>flights[<span class="fl">1e4</span>,]
+
+<span class="kw">system.time</span>(
+<span class="kw"><a href="../../reference/write_nquads.html">write_nquads</a></span>(example, <span class="st">"example.nq"</span>, <span class="dt">prefix =</span> <span class="st">"flights"</span>)
+)
+<span class="co">#&gt;    user  system elapsed </span>
+<span class="co">#&gt;   0.015   0.000   0.014</span>
+
+<span class="kw">system.time</span>(
+<span class="kw"><a href="../../reference/write_nquads.html">write_nquads</a></span>(flights, <span class="st">"flights.nq"</span>, <span class="dt">prefix =</span> <span class="st">"flights"</span>)
+)
+<span class="co">#&gt;    user  system elapsed </span>
+<span class="co">#&gt;  23.119   1.063  24.720</span></code></pre></div>
 <div id="in-memory" class="section level2">
 <h2 class="hasAnchor">
 <a href="#in-memory" class="anchor"></a>In Memory</h2>
 <p>Because the dataset is small enough to easily fit in memory, the default in-memory option is an obvious choice with excellent performance. Note that this option will not be possible with larger triplestores (e.g. with millions or more triples). Our testing has found that even on machines with 100GB+ of RAM, the redland in-memory backend is not able to take advantage of that additional memory and disk-based backends are required.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">triplestore &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf.html">rdf</a></span>()
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">triplestore &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf.html">rdf</a></span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
 <span class="kw">system.time</span>(
-  <span class="kw"><a href="../../reference/read_nquads.html">read_nquads</a></span>(<span class="st">"flights.nq"</span>, <span class="dt">rdf =</span> triplestore)
+  <span class="kw"><a href="../../reference/read_nquads.html">read_nquads</a></span>(<span class="st">"example.nq"</span>, <span class="dt">rdf =</span> triplestore) <span class="co"># smaller set</span>
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   1.156   0.028   1.188</span></code></pre></div>
+<span class="co">#&gt;   0.003   0.000   0.003</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">query &lt;-<span class="st"> </span>
 <span class="st">  'SELECT  ?carrier ?flight ?origin ?dep_delay</span>
 <span class="st">WHERE {</span>
-<span class="st">?flight &lt;x:carrier&gt;  ?carrier .</span>
-<span class="st">?flight &lt;x:dep_delay&gt;  ?dep_delay .</span>
-<span class="st">?flight &lt;x:origin&gt; ?origin</span>
-<span class="st">}'</span>
-
-<span class="kw">system.time</span>(
+<span class="st">?flight &lt;flights:carrier&gt;  ?carrier .</span>
+<span class="st">?flight &lt;flights:dep_delay&gt;  ?dep_delay .</span>
+<span class="st">?flight &lt;flights:origin&gt; ?origin</span>
+<span class="st">}'</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(
 df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_query.html">rdf_query</a></span>(triplestore, query)
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.496   0.012   0.510</span></code></pre></div>
+<span class="co">#&gt;   0.024   0.003   0.027</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/rdf_free.html">rdf_free</a></span>(triplestore)</code></pre></div>
 </div>
 <div id="bdb" class="section level2">
@@ -154,12 +162,12 @@ df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_q
   <span class="kw"><a href="../../reference/read_nquads.html">read_nquads</a></span>(<span class="st">"flights.nq"</span>, <span class="dt">rdf =</span> triplestore)
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   2.336   0.484   2.820</span></code></pre></div>
+<span class="co">#&gt;  89.913  27.217 117.540</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(
 df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_query.html">rdf_query</a></span>(triplestore, query)
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.548   0.008   0.558</span></code></pre></div>
+<span class="co">#&gt;  23.473   0.483  23.970</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/rdf_free.html">rdf_free</a></span>(triplestore)
 ## Becuase BDB is just a hash table, redland needs three separate files:
 <span class="kw">unlink</span>(<span class="st">"rdflib-po2s.db"</span>)
@@ -179,34 +187,70 @@ df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_q
 <span class="kw">system.time</span>(
   <span class="kw"><a href="../../reference/read_nquads.html">read_nquads</a></span>(<span class="st">"flights.nq"</span>, <span class="dt">rdf =</span> triplestore)
 )
-<span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   7.432   6.648 239.139</span></code></pre></div>
+<span class="co">#&gt;     user   system  elapsed </span>
+<span class="co">#&gt;  214.767  182.883 6930.584</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(
 df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_query.html">rdf_query</a></span>(triplestore, query)
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;  50.868  32.964 455.013</span></code></pre></div>
+<span class="co">#&gt;  44.730  29.497 396.329</span>
+df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_query.html">rdf_query</a></span>(triplestore, <span class="st">"SELECT ?s ?p ?o WHERE{ ?s ?p ?o }"</span>)
+<span class="co">#&gt; Warning in rbind(names(probs), probs_f): number of columns of result is not</span>
+<span class="co">#&gt; a multiple of vector length (arg 1)</span>
+<span class="co">#&gt; Warning: 1391311 parsing failures.</span>
+<span class="co">#&gt; row # A tibble: 5 x 5 col       row col   expected   actual     file         expected     &lt;int&gt; &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;        actual 1 1338850 o     an integer _:r1011167 literal data file 2 1338851 o     an integer _:r1011168 literal data row 3 1338852 o     an integer _:r1011169 literal data col 4 1338853 o     an integer _:r1011170 literal data expected 5 1338854 o     an integer _:r1012106 literal data</span>
+<span class="co">#&gt; ... ................. ... .................................................. ........ .................................................. ...... .................................................. .... .................................................. ... .................................................. ... .................................................. ........ ..................................................</span>
+<span class="co">#&gt; See problems(...) for more details.</span>
+df
+<span class="co">#&gt; # A tibble: 6,398,744 x 3</span>
+<span class="co">#&gt;    s          p                o</span>
+<span class="co">#&gt;    &lt;chr&gt;      &lt;chr&gt;        &lt;int&gt;</span>
+<span class="co">#&gt;  1 flights:1  flights:year  2013</span>
+<span class="co">#&gt;  2 flights:2  flights:year  2013</span>
+<span class="co">#&gt;  3 flights:3  flights:year  2013</span>
+<span class="co">#&gt;  4 flights:4  flights:year  2013</span>
+<span class="co">#&gt;  5 flights:5  flights:year  2013</span>
+<span class="co">#&gt;  6 flights:6  flights:year  2013</span>
+<span class="co">#&gt;  7 flights:7  flights:year  2013</span>
+<span class="co">#&gt;  8 flights:8  flights:year  2013</span>
+<span class="co">#&gt;  9 flights:9  flights:year  2013</span>
+<span class="co">#&gt; 10 flights:10 flights:year  2013</span>
+<span class="co">#&gt; # ... with 6,398,734 more rows</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/rdf_free.html">rdf_free</a></span>(triplestore)</code></pre></div>
+<p>Or on remote virtuoso:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">triplestore &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf.html">rdf</a></span>(<span class="dt">storage =</span> <span class="st">"virtuoso"</span>, 
+                   <span class="dt">user =</span> <span class="st">"dba"</span>, 
+                   <span class="dt">password =</span> <span class="st">"dba"</span>, 
+                   <span class="dt">host =</span> <span class="st">"virtuoso:1111"</span>
+                   )
+
+<span class="kw">system.time</span>(
+  <span class="kw"><a href="../../reference/read_nquads.html">read_nquads</a></span>(<span class="st">"flights.nq"</span>, <span class="dt">rdf =</span> triplestore)
+)
+<span class="co">#&gt;     user   system  elapsed </span>
+<span class="co">#&gt;  346.051  418.774 5738.233</span></code></pre></div>
 </div>
 <div id="postgres" class="section level2">
 <h2 class="hasAnchor">
 <a href="#postgres" class="anchor"></a>POSTGRES</h2>
-<p>Postgres and MySQL are ubiquitious relational databases.</p>
+<p>Postgres and MySQL are ubiquitious relational databases. This backend requires the <code>redland</code> binaries are built from source with this support enabled, which is not the case for pre-built Mac or Linux binaries.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">triplestore &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf.html">rdf</a></span>(<span class="dt">storage =</span> <span class="st">"postgres"</span>, 
                    <span class="dt">host =</span> <span class="st">"postgres"</span>, 
                    <span class="dt">user =</span> <span class="st">"postgres"</span>, 
                    <span class="dt">password =</span> <span class="st">"rdflib"</span>, 
                    <span class="dt">new_db =</span> <span class="ot">TRUE</span>)
+<span class="co">#&gt; Warning in rdf_storage(storage, world, host, port, user, password,</span>
+<span class="co">#&gt; database, : postgres driver not found. Falling back on in-memory storage</span>
 <span class="kw">system.time</span>(
   <span class="kw"><a href="../../reference/read_nquads.html">read_nquads</a></span>(<span class="st">"flights.nq"</span>, <span class="dt">rdf =</span> triplestore)
 )
-<span class="co">#&gt;     user   system  elapsed </span>
-<span class="co">#&gt;   29.472   61.588 2823.625</span></code></pre></div>
+<span class="co">#&gt;      user    system   elapsed </span>
+<span class="co">#&gt;    91.684    66.828 68784.126</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(
 df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_query.html">rdf_query</a></span>(triplestore, query)
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.004   0.000   0.216</span></code></pre></div>
+<span class="co">#&gt;   6.975   0.000   6.977</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/rdf_free.html">rdf_free</a></span>(triplestore)</code></pre></div>
 </div>
 <div id="mysql" class="section level2">
@@ -219,48 +263,86 @@ df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_q
                    <span class="dt">database =</span> <span class="st">"mysql"</span>,
                    <span class="dt">new_db =</span> <span class="ot">TRUE</span>
                   )
-<span class="kw">system.time</span>(
   <span class="kw"><a href="../../reference/read_nquads.html">read_nquads</a></span>(<span class="st">"flights.nq"</span>, <span class="dt">rdf =</span> triplestore)
-)
+<span class="co">#&gt; Total of 6398744 triples, stored in mysql</span>
+<span class="co">#&gt; -------------------------------</span>
+<span class="co">#&gt;  </span>
+<span class="co">#&gt;  (preview supressed for performance)</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_query.html">rdf_query</a></span>(triplestore, query))
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;  10.992  26.544 159.376</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(
-df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_query.html">rdf_query</a></span>(triplestore, query)
-)
-<span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.000   0.000   2.055</span></code></pre></div>
+<span class="co">#&gt;  29.511  26.074 340.782</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/rdf_free.html">rdf_free</a></span>(triplestore)</code></pre></div>
 </div>
 <div id="sqlite" class="section level2">
 <h2 class="hasAnchor">
 <a href="#sqlite" class="anchor"></a>SQLite</h2>
-<p><a href="https://en.wikipedia.org/wiki/SQLite">SQLite</a> is relatively easy to set up, but appears to have rather poor overall performance.</p>
+<p><a href="https://en.wikipedia.org/wiki/SQLite">SQLite</a> is relatively easy to set up, but appears to have rather poor overall performance. Requires SQLite development libraries installed (should work ‘out-of-the-box’ with Mac binaries for <code>redland</code> package).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">triplestore &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf.html">rdf</a></span>(<span class="dt">storage=</span><span class="st">"sqlite"</span>, <span class="dt">new_db =</span> <span class="ot">TRUE</span>, <span class="dt">name=</span><span class="st">"rdflib.sqlite"</span>)
 
 <span class="kw">system.time</span>(
   <span class="kw"><a href="../../reference/read_nquads.html">read_nquads</a></span>(<span class="st">"flights.nq"</span>, <span class="dt">rdf =</span> triplestore)
 )
-<span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt; 204.236  59.024 842.972</span></code></pre></div>
+<span class="co">#&gt;      user    system   elapsed </span>
+<span class="co">#&gt;  9309.997  2184.927 32132.714</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(
 df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_query.html">rdf_query</a></span>(triplestore, query)
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.028   0.000   0.030</span></code></pre></div>
+<span class="co">#&gt;  92.374   0.239  99.388</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/rdf_free.html">rdf_free</a></span>(triplestore)</code></pre></div>
 </div>
+</div>
+<div id="building-redland-with-full-backend-support" class="section level1">
+<h1 class="hasAnchor">
+<a href="#building-redland-with-full-backend-support" class="anchor"></a>Building redland with full backend support</h1>
+<p>Getting full support for the above backend databases through the <code>redland</code> R package is not trivial. The <code>redland</code> R package provides bindings to the redland libraries. Unfortunately, commonly available binary versions of those libraries, such as <code>librdf0-dev</code> on Debian, <code>redland</code> on Mac OSX brew, and the statically linked versions for Mac and Windows shipping in the R package, do not build those libraries with the optional support for all backends. (NOTE: it is the C library itself which must be built from source with these options, not just the R package source). Consequently, users must build <code>librdf</code> from the original sources, <a href="https://github.com/dajobe/librdf" class="uri">https://github.com/dajobe/librdf</a> with all backend linking libraries available, and then also build the <code>redland</code> R package from source, to be able to access all of these backends. On a Debian or Ubuntu system this looks like the following:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">apt-get</span> update <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> -yq install \
+libxml2-dev \
+libcurl4-openssl-dev \
+libssl-dev \
+git \
+automake \
+libtool \
+gtk-doc-tools \
+bison \
+flex \
+libgmp-dev  \
+libmhash-dev \
+libgcrypt20-dev \
+libpcre3-dev \
+libv8-dev \
+libjq-dev \
+libpq-dev \
+libdb-dev \
+libsqlite3-dev \
+libmariadbclient-dev \
+librdf-storage-virtuoso \
+virtuoso-server \
+unixodbc-dev</code></pre></div>
+<p>Now we can build <code>raptor</code> (parsers), <code>rasqal</code> (sparql queries) and <code>rdflib</code> from source:</p>
+<pre><code>git clone git://github.com/dajobe/raptor.git &amp;&amp; \
+cd raptor &amp;&amp; \
+./autogen.sh &amp;&amp; \
+make &amp;&amp; \
+make install &amp;&amp; \
+cd .. &amp;&amp; \
+git clone git://github.com/dajobe/rasqal.git &amp;&amp; \
+cd rasqal &amp;&amp; \
+./autogen.sh &amp;&amp; \
+make &amp;&amp; \
+make install &amp;&amp; \
+cd .. &amp;&amp; \
+git clone git://github.com/dajobe/librdf.git &amp;&amp; \
+cd librdf &amp;&amp; \
+./autogen.sh &amp;&amp; \
+make &amp;&amp; \
+make install</code></pre>
+<p>A See the <a href="https://github.com/ropensci/rdflib/tree/master/inst/docker/Dockerfile">Dockerfile</a> in <code>inst/docker</code> for an example of this, or simply use the <a href="https://rocker-project.org">Rocker-based</a> image <code>ropensci/rdflib</code>.</p>
 </div>
 <div id="testing" class="section level1">
 <h1 class="hasAnchor">
 <a href="#testing" class="anchor"></a>Testing</h1>
-<p><code>rdflib</code> uses Circle-CI to test database backends using <code>docker-compose</code>. <code>docker-compose</code> pulls down dedicated docker containers for <code>postgres</code> and <code>mariadb</code>, along with the <code>ropensci/rdflib</code> container, which includes a version of <code>redland</code> compiled with support for all five major backend storage systems. At this time, testing is configured for:</p>
-<ul>
-<li>Berkeley DB</li>
-<li>SQLite</li>
-<li>Postgres</li>
-<li>MySQL (Using MariaDB)</li>
-<li>Virtuoso</li>
-</ul>
+<p><code>rdflib</code> uses Circle-CI to test database backends using <code>docker-compose</code>. <code>docker-compose</code> pulls down dedicated docker containers for <code>postgres</code> and <code>mariadb</code>, along with the <code>ropensci/rdflib</code> container, which includes a version of <code>redland</code> compiled with support for all five major backend storage systems. See the <a href="https://github.com/ropensci/rdflib/tree/master/inst/docker/Dockerfile">Dockerfile</a> in <code>inst/docker</code> and associated [docker-compose.yml]((<a href="https://github.com/ropensci/rdflib/tree/master/docker-compose.yml" class="uri">https://github.com/ropensci/rdflib/tree/master/docker-compose.yml</a>) used in testing for an example of this configuration. You can also pull the Docker image <code>ropensci/rdflib</code> from Docker Hub for testing with all these libraries installed.</p>
 <p>The badge below (also on the package README) indicates that these dedicated tests are passing.</p>
 <p><a href="https://circleci.com/gh/ropensci/rdflib"><img src="https://circleci.com/gh/ropensci/rdflib.svg?style=svg" alt="CircleCI"></a></p>
 </div>
@@ -281,6 +363,7 @@ df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_q
       <li><a href="#sqlite">SQLite</a></li>
       </ul>
 </li>
+      <li><a href="#building-redland-with-full-backend-support">Building redland with full backend support</a></li>
       <li><a href="#testing">Testing</a></li>
       </ul>
 </div>

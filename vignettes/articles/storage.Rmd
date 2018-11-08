@@ -166,7 +166,7 @@ system.time(
 
 ## POSTGRES
 
-Postgres and MySQL are ubiquitious relational databases.  
+Postgres and MySQL are ubiquitious relational databases.  This backend requires the `redland` binaries are built from source with this support enabled, which is not the case for pre-built Mac or Linux binaries.   
 
 ```{r}
 triplestore <- rdf(storage = "postgres", 
@@ -201,21 +201,18 @@ triplestore <- rdf(storage = "mysql",
                    database = "mysql",
                    new_db = TRUE
                   )
-profvis::profvis(
   read_nquads("flights.nq", rdf = triplestore)
-)
-  
+ 
 ```
 
 
 ```{r}
-system.time(
-df <- rdf_query(triplestore, query)
-)
+system.time(df <- rdf_query(triplestore, query))
 ```
 
 ```{r}
 rdf_free(triplestore)
+
 ```
 
 
@@ -224,7 +221,7 @@ rdf_free(triplestore)
 ## SQLite
 
 
-[SQLite](https://en.wikipedia.org/wiki/SQLite) is relatively easy to set up, but appears to have rather poor overall performance.
+[SQLite](https://en.wikipedia.org/wiki/SQLite) is relatively easy to set up, but appears to have rather poor overall performance. Requires SQLite development libraries installed (should work 'out-of-the-box' with Mac binaries for `redland` package).  
 
 
 ```{r}
@@ -246,16 +243,63 @@ df <- rdf_query(triplestore, query)
 rdf_free(triplestore)
 ```
 
+# Building redland with full backend support
+
+Getting full support for the above backend databases through the `redland` R package is not trivial.  The `redland` R package provides bindings to the redland libraries.  Unfortunately, commonly available binary versions of those libraries, such as `librdf0-dev` on Debian, `redland` on Mac OSX brew, and the statically linked versions for Mac and Windows shipping in the R package, do not build those libraries with the optional support for all backends. (NOTE: it is the C library itself which must be built from source with these options, not just the R package source).  Consequently, users must build `librdf` from the original sources, <https://github.com/dajobe/librdf> with all backend linking libraries available, and then also build the `redland` R package from source, to be able to access all of these backends. On a Debian or Ubuntu system this looks like the following:
+
+```bash
+apt-get update && apt-get -yq install \
+libxml2-dev \
+libcurl4-openssl-dev \
+libssl-dev \
+git \
+automake \
+libtool \
+gtk-doc-tools \
+bison \
+flex \
+libgmp-dev  \
+libmhash-dev \
+libgcrypt20-dev \
+libpcre3-dev \
+libv8-dev \
+libjq-dev \
+libpq-dev \
+libdb-dev \
+libsqlite3-dev \
+libmariadbclient-dev \
+librdf-storage-virtuoso \
+virtuoso-server \
+unixodbc-dev
+```
+
+Now we can build `raptor` (parsers), `rasqal` (sparql queries) and `rdflib` from source:
+
+```
+git clone git://github.com/dajobe/raptor.git && \
+cd raptor && \
+./autogen.sh && \
+make && \
+make install && \
+cd .. && \
+git clone git://github.com/dajobe/rasqal.git && \
+cd rasqal && \
+./autogen.sh && \
+make && \
+make install && \
+cd .. && \
+git clone git://github.com/dajobe/librdf.git && \
+cd librdf && \
+./autogen.sh && \
+make && \
+make install
+```
+
+A See the [Dockerfile](https://github.com/ropensci/rdflib/tree/master/inst/docker/Dockerfile) in `inst/docker` for an example of this, or simply use the [Rocker-based](https://rocker-project.org) image `ropensci/rdflib`.  
 
 # Testing
 
-`rdflib` uses Circle-CI to test database backends using `docker-compose`.  `docker-compose` pulls down dedicated docker containers for `postgres` and `mariadb`, along with the `ropensci/rdflib` container, which includes a version of `redland` compiled with support for all five major backend storage systems.  At this time, testing is configured for:
-
-- Berkeley DB
-- SQLite
-- Postgres
-- MySQL (Using MariaDB)
-- Virtuoso
+`rdflib` uses Circle-CI to test database backends using `docker-compose`.  `docker-compose` pulls down dedicated docker containers for `postgres` and `mariadb`, along with the `ropensci/rdflib` container, which includes a version of `redland` compiled with support for all five major backend storage systems.  See the [Dockerfile](https://github.com/ropensci/rdflib/tree/master/inst/docker/Dockerfile) in `inst/docker` and associated [docker-compose.yml]((https://github.com/ropensci/rdflib/tree/master/docker-compose.yml) used in testing for an example of this configuration.  You can also pull the Docker image `ropensci/rdflib` from Docker Hub for testing with all these libraries installed.     
 
 
 

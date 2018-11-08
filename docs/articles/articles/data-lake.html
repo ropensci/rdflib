@@ -88,7 +88,7 @@
       <h1>The Data Lake and Schema On Read</h1>
                         <h4 class="author">Carl Boettiger</h4>
             
-            <h4 class="date">2018-11-02</h4>
+            <h4 class="date">2018-11-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/rdflib/blob/master/vignettes/articles/data-lake.Rmd"><code>vignettes/articles/data-lake.Rmd</code></a></small>
       <div class="hidden name"><code>data-lake.Rmd</code></div>
@@ -155,7 +155,7 @@
   <span class="kw"><a href="../../reference/write_nquads.html">write_nquads</a></span>(uri_flights,  <span class="st">"flights.nq"</span>, <span class="dt">prefix =</span> <span class="st">"flights:"</span>)
 })</code></pre></div>
 <pre><code>##    user  system elapsed 
-##  24.404   0.856  25.336</code></pre>
+##  25.448   0.921  26.385</code></pre>
 <p>We can now read these into our RDF data lake:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>({
   <span class="kw"><a href="../../reference/read_nquads.html">read_nquads</a></span>(<span class="st">"airlines.nq"</span>, <span class="dt">rdf =</span> rdf)
@@ -164,7 +164,7 @@
 
 })</code></pre></div>
 <pre><code>##    user  system elapsed 
-##  93.732  35.364 129.692</code></pre>
+##  91.168  27.781 119.286</code></pre>
 <p>Note that flights does not have a natural key (somewhat surprisingly, <code>flight</code> number is not a unique key for this table, as the same flight number is reused on the same route at different times.) So, we will treat each row as a unique anonymous key by setting the key to <code>NULL</code>.</p>
 </div>
 <div id="schema-on-read" class="section level2">
@@ -186,7 +186,7 @@
 df &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_query.html">rdf_query</a></span>(rdf, s)
 )</code></pre></div>
 <pre><code>##    user  system elapsed 
-##  26.280   0.992  27.279</code></pre>
+##  28.846   1.007  29.862</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(df)</code></pre></div>
 <pre><code>## # A tibble: 6 x 5
 ##   carrier     name                   manufacturer model     dep_delay
@@ -253,7 +253,7 @@ gh_tibble <span class="op">%&gt;%</span><span class="st"> </span><span class="kw
 rdf_tibble &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/rdf_query.html">rdf_query</a></span>(rdf, s)
 )</code></pre></div>
 <pre><code>##    user  system elapsed 
-##  18.760   0.348  19.113</code></pre>
+##  18.453   0.298  18.755</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(rdf_tibble)</code></pre></div>
 <pre><code>## # A tibble: 6 x 5
 ##   name        issues wiki  homepage owner      
