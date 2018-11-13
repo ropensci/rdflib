@@ -10,7 +10,7 @@
   "codeRepository": "https://github.com/ropensci/rdflib",
   "issueTracker": "https://github.com/ropensci/rdflib/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.1.1.9999",
+  "version": "0.2.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -313,7 +313,7 @@
   ],
   "contIntegration": "https://travis-ci.org/ropensci/rdflib",
   "readme": "https://github.com/ropensci/rdflib/blob/master/README.md",
-  "fileSize": "79119.29KB",
+  "fileSize": "65.019KB",
   "releaseNotes": "https://github.com/ropensci/rdflib/blob/master/NEWS.md",
   "citation": [
     {

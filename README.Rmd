@@ -114,6 +114,12 @@ unlink(out)
 rdf_free(x)
 ```
 
+
+## Advanced Use
+
+See [articles](https://ropensci.github.io/rdflib/articles/) from the documentation for advanced use including applications to large triplestores, example SPARQL queries, and information about additional database backends.  
+
+
 ----
 
 ## Citing rdflib
