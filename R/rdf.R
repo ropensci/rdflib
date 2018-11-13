@@ -1,11 +1,11 @@
 #' Initialize an `rdf` Object
 #'
 #' @param storage Storage backend to use; see details
-#' @param host host address for mysql, postgres, or viruoso storage
+#' @param host host address for mysql, postgres, or virtuoso storage
 #' @param port port for mysql (mysql storage defaults to mysql standard port, 3306)
 #' or postgres (postgres storage defaults to postgres standard port, 4321)
 #' @param user user name for postgres, mysql, or virtuoso
-#' @param password password for postgres, mysql, or vituoso
+#' @param password password for postgres, mysql, or virtuoso
 #' @param database name of the database to be created/used
 #' @param charset charset for virtuoso database, if desired
 #' @param dir directory of where to write sqlite or berkeley database.

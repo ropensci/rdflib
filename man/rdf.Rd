@@ -13,14 +13,14 @@ rdf(storage = c("memory", "BDB", "sqlite", "postgres", "mysql",
 \arguments{
 \item{storage}{Storage backend to use; see details}
 
-\item{host}{host address for mysql, postgres, or viruoso storage}
+\item{host}{host address for mysql, postgres, or virtuoso storage}
 
 \item{port}{port for mysql (mysql storage defaults to mysql standard port, 3306)
 or postgres (postgres storage defaults to postgres standard port, 4321)}
 
 \item{user}{user name for postgres, mysql, or virtuoso}
 
-\item{password}{password for postgres, mysql, or vituoso}
+\item{password}{password for postgres, mysql, or virtuoso}
 
 \item{database}{name of the database to be created/used}
 
