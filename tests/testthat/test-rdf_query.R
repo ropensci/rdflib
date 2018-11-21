@@ -71,8 +71,8 @@ testthat::test_that("SPARQL handles data types", {
   #testthat::expect_type(match$o[[1]], "logical")
   
   match <- rdf_query(rdf, 'SELECT ?o ?s WHERE { ?s <ex:integer> ?o }')
-  testthat::expect_is(match$o[[1]], "integer")
-  testthat::expect_type(match$o[[1]], "integer")
+  testthat::expect_is(match$o[[1]], "numeric")
+  testthat::expect_type(match$o[[1]], "double")
   
   match <- rdf_query(rdf, 'SELECT ?o ?s WHERE { ?s <ex:string> ?o }')
   testthat::expect_is(match$o[[1]], "character")
