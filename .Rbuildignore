@@ -1,3 +1,4 @@
+^CRAN-RELEASE$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.travis\.yml$
@@ -15,3 +16,4 @@
 ^slides$
 ^.circleci$
 ^docker-compose\.yml$
+^rdflib\.sqlite$
