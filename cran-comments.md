@@ -1,8 +1,6 @@
 Dear CRAN maintainers,
 
-This release adds support for additional backend databases (Postgres, MySQL,
-Virtuoso, and SQLite), along with appropriate documentation.  See NEWS for 
-details. 
+This release patches a unit test that was broken by the recent readr 1.2.0 release.
 
 ## Test environments
 
