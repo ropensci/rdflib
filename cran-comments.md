@@ -1,11 +1,11 @@
 Dear CRAN maintainers,
 
-This release patches a unit test that was broken by the recent readr 1.2.0 release.
+This release fixes the license copyright holder name, as requested. 
 
 ## Test environments
 
-* local OS X install, R 3.5.1
-* ubuntu 14.04 (on travis-ci), R 3.5.1
+* local OS X install, R 3.5.2
+* ubuntu 16.04 (on travis-ci), R 3.5.2
 * win-builder (devel and release)
 
 ## R CMD check results
