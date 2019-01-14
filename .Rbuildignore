@@ -18,3 +18,5 @@
 ^.circleci$
 ^docker-compose\.yml$
 ^rdflib\.sqlite$
+pkgdown
+
