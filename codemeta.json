@@ -325,7 +325,7 @@
   ],
   "contIntegration": "https://travis-ci.org/ropensci/rdflib",
   "readme": "https://github.com/ropensci/rdflib/blob/master/README.md",
-  "fileSize": "9764.057KB",
+  "fileSize": "117.421KB",
   "releaseNotes": "https://github.com/ropensci/rdflib/blob/master/NEWS.md",
   "citation": [
     {
