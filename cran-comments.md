@@ -1,6 +1,7 @@
 Dear CRAN maintainers,
 
-This release fixes the license copyright holder name, as requested. 
+This release fixes the license copyright holder name, as requested. This also avoids
+an isssue of package size in the previous submission. 
 
 ## Test environments
 

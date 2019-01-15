@@ -13,10 +13,12 @@
 ^paper\.bib$
 ^CONDUCT\.md$
 ^cran-comments\.md$
-^inst/notebook/img$
+^inst/notebook$
 ^slides$
 ^.circleci$
 ^docker-compose\.yml$
-^rdflib\.sqlite$
+^.*\.sqlite$
+^.*\.nq$
+^.*\.gz$
 pkgdown
 
