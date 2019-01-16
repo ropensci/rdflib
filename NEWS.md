@@ -1,4 +1,4 @@
-# rdflib 0.2.1
+# rdflib 0.2.2 2019-01-15
 
 * Minor patch to fix license file
 * Updates documentation with hex
