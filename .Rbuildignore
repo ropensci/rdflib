@@ -21,4 +21,5 @@
 ^.*\.nq$
 ^.*\.gz$
 pkgdown
+^manuscripts/.*
 

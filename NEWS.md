@@ -31,7 +31,7 @@
 
 ## Minor Improvements
 
-* `rdf_query` now bypasses the the very slow iteration over `getNextResult`
+* `rdf_query` now bypasses the very slow iteration over `getNextResult`
    approach and uses an internal redland function call to access all results
    at once in csv format.
 * experimental `as_rdf` method now uses a poor-man's nquad serializer to
@@ -46,7 +46,7 @@
   [#10](https://github.com/cboettig/rdflib/issues/10) 
 * both functions and unit tests are broken out into separate files in
   their respective directories.
-* additional example RDF data added in `extdata`
+* Additional example RDF data added in `extdata`
 * `rdf_serialize` passes `...` arguments to serializeToFile (e.g. to set a `baseUri`) 
 
 ## Bug Fixes 

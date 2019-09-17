@@ -1,0 +1,413 @@
+---
+title: "A Tidyverse Lover's Introduction to RDF in R"
+author:
+  - name: Carl Boettiger
+    affiliation: UC Berkeley
+    address:
+    - ESPM Department, University of California,
+    - 130 Mulford Hall Berkeley, CA 94720-3114, USA
+    - ORCiD \href{https://orcid.org/0000-0002-1642-628X}{0000-0002-1642-628X}
+    email:  cboettig@berkeley.edu
+abstract: >
+  The Resource Description Framework, or RDF, offers a powerful concept of data abstraction and representation which forms the core of the semantic web.  RDF triplestores seek to improve upon the model of relational databases by addressing core challenges such as universal compatibility and extensibility of the underlying data schema, and provide the SPARQL query language to provide graph queries.  However, while R users have long enjoyed rich libraries providing bindings to various SQL-based relational databases such as Postgres and MariaDB, support for RDF-based data has been more limited.  This article reviews several packages that provide support for reading, creating, and querying RDF data from R.  More fundamentally, this article also seeks to introduce users to the potential utility of an RDF-based approach and related concepts.
+  
+output:
+  rticles::rjournal_article:
+    includes:
+      in_header: preamble.tex
+---
+
+## Introduction
+
+Hadley Wickham's classic article, "Tidy Data" \citep{tidydata}, introduced many R users for the first time to well established concepts of relational database design such as Cobb's Third Normal Form, which he dubbed "tidy data," giving rise to the suite of packages now known as the tidyverse \citep{Ross2017}. 
+
+
+In the world of data science, RDF is a bit of an ugly duckling.  Like XML and Java, only without the massive-adoption-that-refuses-to-die part.  In fact RDF is most frequently expressed in XML, and RDF tools are written in Java, which help give RDF has the aesthetics of *steampunk*, of some technology for some futuristic Semantic Web[^1] in a toolset that feels about as lightweight and modern as iron dreadnought.
+
+[^1]: "The semantic web is the future of the internet and always will be." - Peter Norvig, Director of Research at Google
+
+But don't let these appearances deceive you. After all, SQL-based approaches have been around for decades longer than RDF, and yet SQL technology continues to improve and spread.  
+
+
+If you've ever gotten carried away using `tidyr::gather` to make everything into one long table, you may have noticed you can just about always get things down to about three columns, as we see with an obligatory `mtcars` data example for `tidyr::gather`:
+
+```{r message = FALSE, warning=FALSE}
+library(rdflib)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(jsonld)
+```
+
+
+```{r}
+car_triples <- 
+mtcars %>% 
+  rownames_to_column("Model") %>% 
+  gather(attribute,measurement, -Model)
+```
+
+```{r echo=FALSE}
+DT::datatable(car_triples)
+```
+
+If you like long tables like this, RDF is for you. This layout isn't "Tidy Data," where rows are observations and columns are variables, but it is damn useful sometimes.  This format is very liquid, easy to reshape into other structures -- so much so that `tidyr::gather` was originally known as `melt` in the `reshape2` package. It's also a good way to get started thinking about RDF.
+
+## It's all about the triples
+
+Looking at this table closely, we see that *each row is reduced to the most elementary statement you can make from the data*. A row no longer tells you the measurements (observations) *all* attributes (variables) of a given species (key), instead, you get just one fact per row, `Mazda RX4` gets a `mpg` measurement of `21.0`.  In RDF-world, we think of these three-part statements as something very special, which we call **triples**.  RDF is all about these triples. 
+
+The first column came from the row names in this case, the `Model` of car.  This acts serves as a `key` to index the data.frame, i.e. the **subject** being described. The next column is the variable (also called attribute or property) being measured, (that is, column names, other than the key column(s), from the tidy data), called the property or **predicate** in RDF-speak (slash grammar-school jargon). The third column is the actual value measured, more **object** of the predicate. Call it key-property-value or subject-predicate-object, these are our triples.  We can represent just about any data in fully elementary manner.  
+
+
+&nbsp;          | &nbsp;  | &nbsp;      | &nbsp;
+----------------|---------|-------------|-------------
+**RDF**         | subject | predicate   | object         
+**JSON**        | object  | property    | value
+**spreadsheet** | row id  | column name | cell
+**data.frame**  | key     | variable    | measurement
+**data.frame**  | key     | attribute   | value  
+
+Table: **Table 1**: The many names for triples.  
+
+Table 1 summarizes the many different names associated with triples.  The first naming convention is the terminology typically associated with RDF.  The second set are terms typically associated with JSON data, while the remaining are all examples in tabular or relational data structures.  
+
+
+## Subject URIs
+
+Using row names as our subject was intuitive but actually a bit sloppy.  `tidyverse` lovers know that `tidyverse` doesn't like rownames, they aren't tidy and have a way of causing trouble.  Of course, we made rownames into a proper column to use `gather`, but we could have taken this one step further.  In true `tidyverse` fashion, this rownames-column is really just one more variable we can observe, one more attribute of the thing we were describing: say, thing A (Car A) is a `car_model_name` as  `Mazda RX4` and thing A also has `mpg` of `21`. We can accomplish such a greater level of abstraction by keeping the Model as just another variable the row ids themselves as the key (i.e. the *subject*) of our triple:
+
+```{r}
+car_triples <- 
+mtcars %>% 
+  rownames_to_column("Model") %>% 
+  rowid_to_column("subject") %>% 
+  gather(predicate, object, -subject)
+```
+
+
+```{r echo=FALSE}
+DT::datatable(car_triples)
+```
+
+
+This is identical to a `gather` of *all* columns, where we have just made the original row ids an explicit column for reference (diligent reader will recognize we would need this information to reverse the operation and `spread` the data back into it's wide form; without it, our transformation is lossy and irreversible).   Our `subject` column now consists only of simple numeric `id`'s, while we have gained an additional triple for every row in the original data which states `Model` of each `id` number (e.g. `1` is `Model` `Mazda RX4`).  Okay, now you're probably thinking: "wait a minute, `1` is not a very unique or specific key, surely that will cause trouble," and you'd be right. For instance, if we performed the same transformation on the iris data, we get triples in the exact same format, ready to `bind_rows`:
+
+
+
+```{r}
+iris_triples <- iris %>%
+  rowid_to_column("subject") %>%
+  gather(key = predicate, value = object, -subject)
+```
+
+```{r echo=FALSE}
+DT::datatable(iris_triples)
+```
+
+
+but in the `iris` data, `1` corresponds to the first individual Iris flower in the measurement data, and not a Mazda RX4.  If we don't want to get confused, we're going to need to make sure our identifiers are unique: not just kind of unique, but unique in the **World** wide.  And what else is unique world-wide? Yup, you guessed it, we are going to use URLs for our subject identifiers, just like the world wide web.  Think of this as a clever out-sourcing to the whole internet domain registry service.  Here, we'll imagine registering each of these example datasets with a separate **base URL**, so instead of a vague `1` to identify the first observation in the `iris` example data, we'll use the URL `http://example.com/iris#1`, which we can now distinguish from `http://example.com/mtcars#1` (and if you're way ahead of me, yes, we'll have more to say about URI vs URL and the use of blank nodes in just a minute).  For example:
+
+```{r}
+iris_triples <- iris %>%
+  rowid_to_column("subject") %>%
+  mutate(subject = paste0("http://example.com/iris#", subject)) %>%
+  gather(key = predicate, value = object, -subject)
+
+```
+
+
+```{r echo=FALSE}
+DT::datatable(iris_triples)
+```
+
+## Predicate URIs
+
+A slightly more subtle version of the same problem can arise with our predicates. Different tables may use the same attribute (i.e. originally, a column name of a variable) for different things -- the attribute labeled `cyl` means "number of cylinders" in `mtcars` data.frame, but could mean something very different in different data.  Luckily we've already seen how to make names unique in RDF turn them into URLs.
+
+```{r mesage = FALSE}
+iris_triples <- iris %>%
+  rowid_to_column("subject") %>%
+  mutate(subject = paste0("http://example.com/iris#", subject)) %>%
+  gather(key = predicate, value = object, -subject) %>%
+  mutate(predicate = paste0("http://example.com/iris#", predicate))
+
+```
+
+
+
+```{r echo=FALSE}
+DT::datatable(iris_triples)
+```
+
+
+At this point the motivation for the name "Linked Data" is probably becoming painfully obvious.  
+
+
+## Datatype URIs
+
+One more column to go!  But wait a minute, the `object` column is different, isn't it? These measurements don't suffer from the same ambiguity -- after all, there is no confusion if a car has `4` cylinders and an iris has `4` mm long sepals.  However, a new issue has arisen in the data type (e.g. `string`, `boolean`, `double`, `integer`, `dateTime`, etc).  A close look reveals our `object` column is encoded as a `character` and not `numeric` -- how'd that happen?  `tidyr::gather` has coerced the whole column into character strings because some of the values, that is, the `Species` names in `iris` and the Model names in `mtcars`, are text strings (and it couldn't exactly coerce them into integers).  Perhaps this isn't a big deal -- we can often guess the type of an object just by how it looks (so-called [Duck typing](https://en.wikipedia.org/wiki/Duck_typing), because if it quacks like duck...).  Still, being explicit about data types is a Good Thing, so fortunately there's an explicit way to address this too ... oh no ... not ... yes ... more URLs!  
+
+Luckily we don't have to make up `example.com` URLs this time because there's already a well-established list of data types widely used across the internet that were originally developed for use in XML (I warned you) Schemas, listed in see the [W3C RDF DataTypes](https://www.w3.org/TR/rdf11-concepts/#section-Datatypes).  As the standard shows, familiar types `string`, `double`, `boolean`, `integer`, etc are made explicit using the XML Schema URL: `http://www.w3.org/2001/XMLSchema#`, followed by the type; so an integer would be ``http://www.w3.org/2001/XMLSchema#integer`, a character string `http://www.w3.org/2001/XMLSchema#string` etc.  
+
+Because this case is a little different, the URL is attached directly after the object value, which is set off by quotes, using the symbol `^^` (I dunno, but I think two duck feet), such that `5.1` becomes `"5.1"^^http://www.w3.org/2001/XMLSchema#double`.  Wow[^2].  Most of the time we won't have to worry about the type, because, if it quacks... 
+
+[^2]: Couldn't we just have used another column?  Perhaps, but then it wouldn't be a triple.  More to the point, the datatype modifies `object` alone, not the predicate or subject.  
+
+
+# Triples in `rdflib`
+
+So far, we have explored the concept of triples using familiar `data.frame` structures, but haven't yet introduced any `rdflib` functions.  Though we've been thinking of RDF data in this explicitly tabular three-column structure, that is really just one potentially convenient representation. Just as the same tabular data can be represented in a `data.frame`, written to disk as a `.csv` file, or stored in a database (like MySQL or PostgreSQL), so it is for RDF to even greater degree.  We have separate abstractions for the information itself compared to how it is represented.  
+
+To take advantage of this abstraction, `rdflib` introduces an `rdf` class object. Depending on how this is initialized, this could utilize storage in memory (the default), on disk, or potentially in an array of different databases, (including relational databases like PostgreSQL and rdf-specific ones like Virtuoso, depending on how the underlying `redland` library is compiled -- a topic beyond our scope here).  Here, we simply initialize an `rdf` object using the default in-memory storage:
+
+```{r}
+rdf <- rdf()
+```
+
+To add triples to this `rdf` object (often called an RDF Model or RDF Graph), we use the function `rdf_add`, which takes a subject, predicate, and object as arguments, as we have just discussed.  A datatype URI can be inferred from the R type used for the object (e.g. `numeric`, `integer`, `logical`, `character`, etc.)
+
+
+```{r}
+base <- "http://example.com/iris#"
+
+rdf %>% 
+  rdf_add(subject = paste0(base, "obs1"), 
+          predicate = paste0(base, "Sepal.Length"), 
+          object = 5.1)
+
+rdf
+```
+
+The result is displayed as a triple discussed above. This is technically an example of the `nquad` notation we will see later.  Note the inferred datatype URI.
+
+
+## Dialing back the ugly
+
+This `gather` thing started well, but now are data is looking pretty ugly, not to mention cumbersome.  You have some idea why RDF hasn't taken data science by storm, and we haven't even looked at how ugly this gets when you write it in the RDF/XML serialization yet!  On the upside, we've introduced most of the essential concepts that will let us start to work with data as triples.  Before we proceed further, we'll take a quick look at some of the options for expressing triples in different ways, and also introduce some of the different serializations (ways of representing in text) frequently used to express these triples.  
+
+#### Prefixes for URIs
+
+Long URL strings are one of the most obvious ways that what started off looking like a concise, minimal statement got ugly and cumbersome.  Borrowing from the notion of [Namespaces in XML](https://en.wikipedia.org/wiki/XML_namespace), most RDF tools permit custom prefixes to be declared and swapped in for longer URLs.  A prefix is typically a short string[^3] followed by a `:` that is used in place of the shared root URL. For instance, we might use the prefix `iris:Sepal.Length` and `iris:Sepal.Width` where `iris:` is defined to mean `http://example.com/iris#` in our example above.   
+
+ [^3]: Technically I believe it should be a [NCName](https://www.w3.org/TR/xmlschema-2/#NCName), defined by the regexp `[\i-[:]][\c-[:]]*`.  [Essentially](https://stackoverflow.com/questions/1631396), this says it cannot include symbol characters like `:`, `@`, `$`, `%`, `&`, `/`, `+`, `,`, `;`, whitespace characters or different parenthesis. Furthermore an NCName cannot begin with a number, dot or minus character although they can appear later in an NCName.  
+ 
+#### URI vs URL
+
+While I've referred to these things as [URL](https://en.wikipedia.org/wiki/URL)s, (uniform resource locator, aka web address) technically they can be a broader class of things known as [URI](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier)s (uniform resource identifier).  In addition to including anything that is a URL, URIs include things which are not URLs, like `urn:isbn:0-486-27557-4` or `urn:uuid:aac06f69-7ec8-403d-ad84-baa549133dce`, which are URNs: unique resource numbers in some numbering scheme (e.g. book ISBN numbers, or UUIDs), neither of which are URLs but nonetheless enjoy the same globally unique property.
+
+#### Blank nodes
+
+Sometimes we do not need a globally unique identifier, we just want a way to refer to a node (e.g. subject, and sometimes an object) uniquely in our document. This is the role of a [blank node](https://en.wikipedia.org/wiki/Blank_node) (do follow the link for a better overview).  These are frequently denoted with the prefix `_:`, e.g. we could have replaced the sample IDs as `_:1`, `_:2` instead of the URLs such as `http://example.com/iris#1` etc.  Note that RDF operations need not preserve the actual string pattern in a blank ID name, it means the exact same thing if we replace all the `_:1`s with `_:b1` and `_:2` with `_:b2`,  etc.
+
+In `librdf` we can get a blank node by passing an empty string or character string that is not a URI as the subject.  Here we also use a URI that isn't a URL as predicate: 
+
+```{r}
+rdf <- rdf()
+rdf %>% rdf_add("",   
+                "iris:Sepal.Length", 
+                object = 5.1)
+rdf
+```
+
+Note that we get a blank node, `_:`  with a randomly generated string.  
+
+## Triple notation: `nquads` `rdfxml`, `turtle`, and `nquads`
+
+So far we have relied primarily on a three-column tabular format to represent our triples.  We have also seen the default `print` format used for the `rdf` method, known as [N-Quads](https://www.w3.org/TR/n-quads/) above, which displays a bare, space-separated triple, possibly with a datatype URI attached to the object.  The line ends with a dot, which indicates this is part of the same local triplestore (aka RDF graph or RDF Model).  Technically this could be another URI indicating a unique global address for the triplestore in question.   
+
+We can serialize any `rdf` object out to a file in this format with the `rdf_serialize()` function, e.g.
+
+```{r}
+rdf_serialize(rdf, "rdf.nq", format = "nquads")
+```
+
+ Just as each of these formats can be serialized with `rdf_serialize()`, each can be read by `rdflib` using the function `rdf_parse()`:
+
+
+```{r}
+doc <- system.file("extdata/example.rdf", package="redland")
+rdf <- rdf_parse(doc, format = "rdfxml") 
+rdf
+```
+
+
+N-Quads are convenient in that each triple is displayed on a unique line, and the format supports the blank node and Datatype URIs in the manner we have just discussed. Other formats are not so concise.  Rather than print to file, we can simply change the default print format used by `rdflib` to explore the textual layout of the other serializations.  Here is one of the most common classical serializations, `RDF/XML` which expresses triples in an XML-based schema:
+
+```{r}
+options(rdf_print_format = "rdfxml")
+rdf
+```
+
+Just looking at this is probably enough to explain why so many alternative serializations were created.  Another popular format, [`turtle`](https://www.w3.org/TR/turtle/), looks more like `nquads`: 
+
+
+```{r}
+options(rdf_print_format = "turtle")
+rdf
+```
+
+Here, blank nodes are denoted by `[]`.  `turtle` uses indentation to indicate that all three predicates (`creator`, `description`, `title`) are properties of the same subject.  
+
+
+
+### JSON-LD
+
+While formats such as `nquads` and `turtle` provide a much cleaner syntax than RDF/XML, they also introduce a custom format rather than building on a familiar standard (like XML) for which users already have a well-developed set of tools and intuition.  After more than a decade of such challenges (RDF specification started 1997, including an the HTML-embedded serialization of [RDFa](https://en.wikipedia.org/wiki/RDFa) in 2004), a more user friendly specification has emerged in the form of JSON-LD (1.0 W3C specification was released in 2014, the 1.1 specification released in February 2018).  JSON-LD uses the familiar *object notation* of JSON, (which is rapidly replacing XML as the ubiquitous data exchange format, and will be more familiar to many readers than the specialized RDF formats or even XML.  Here is our `rdf` data in the JSON-LD serialization:
+
+
+```{r}
+options(rdf_print_format = "jsonld")
+rdf
+```
+
+In this serialization, our subject corresponds to "the thing in the curly braces," (i.e. the JSON "object") which is identified by the special `@id` property (omitting `@id` corresponds to a blank node).  The predicate-object pairs in the triple are then just JSON key-value pairs within the curly braces of the given object.  We can make this format look even more natural by stripping out the URLs.  While it is possible to use prefixes in place of URLs, it is more natural to pull them out entirely, e.g. by declaring a default vocabulary in the JSON-LD "Context", like so:
+
+```{r}
+rdf_serialize(rdf, "example.json", "jsonld") %>% 
+  jsonld_compact(context = '{"@vocab": "http://purl.org/dc/elements/1.1/"}')
+```
+
+The context of a JSON-LD file can also define datatypes, use multiple namespaces, and permit different names in the JSON keys from that found in the URLs.  While a complete introduction to JSON-LD is beyond our scope, this representation essentially provides a way to map intuitive JSON structures into precise RDF triples. 
+
+
+
+## From tables to Graphs
+
+So far we have considered examples where the data could be represented in tabular form. 
+We frequently encounter data that cannot be easily represented in such a format.  For instance, consider
+the JSON data in this example:
+
+```{r}
+ex <- system.file("extdata/person.json", package="rdflib")
+cat(readLines(ex), sep = "\n")
+#jsonld_compact(ex, "{}")
+
+```
+
+
+This JSON object for a `Person` has another JSON object nested inside (a `PostalAddress`).  Yet if we look at this data as `nquads`, we see the familiar flat triple structure: 
+
+
+
+```{r}
+options(rdf_print_format = "nquads")
+rdf <- rdf_parse(ex, "jsonld")
+rdf
+```
+
+So what has happened?  Note that our `address` has been given the blank node URI `_:b0`, which serves both as the object in the `address` line of the `Person` and as the subject of all the properties belonging to the `PostalAddress`.  In JSON-LD, this structure is referred to as being 'flattened': 
+
+```{r}
+jsonld_flatten(ex, context = "http://schema.org")
+```
+
+Note that our JSON-LD structure now starts with an object called `@graph`.  Unlike our opening examples, this data is not tabular in nature, but rather, is formatted as a nested _graph_.  Such nesting is very natural in JSON, where objects can be arranged in a tree-like structure with a single outer-most set of `{}` indicating a root object.  A graph is just a more generic form of a tree structure, where we are agnostic to the root.  (We could in fact use the `@reverse` property on address to create a root `PostalAddress` that contains the `Person`).  In this way, the notion of data as a `graph` offers a powerful generalization to the notion of tabular data.  The `@graph` above consists of two separate objects: a `PostalAddress` (with `id` of `_:b0`) and a `Person` (with an ORCID id).  This layout acts much like a foreign key in a relational database, or as a list-column in `tidyverse` (e.g. see `tidyr::nest()`).  `rdflib` uses this flattened representation when serializing JSON-LD objects.  Note that JSON-LD provides a rich set of utilities to go back and forth between flattened and nested layouts using `jsonld_frame`.  For instance, we can recover the original structure just by specifying a frame that indicates which type we want as the root:
+
+```{r}
+jsonld_flatten(ex) %>%
+  jsonld_frame('{"@type": "http://schema.org/Person"}') %>%
+  jsonld_compact(context = "http://schema.org")
+```
+
+(Recall that compacting just replaces URIs and any type declarations with short names given by the context).  This is somewhat analogous to `join` operations in relational data, or nesting and un-nesting functions in `tidyr`.  However, when working with RDF, the beautiful thing is that the differences between these two representations (nested or flattened) are purely aesthetic.  Both representations have precisely the same semantic meaning, and are thus precisely the same thing in RDF world.  We will never have to orchestrate a join on a foreign key before we can perform desired operations like select and filter on the data.  We don't have to think about how our data is organized, because it is always in the same molten triple format, whatever it is, and however nested it might be.  
+
+Just as we saw `gather` could provide a relatively generic way of transforming a data.frame into RDF triples, JSON-LD defines a relatively simple convention for getting nested data (e.g. lists) into RDF triples.  This convention simply treats JSON `{}` objects as `subjects` (often assigning blank node ids, as we saw with row ids), and key-value pairs (or in R-speak, list names and values) as predicates and objects, respectively.  Any raw JSON file can be treated as JSON-LD, ideally by specifying an appropriate `context`, which serves to map terms into URIs as we saw with data.frames. `JSON-LD` is then already a valid RDF format that we can parse with `rdflib`.  
+
+For instance, here is a simple function for coercing list objects into RDF with a specified context:
+
+```{r}
+as_rdf.list <- function(x, context = "http://schema.org"){
+  if(length(x) == 1) x <- x[[1]]
+  x[["@context"]] <- context
+  json <- jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE, force = TRUE)
+  rdflib::rdf_parse(json, "jsonld")
+}
+```
+
+Here we set a default context (http://schema.org), and map a few R terms to corresponding schema terms
+
+```{r}
+context <- list("http://schema.org", 
+                list(schema = "http://schema.org/",
+                     given = "givenName",
+                     family = "familyName",
+                     title = "name",
+                     year = "datePublished",
+                     note = "softwareVersion",
+                     comment = "identifier",
+                     role = "http://www.loc.gov/marc/relators/relaterm.html"))
+
+```
+
+
+We can now apply our function on arbitrary R `list` objects, such as the `bibentry` class object returned by the `citation()` function:
+
+```{r}
+options(rdf_print_format = "nquads") # go back to the default
+
+
+R <- citation("rdflib")
+rdf <- as_rdf.list(R, context)
+rdf  
+```
+
+
+## SPARQL: A Graph Query Language
+
+```{r}
+#source(system.file("examples/as_rdf.R", package="rdflib"))
+source(system.file("examples/tidy_schema.R", package="rdflib"))
+
+## Testing: Digest some data.frames into RDF and extract back
+ cars <- mtcars %>% rownames_to_column("Model")
+ x1 <- as_rdf(iris, NULL, "iris:")
+ x2 <- as_rdf(cars, NULL, "mtcars:")
+ rdf <- c(x1,x2)
+```
+
+
+## SPARQL: Getting back to Tidy Tables!
+
+
+```{r}
+sparql <-
+  'SELECT  ?Species ?Sepal_Length ?Sepal_Width ?Petal_Length  ?Petal_Width
+WHERE {
+ ?s <iris:Species>  ?Species .
+ ?s <iris:Sepal.Width>  ?Sepal_Width .
+ ?s <iris:Sepal.Length>  ?Sepal_Length . 
+ ?s <iris:Petal.Length>  ?Petal_Length .
+ ?s <iris:Petal.Width>  ?Petal_Width 
+}'
+
+iris2 <- rdf_query(rdf, sparql)
+```
+
+```{r echo=FALSE}
+DT::datatable(iris2)
+```
+
+
+We can automatically create the a SPARQL query that returns "tidy data".  Tidy data has predicates as columns, objects as values, subjects as rows.  
+
+```{r}
+sparql <- tidy_schema("Species",  "Sepal.Length", "Sepal.Width", prefix = "iris")
+
+rdf_query(rdf, sparql)
+```
+
+
+## Multi-table queries & non-rectangular data
+
+In the following vignette, "The Data Lake and Schema On Read," we explore more complex examples with multiple tables from a relational database and nested JSON data.  These highlight the power of SPARQL as a *Graph* query language. 
+
+
+## Summary
+
+
+## Acknowledgements
+
+This manuscript is based on a vignette of the same name which was written for the `rdflib` package.  
+
+\bibliography{RJreferences}
