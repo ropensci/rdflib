@@ -59,13 +59,13 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Carl Boettiger \email{cboettig@gmail.com} (0000-0002-1642-628X) [copyright holder]
+\strong{Maintainer}: Carl Boettiger \email{cboettig@gmail.com} (\href{https://orcid.org/0000-0002-1642-628X}{ORCID}) [copyright holder]
 
 Other contributors:
 \itemize{
-  \item Bryce Mecum (0000-0002-0381-3766) [reviewer]
-  \item Anna Krystalli (0000-0002-2378-4915) [reviewer]
-  \item Viktor Senderov \email{vsenderov@gmail.com} (0000-0003-3340-5963) [contributor]
+  \item Bryce Mecum (\href{https://orcid.org/0000-0002-0381-3766}{ORCID}) [reviewer]
+  \item Anna Krystalli (\href{https://orcid.org/0000-0002-2378-4915}{ORCID}) [reviewer]
+  \item Viktor Senderov \email{vsenderov@gmail.com} (\href{https://orcid.org/0000-0003-3340-5963}{ORCID}) [contributor]
 }
 
 }

@@ -4,11 +4,20 @@
 \alias{rdf}
 \title{Initialize an \code{rdf} Object}
 \usage{
-rdf(storage = c("memory", "BDB", "sqlite", "postgres", "mysql",
-  "virtuoso"), host = NULL, port = NULL, user = NULL,
-  password = NULL, database = NULL, charset = NULL, dir = NULL,
-  dsn = "Local Virtuoso", name = "rdflib", new_db = FALSE,
-  fallback = TRUE)
+rdf(
+  storage = c("memory", "BDB", "sqlite", "postgres", "mysql", "virtuoso"),
+  host = NULL,
+  port = NULL,
+  user = NULL,
+  password = NULL,
+  database = NULL,
+  charset = NULL,
+  dir = NULL,
+  dsn = "Local Virtuoso",
+  name = "rdflib",
+  new_db = FALSE,
+  fallback = TRUE
+)
 }
 \arguments{
 \item{storage}{Storage backend to use; see details}

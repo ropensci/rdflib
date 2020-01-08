@@ -16,7 +16,7 @@
 #' 
 #'     
 #' @importClassesFrom redland Query
-#' @importMethodsFrom redland executeQuery getNextResult
+#' @importMethodsFrom redland executeQuery
 #' @importMethodsFrom redland freeQuery freeQueryResults
 #' @export
 #' @examples

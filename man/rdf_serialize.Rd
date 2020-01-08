@@ -4,10 +4,15 @@
 \alias{rdf_serialize}
 \title{Serialize an RDF Document}
 \usage{
-rdf_serialize(rdf, doc = NULL, format = c("guess", "rdfxml", "nquads",
-  "ntriples", "turtle", "jsonld"), namespace = NULL,
-  prefix = names(namespace), base = getOption("rdf_base_uri",
-  "localhost://"), ...)
+rdf_serialize(
+  rdf,
+  doc = NULL,
+  format = c("guess", "rdfxml", "nquads", "ntriples", "turtle", "jsonld"),
+  namespace = NULL,
+  prefix = names(namespace),
+  base = getOption("rdf_base_uri", "localhost://"),
+  ...
+)
 }
 \arguments{
 \item{rdf}{an existing rdf triplestore to extend with triples from

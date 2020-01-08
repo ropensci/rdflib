@@ -4,8 +4,15 @@
 \alias{rdf_add}
 \title{Add RDF Triples}
 \usage{
-rdf_add(rdf, subject, predicate, object, subjectType = as.character(NA),
-  objectType = as.character(NA), datatype_uri = as.character(NA))
+rdf_add(
+  rdf,
+  subject,
+  predicate,
+  object,
+  subjectType = as.character(NA),
+  objectType = as.character(NA),
+  datatype_uri = as.character(NA)
+)
 }
 \arguments{
 \item{rdf}{an rdf object}
@@ -38,7 +45,7 @@ That is, strings that look like URIs will be declared as URIs. (See
 Predicate should always be a URI (e.g. URL or  a \code{prefix:string}),
 cannot be blank or literal.  Subjects that look like strings will be
 treated as \href{https://en.wikipedia.org/wiki/Blank_node}{Blank Nodes} (i.e.
-will be prefixed with \code{_:}).  An empty subject, \code{""}, will create a
+will be prefixed with \verb{_:}).  An empty subject, \code{""}, will create a
 blank node with random name.  Objects that look like URIs will be
 typed as resource nodes, otherwise as literals.  An empty object \code{""}
 will be treated as blank node.  Set \code{subjectType} or \code{objectType}
