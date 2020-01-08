@@ -137,9 +137,9 @@ Carl Boettiger. (2018). rdflib: A high level wrapper around the redland
 package for common rdf applications (Version 0.1.0). Zenodo.
 <https://doi.org/10.5281/zenodo.1098478>
 
-Jones M, Slaughter P, Ooms J, Boettiger C, Chamberlain S (2018).
+Jones M, Slaughter P, Ooms J, Boettiger C, Chamberlain S (2019).
 *redland: RDF Library Bindings in R*. doi: 10.5063/F1VM496B (URL:
-<http://doi.org/10.5063/F1VM496B>), R package version 1.0.17-10, \<URL:
+<https://doi.org/10.5063/F1VM496B>), R package version 1.0.17-11, \<URL:
 <https://github.com/ropensci/redland-bindings/tree/master/R/redland>\>.
 
 [![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)

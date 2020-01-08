@@ -10,14 +10,14 @@
   "codeRepository": "https://github.com/ropensci/rdflib",
   "issueTracker": "https://github.com/ropensci/rdflib/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.5.2",
+    "version": "3.6.1",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.5.2 (2018-12-20)",
+  "runtimePlatform": "R version 3.6.1 (2019-07-05)",
   "author": [
     {
       "@type": "Person",
@@ -325,7 +325,7 @@
   ],
   "contIntegration": "https://travis-ci.org/ropensci/rdflib",
   "readme": "https://github.com/ropensci/rdflib/blob/master/README.md",
-  "fileSize": "117.421KB",
+  "fileSize": "117.481KB",
   "releaseNotes": "https://github.com/ropensci/rdflib/blob/master/NEWS.md",
   "citation": [
     {
@@ -373,5 +373,6 @@
     "r-package",
     "peer-reviewed"
   ],
-  "relatedLink": "https://CRAN.R-project.org/package=rdflib"
+  "relatedLink": "https://CRAN.R-project.org/package=rdflib",
+  "funder": {}
 }
