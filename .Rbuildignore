@@ -22,4 +22,5 @@
 ^.*\.gz$
 pkgdown
 ^manuscripts/.*
-
+cache
+.*\.db$
