@@ -24,3 +24,4 @@ pkgdown
 ^manuscripts/.*
 cache
 .*\.db$
+^precompute-storage-vignette\.sh$
