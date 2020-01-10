@@ -1,4 +1,4 @@
-# rdflib 0.2.3 2019-01-15
+# rdflib 0.2.3 2020-01-10
 
 * Drop import of deprecated redland method, getNextResult (#33)
 
