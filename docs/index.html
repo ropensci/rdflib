@@ -13,23 +13,24 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Tools to Manipulate and Query Semantic Data">
-<meta property="og:description" content="The Resource Description Framework, or 'RDF' is a widely used
+<meta property="og:description" content="The Resource Description Framework, or RDF is a widely used
              data representation model that forms the cornerstone of the 
-             Semantic Web. 'RDF' represents data as a graph rather than 
+             Semantic Web. RDF represents data as a graph rather than 
              the familiar data table or rectangle of relational databases.
-             The 'rdflib' package provides a friendly and concise user interface
-             for performing common tasks on 'RDF' data, such as reading, writing
-             and converting between the various serializations of 'RDF' data,
-             including 'rdfxml', 'turtle', 'nquads', 'ntriples', and 'json-ld';
-             creating new 'RDF' graphs, and performing graph queries using 'SPARQL'.
-             This package wraps the low level 'redland' R package which
-             provides direct bindings to the 'redland' C library.  Additionally,
+             The rdflib package provides a friendly and concise user interface
+             for performing common tasks on RDF data, such as reading, writing
+             and converting between the various serializations of RDF data,
+             including rdfxml, turtle, nquads, ntriples, and json-ld;
+             creating new RDF graphs, and performing graph queries using SPARQL.
+             This package wraps the low level redland R package which
+             provides direct bindings to the redland C library.  Additionally,
              the package supports the newer and more developer friendly
-             'JSON-LD' format through the 'jsonld' package. The package
-             interface takes inspiration from the Python 'rdflib' library.">
+             JSON-LD format through the jsonld package. The package
+             interface takes inspiration from the Python rdflib library.">
 <meta property="og:image" content="/logo.png">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -38,7 +39,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-article">
+    <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -50,7 +51,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">rdflib</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
       </span>
     </div>
 
@@ -58,7 +59,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -90,7 +91,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/ropensci/rdflib">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -103,12 +104,9 @@
 <!--/.navbar -->
 
       
-      </header><div class="row">
-  <div class="col-md-9 contents">
-    
 
-    
-    
+      </header><div class="row">
+  <div class="contents col-md-9">
 <div id="rdflib" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#rdflib" class="anchor"></a>rdflib <img src="reference/figures/logo.svg" align="right" alt="" width="120">
@@ -121,16 +119,16 @@
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install rdflib from GitHub with:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ropensci/rdflib"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb1-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"ropensci/rdflib"</span>)</a></code></pre></div>
 </div>
 <div id="basic-use" class="section level2">
 <h2 class="hasAnchor">
 <a href="#basic-use" class="anchor"></a>Basic use</h2>
-<p>While not required, <code>rdflib</code> is designed to play nicely with <code>%&gt;%</code> pipes, so we will load the <code>magrittr</code> package as well:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(magrittr)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(rdflib)</a></code></pre></div>
+<p>While not required, <code>rdflib</code> is designed to play nicely with <code><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></code> pipes, so we will load the <code>magrittr</code> package as well:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(magrittr)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(rdflib)</a></code></pre></div>
 <p>Parse a file and serialize into a different format:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/dc.rdf"</span>, <span class="dt">package=</span><span class="st">"redland"</span>) <span class="op">%&gt;%</span></a>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata/dc.rdf"</span>, <span class="dt">package=</span><span class="st">"redland"</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/rdf_parse.html">rdf_parse</a></span>() <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/rdf_serialize.html">rdf_serialize</a></span>(<span class="st">"test.nquads"</span>, <span class="st">"nquads"</span>)</a></code></pre></div>
 <p>Perform SPARQL queries:</p>
@@ -139,7 +137,7 @@
 <a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  SELECT ?a ?c</span></a>
 <a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">  WHERE { ?a dc:creator ?c . }'</span></a>
 <a class="sourceLine" id="cb4-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/dc.rdf"</span>, <span class="dt">package=</span><span class="st">"redland"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata/dc.rdf"</span>, <span class="dt">package=</span><span class="st">"redland"</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb4-7" data-line-number="7"><span class="kw"><a href="reference/rdf_parse.html">rdf_parse</a></span>() <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb4-8" data-line-number="8"><span class="kw"><a href="reference/rdf_query.html">rdf_query</a></span>(sparql)</a>
 <a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; # A tibble: 1 x 2</span></a>
@@ -157,7 +155,7 @@
 <a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; -------------------------------</span></a>
 <a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; &lt;http://www.dajobe.org/&gt; &lt;http://purl.org/dc/elements/1.1/language&gt; "en" .</span></a></code></pre></div>
 <p>Change the default display format (<code>nquads</code>) for graph objects:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(<span class="dt">rdf_print_format =</span> <span class="st">"jsonld"</span>)</a>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">rdf_print_format =</span> <span class="st">"jsonld"</span>)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">x</a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; Total of 1 triples, stored in hashes</span></a>
 <a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; -------------------------------</span></a>
@@ -170,7 +168,7 @@
 <h2 class="hasAnchor">
 <a href="#json-ld" class="anchor"></a>JSON-LD</h2>
 <p>We can also work with the JSON-LD format through additional functions provided in the R package, <code>jsonld</code>.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">out &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/tempfile">tempfile</a></span>()</a>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">out &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/tempfile.html">tempfile</a></span>()</a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw"><a href="reference/rdf_serialize.html">rdf_serialize</a></span>(x, out, <span class="st">"jsonld"</span>)</a>
 <a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw"><a href="reference/rdf_parse.html">rdf_parse</a></span>(out, <span class="dt">format =</span> <span class="st">"jsonld"</span>)</a>
 <a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; Total of 1 triples, stored in hashes</span></a>
@@ -192,7 +190,7 @@
 <a href="#citing-rdflib" class="anchor"></a>Citing rdflib</h2>
 <p>Please also cite the underlying <code>redland</code> library when citing <code>rdflib</code></p>
 <p>Carl Boettiger. (2018). rdflib: A high level wrapper around the redland package for common rdf applications (Version 0.1.0). Zenodo. <a href="https://doi.org/10.5281/zenodo.1098478" class="uri">https://doi.org/10.5281/zenodo.1098478</a></p>
-<p>Jones M, Slaughter P, Ooms J, Boettiger C, Chamberlain S (2018). <em>redland: RDF Library Bindings in R</em>. doi: 10.5063/F1VM496B (URL: <a href="http://doi.org/10.5063/F1VM496B" class="uri">http://doi.org/10.5063/F1VM496B</a>), R package version 1.0.17-10, &lt;URL: <a href="https://github.com/ropensci/redland-bindings/tree/master/R/redland" class="uri">https://github.com/ropensci/redland-bindings/tree/master/R/redland</a>&gt;.</p>
+<p>Jones M, Slaughter P, Ooms J, Boettiger C, Chamberlain S (2019). <em>redland: RDF Library Bindings in R</em>. doi: 10.5063/F1VM496B (URL: <a href="https://doi.org/10.5063/F1VM496B" class="uri">https://doi.org/10.5063/F1VM496B</a>), R package version 1.0.17-11, &lt;URL: <a href="https://github.com/ropensci/redland-bindings/tree/master/R/redland" class="uri">https://github.com/ropensci/redland-bindings/tree/master/R/redland</a>&gt;.</p>
 <p><a href="http://ropensci.org"><img src="http://ropensci.org/public_images/github_footer.png" alt="rofooter"></a></p>
 </div>
 </div>
@@ -227,12 +225,12 @@
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Carl Boettiger <br><small class="roles"> Author, maintainer, copyright holder </small> <a href="https://orcid.org/0000-0002-1642-628X" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
+<li>Carl Boettiger <br><small class="roles"> Author, maintainer, copyright holder </small> <a href="https://orcid.org/0000-0002-1642-628X" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>
 
-      <div class="dev-status">
+  <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="http://www.repostatus.org/#active"><img src="http://www.repostatus.org/badges/latest/active.svg" alt="Project Status: Active – The project has reached a stable, usable state and is being actively developed."></a></li>
@@ -247,7 +245,6 @@
 </ul>
 </div>
 </div>
-
 </div>
 
 
@@ -256,12 +253,14 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

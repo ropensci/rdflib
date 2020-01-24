@@ -8,4 +8,6 @@ inst/doc
 *.nq
 *.sqlite
 *.tar.gz
+cache/
+*.db
 
