@@ -36,7 +36,7 @@ read_nquads <- function(file, ...){
 
 #' @export
 write_nquads.rdf <- function(x, file, ...){
-  rdf_serialize(rdf, file, "nquads", ...)
+  rdf_serialize(x, file, "nquads", ...)
 }
   
 #' @export
