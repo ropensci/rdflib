@@ -11,8 +11,13 @@
 #' @examples
 #' tmp <- tempfile(fileext = ".nq")
 #' library(datasets)
+#' 
+#' ## convert data.frame to nquads
 #' write_nquads(iris, tmp)
-#' read_nquads(tmp)
+#' rdf <- read_nquads(tmp)
+#' 
+#' ## or starting a native rdf object
+#' write_nquads(rdf, tempfile(fileext = ".nq"))
 write_nquads <- function(x, file, ...){
   UseMethod("write_nquads")
 }

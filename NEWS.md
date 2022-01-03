@@ -1,3 +1,7 @@
+# rdflib 0.2.4
+
+* bugfix in write_nquads() for rdf method
+
 # rdflib 0.2.3 2020-01-10
 
 * Drop import of deprecated redland method, getNextResult (#33)
