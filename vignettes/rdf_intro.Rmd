@@ -13,6 +13,8 @@ vignette: >
 
 ```{r include=FALSE}
 options(rdf_print_format = "nquads")
+is_linux <- Sys.info()["sysname"] == "Linux"
+knitr::opts_chunk$set(eval=is_linux)
 ```
 
 In the world of data science, RDF is a bit of an ugly duckling.  Like XML and Java, only without the massive-adoption-that-refuses-to-die part.  In fact RDF is most frequently expressed in XML, and RDF tools are written in Java, which help give RDF has the aesthetics of *steampunk*, of some technology for some futuristic Semantic Web[^1] in a toolset that feels about as lightweight and modern as iron dreadnought.
@@ -393,8 +395,7 @@ rdf_query(rdf, sparql)
 ```
 
 
-## Multi-table queries & non-rectangular data
-
-In the following vignette, "The Data Lake and Schema On Read," we explore more complex examples with multiple tables from a relational database and nested JSON data.  These highlight the power of SPARQL as a *Graph* query language. 
-
-
+```{r include=FALSE}
+unlink("rdf.nq")
+unlink("example.json")
+```
