@@ -103,7 +103,7 @@ but in the `iris` data, `1` corresponds to the first individual Iris flower in t
 ```{r}
 iris_triples <- iris %>%
   rowid_to_column("subject") %>%
-  mutate(subject = paste0("http://example.com/iris#", subject)) %>%
+  mutate(subject = paste0("http://example.com/", "iris#", subject)) %>%
   gather(key = predicate, value = object, -subject)
 
 ```
@@ -120,9 +120,9 @@ A slightly more subtle version of the same problem can arise with our predicates
 ```{r mesage = FALSE}
 iris_triples <- iris %>%
   rowid_to_column("subject") %>%
-  mutate(subject = paste0("http://example.com/iris#", subject)) %>%
+  mutate(subject = paste0("http://example.com/", "iris#", subject)) %>%
   gather(key = predicate, value = object, -subject) %>%
-  mutate(predicate = paste0("http://example.com/iris#", predicate))
+  mutate(predicate = paste0("http://example.com/", "iris#", predicate))
 
 ```
 
@@ -161,7 +161,7 @@ To add triples to this `rdf` object (often called an RDF Model or RDF Graph), we
 
 
 ```{r}
-base <- "http://example.com/iris#"
+base <- paste0("http://example.com/", "iris#")
 
 rdf %>% 
   rdf_add(subject = paste0(base, "obs1"), 
@@ -291,15 +291,15 @@ rdf
 So what has happened?  Note that our `address` has been given the blank node URI `_:b0`, which serves both as the object in the `address` line of the `Person` and as the subject of all the properties belonging to the `PostalAddress`.  In JSON-LD, this structure is referred to as being 'flattened': 
 
 ```{r}
-jsonld_flatten(ex, context = "http://schema.org")
+jsonld_flatten(ex, context = "https://schema.org/")
 ```
 
 Note that our JSON-LD structure now starts with an object called `@graph`.  Unlike our opening examples, this data is not tabular in nature, but rather, is formatted as a nested _graph_.  Such nesting is very natural in JSON, where objects can be arranged in a tree-like structure with a single outer-most set of `{}` indicating a root object.  A graph is just a more generic form of a tree structure, where we are agnostic to the root.  (We could in fact use the `@reverse` property on address to create a root `PostalAddress` that contains the `Person`).  In this way, the notion of data as a `graph` offers a powerful generalization to the notion of tabular data.  The `@graph` above consists of two separate objects: a `PostalAddress` (with `id` of `_:b0`) and a `Person` (with an ORCID id).  This layout acts much like a foreign key in a relational database, or as a list-column in `tidyverse` (e.g. see `tidyr::nest()`).  `rdflib` uses this flattened representation when serializing JSON-LD objects.  Note that JSON-LD provides a rich set of utilities to go back and forth between flattened and nested layouts using `jsonld_frame`.  For instance, we can recover the original structure just by specifying a frame that indicates which type we want as the root:
 
 ```{r}
 jsonld_flatten(ex) %>%
-  jsonld_frame('{"@type": "http://schema.org/Person"}') %>%
-  jsonld_compact(context = "http://schema.org")
+  jsonld_frame('{"@type": "https://schema.org//Person"}') %>%
+  jsonld_compact(context = "https://schema.org/")
 ```
 
 (Recall that compacting just replaces URIs and any type declarations with short names given by the context).  This is somewhat analogous to `join` operations in relational data, or nesting and un-nesting functions in `tidyr`.  However, when working with RDF, the beautiful thing is that the differences between these two representations (nested or flattened) are purely aesthetic.  Both representations have precisely the same semantic meaning, and are thus precisely the same thing in RDF world.  We will never have to orchestrate a join on a foreign key before we can perform desired operations like select and filter on the data.  We don't have to think about how our data is organized, because it is always in the same molten triple format, whatever it is, and however nested it might be.  
@@ -309,7 +309,7 @@ Just as we saw `gather` could provide a relatively generic way of transforming a
 For instance, here is a simple function for coercing list objects into RDF with a specified context:
 
 ```{r}
-as_rdf.list <- function(x, context = "http://schema.org"){
+as_rdf.list <- function(x, context = "https://schema.org/"){
   if(length(x) == 1) x <- x[[1]]
   x[["@context"]] <- context
   json <- jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE, force = TRUE)
@@ -317,11 +317,11 @@ as_rdf.list <- function(x, context = "http://schema.org"){
 }
 ```
 
-Here we set a default context (http://schema.org), and map a few R terms to corresponding schema terms
+Here we set a default context (https://schema.org/), and map a few R terms to corresponding schema terms
 
 ```{r}
-context <- list("http://schema.org", 
-                list(schema = "http://schema.org/",
+context <- list("https://schema.org/", 
+                list(schema = "https://schema.org//",
                      given = "givenName",
                      family = "familyName",
                      title = "name",

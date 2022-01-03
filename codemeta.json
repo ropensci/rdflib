@@ -1,23 +1,25 @@
 {
-  "@context": [
-    "https://doi.org/doi:10.5063/schema/codemeta-2.0",
-    "http://schema.org"
-  ],
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "rdflib",
-  "description": "The Resource Description Framework, or 'RDF' is a widely used\n             data representation model that forms the cornerstone of the \n             Semantic Web. 'RDF' represents data as a graph rather than \n             the familiar data table or rectangle of relational databases.\n             The 'rdflib' package provides a friendly and concise user interface\n             for performing common tasks on 'RDF' data, such as reading, writing\n             and converting between the various serializations of 'RDF' data,\n             including 'rdfxml', 'turtle', 'nquads', 'ntriples', and 'json-ld';\n             creating new 'RDF' graphs, and performing graph queries using 'SPARQL'.\n             This package wraps the low level 'redland' R package which\n             provides direct bindings to the 'redland' C library.  Additionally,\n             the package supports the newer and more developer friendly\n             'JSON-LD' format through the 'jsonld' package. The package\n             interface takes inspiration from the Python 'rdflib' library.",
+  "description": "The Resource Description Framework, or 'RDF' is a widely used data representation model that forms the cornerstone of the Semantic Web. 'RDF' represents data as a graph rather than the familiar data table or rectangle of relational databases. The 'rdflib' package provides a friendly and concise user interface for performing common tasks on 'RDF' data, such as reading, writing and converting between the various serializations of 'RDF' data, including 'rdfxml', 'turtle', 'nquads', 'ntriples', and 'json-ld'; creating new 'RDF' graphs, and performing graph queries using 'SPARQL'. This package wraps the low level 'redland' R package which provides direct bindings to the 'redland' C library. Additionally, the package supports the newer and more developer friendly 'JSON-LD' format through the 'jsonld' package. The package interface takes inspiration from the Python 'rdflib' library.",
   "name": "rdflib: Tools to Manipulate and Query Semantic Data",
   "codeRepository": "https://github.com/ropensci/rdflib",
   "issueTracker": "https://github.com/ropensci/rdflib/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.6.1",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.6.1 (2019-07-05)",
+  "runtimePlatform": "R version 4.1.2 (2021-11-01)",
+  "provider": {
+    "@id": "https://cran.r-project.org",
+    "@type": "Organization",
+    "name": "Comprehensive R Archive Network (CRAN)",
+    "url": "https://cran.r-project.org"
+  },
   "author": [
     {
       "@type": "Person",
@@ -25,6 +27,15 @@
       "familyName": "Boettiger",
       "email": "cboettig@gmail.com",
       "@id": "https://orcid.org/0000-0002-1642-628X"
+    }
+  ],
+  "contributor": [
+    {
+      "@type": "Person",
+      "givenName": "Viktor",
+      "familyName": "Senderov",
+      "email": "vsenderov@gmail.com",
+      "@id": "https://orcid.org/0000-0003-3340-5963"
     }
   ],
   "copyrightHolder": [
@@ -239,8 +250,8 @@
       "sameAs": "https://CRAN.R-project.org/package=spelling"
     }
   ],
-  "softwareRequirements": [
-    {
+  "softwareRequirements": {
+    "1": {
       "@type": "SoftwareApplication",
       "identifier": "redland",
       "name": "redland",
@@ -252,7 +263,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=redland"
     },
-    {
+    "2": {
       "@type": "SoftwareApplication",
       "identifier": "jsonld",
       "name": "jsonld",
@@ -264,17 +275,17 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=jsonld"
     },
-    {
+    "3": {
       "@type": "SoftwareApplication",
       "identifier": "methods",
       "name": "methods"
     },
-    {
+    "4": {
       "@type": "SoftwareApplication",
       "identifier": "utils",
       "name": "utils"
     },
-    {
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "stringi",
       "name": "stringi",
@@ -286,7 +297,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=stringi"
     },
-    {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "readr",
       "name": "readr",
@@ -298,7 +309,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=readr"
     },
-    {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "dplyr",
       "name": "dplyr",
@@ -310,7 +321,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=dplyr"
     },
-    {
+    "8": {
       "@type": "SoftwareApplication",
       "identifier": "tidyr",
       "name": "tidyr",
@@ -321,12 +332,10 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=tidyr"
-    }
-  ],
-  "contIntegration": "https://travis-ci.org/ropensci/rdflib",
-  "readme": "https://github.com/ropensci/rdflib/blob/master/README.md",
-  "fileSize": "117.481KB",
-  "releaseNotes": "https://github.com/ropensci/rdflib/blob/master/NEWS.md",
+    },
+    "SystemRequirements": null
+  },
+  "fileSize": "344.795KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -345,34 +354,5 @@
       "@id": "https://doi.org/10.5281/zenodo.1098478",
       "sameAs": "https://doi.org/10.5281/zenodo.1098478"
     }
-  ],
-  "developmentStatus": "[![Project Status: Active – The project has reached a stable, usable",
-  "provider": {
-    "@id": "https://cran.r-project.org",
-    "@type": "Organization",
-    "name": "Comprehensive R Archive Network (CRAN)",
-    "url": "https://cran.r-project.org"
-  },
-  "contributor": [
-    {
-      "@type": "Person",
-      "givenName": "Viktor",
-      "familyName": "Senderov",
-      "email": "vsenderov@gmail.com",
-      "@id": "https://orcid.org/0000-0003-3340-5963"
-    }
-  ],
-  "review": {
-    "@type": "Review",
-    "url": "https://github.com/ropensci/onboarding/issues/169",
-    "provider": "http://ropensci.org"
-  },
-  "keywords": [
-    "r",
-    "rstats",
-    "r-package",
-    "peer-reviewed"
-  ],
-  "relatedLink": "https://CRAN.R-project.org/package=rdflib",
-  "funder": {}
+  ]
 }

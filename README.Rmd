@@ -4,13 +4,13 @@ output: github_document
 
 # rdflib <img src="man/figures/logo.svg" align="right" alt="" width="120" />
 
-[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/)
 [![Travis-CI Build Status](https://travis-ci.org/ropensci/rdflib.svg?branch=master)](https://travis-ci.org/ropensci/rdflib) 
 [![Build status](https://ci.appveyor.com/api/projects/status/n81e9wsh5bh0xrm6?svg=true)](https://ci.appveyor.com/project/cboettig/rdflib)
 [![Coverage Status](https://img.shields.io/codecov/c/github/ropensci/rdflib/master.svg)](https://codecov.io/github/ropensci/rdflib?branch=master)
-[![CircleCI](https://circleci.com/gh/ropensci/rdflib.svg?style=svg)](https://circleci.com/gh/ropensci/rdflib "Docker tests")
+[![CircleCI](https://app.circleci.com/pipelines/github/ropensci/rdflib.svg?style=svg)](https://app.circleci.com/pipelines/github/ropensci/rdflib "Docker tests")
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rdflib)](https://cran.r-project.org/package=rdflib)
-[![](http://badges.ropensci.org/169_status.svg)](https://github.com/ropensci/onboarding/issues/169)
+[![](http://badges.ropensci.org/169_status.svg)](https://github.com/ropensci/software-review/issues/169)
 [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/rdflib)](https://CRAN.R-project.org/package=rdflib)
 [![DOI](https://zenodo.org/badge/100521776.svg)](https://zenodo.org/badge/latestdoi/100521776)
 
@@ -119,7 +119,7 @@ rdf_free(x)
 
 ## Advanced Use
 
-See [articles](https://ropensci.github.io/rdflib/articles/) from the documentation for advanced use including applications to large triplestores, example SPARQL queries, and information about additional database backends.  
+See [articles](https://docs.ropensci.org/rdflib/articles/) from the documentation for advanced use including applications to large triplestores, example SPARQL queries, and information about additional database backends.  
 
 
 ----
@@ -138,8 +138,8 @@ print(citation("redland"), "text")
 ```
 
 ```{r include=FALSE}
-codemetar::write_codemeta()
+codemeta::write_codemeta()
 ```
 
 
-[![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
+[![rofooter](https://ropensci.org//public_images/github_footer.png)](https://ropensci.org/)
