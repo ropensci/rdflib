@@ -25,3 +25,4 @@ pkgdown
 cache
 .*\.db$
 ^precompute-storage-vignette\.sh$
+^CRAN-SUBMISSION$
