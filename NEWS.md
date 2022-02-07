@@ -1,3 +1,7 @@
+# rdflib 0.2.5
+
+* bugfix UTF-8
+
 # rdflib 0.2.4
 
 * bugfix in write_nquads() for rdf method
