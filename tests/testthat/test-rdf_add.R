@@ -1,42 +1,45 @@
-testthat::context("RDF Add")
+context("RDF Add")
 
-testthat::test_that("we can print.rdf UTF-8", {
+test_that("we can print.rdf UTF-8", {
+  # stringi::stri_unescape_unicode fails on some architectures
+  skip_on_cran()
+  skip_on_os("windows")
   r <- rdf()
   rdf_add(r,
           subject="", 
           predicate="http://schema.org/name", 
           object="Maëlle Salmon")
   
-  testthat::expect_output(print(r), "Maëlle")
+  expect_output(print(r), "Maëlle")
   rdf_free(r)
 })
 
 
 
-testthat::test_that("we can initialize add triples to rdf graph", {
+test_that("we can initialize add triples to rdf graph", {
   rdf <- rdf()
   rdf <- rdf_add(rdf, 
                  subject="http://www.dajobe.org/",
                  predicate="http://schema.org/dateCreated",
                  object=as.Date("2015-01-01"))
-  testthat::expect_is(rdf, "rdf")
+  expect_is(rdf, "rdf")
   rdf_free(rdf)
   
 })
 
 
-testthat::test_that("we can initialize add triples to rdf graph", {
+test_that("we can initialize add triples to rdf graph", {
   rdf <- rdf()
   rdf <- rdf_add(rdf, 
                  subject=NA,
                  predicate="http://schema.org/dateCreated",
                  object=NA)
-  testthat::expect_is(rdf, "rdf")
+  expect_is(rdf, "rdf")
   rdf_free(rdf)
   
 })
 
-testthat::test_that("other rdf_add examples work",{
+test_that("other rdf_add examples work",{
   
    rdf <- rdf()
    rdf_add(rdf, 
@@ -71,6 +74,6 @@ testthat::test_that("other rdf_add examples work",{
            objectType = "literal")  
            
   
-   testthat::expect_is(rdf, "rdf")
+   expect_is(rdf, "rdf")
    rdf_free(rdf)
 })
