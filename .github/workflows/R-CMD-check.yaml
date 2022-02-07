@@ -38,6 +38,9 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
+          
+      - if: runner.os == 'Linux'
+        run: apt-get update && apt-get -y install librdf0-dev
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
