@@ -56,9 +56,9 @@ getResults <- function(queryResult, format = "csv", ...){
   mimetype <- switch(format,
                      "csv" = "text/csv; charset=utf-8",
                      NULL)
-  readr::read_csv(redland::librdf_query_results_to_string2(
+  readr::read_csv(I(redland::librdf_query_results_to_string2(
                             queryResult@librdf_query_results, 
-                            format, mimetype, NULL, NULL), 
+                            format, mimetype, NULL, NULL)),
                   progress = FALSE, show_col_types = FALSE,
                   ...)
 }
