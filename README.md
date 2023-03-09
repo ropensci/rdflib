@@ -1,21 +1,17 @@
 
 # rdflib <img src="man/figures/logo.svg" align="right" alt="" width="120" />
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/ropensci/rdflib/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/rdflib/actions)
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/)
-[![Travis-CI Build
-Status](https://travis-ci.org/ropensci/rdflib.svg?branch=master)](https://travis-ci.org/ropensci/rdflib)
-[![Build
-status](https://ci.appveyor.com/api/projects/status/n81e9wsh5bh0xrm6?svg=true)](https://ci.appveyor.com/project/cboettig/rdflib)
-[![Coverage
-Status](https://img.shields.io/codecov/c/github/ropensci/rdflib/master.svg)](https://codecov.io/github/ropensci/rdflib?branch=master)
-[![CircleCI](https://app.circleci.com/pipelines/github/ropensci/rdflib.svg?style=svg)](https://app.circleci.com/pipelines/github/ropensci/rdflib "Docker tests")
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rdflib)](https://cran.r-project.org/package=rdflib)
 [![](http://badges.ropensci.org/169_status.svg)](https://github.com/ropensci/software-review/issues/169)
 [![CRAN RStudio mirror
 downloads](http://cranlogs.r-pkg.org/badges/rdflib)](https://CRAN.R-project.org/package=rdflib)
 [![DOI](https://zenodo.org/badge/100521776.svg)](https://zenodo.org/badge/latestdoi/100521776)
+<!-- badges: end -->
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -66,13 +62,6 @@ sparql <-
 system.file("extdata/dc.rdf", package="redland") %>%
 rdf_parse() %>%
 rdf_query(sparql)
-#> Rows: 1 Columns: 2
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr (2): a, c
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 #> # A tibble: 1 × 2
 #>   a                      c           
 #>   <chr>                  <chr>       
@@ -144,9 +133,9 @@ Carl Boettiger. (2018). rdflib: A high level wrapper around the redland
 package for common rdf applications (Version 0.1.0). Zenodo.
 <https://doi.org/10.5281/zenodo.1098478>
 
-Jones M, Slaughter P, Ooms J, Boettiger C, Chamberlain S (2021).
-*redland: RDF Library Bindings in R*. doi: 10.5063/F1VM496B (URL:
-<https://doi.org/10.5063/F1VM496B>), R package version 1.0.17-15, \<URL:
-<https://github.com/ropensci/redland-bindings/tree/master/R/redland>\>.
+Jones M, Slaughter P, Ooms J, Boettiger C, Chamberlain S (2022).
+*redland: RDF Library Bindings in R*. <doi:10.5063/F1VM496B>
+<https://doi.org/10.5063/F1VM496B>, R package version 1.0.17-16,
+<https://github.com/ropensci/redland-bindings/tree/master/R/redland>.
 
 [![rofooter](https://ropensci.org//public_images/github_footer.png)](https://ropensci.org/)

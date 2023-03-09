@@ -7,13 +7,13 @@
   "codeRepository": "https://github.com/ropensci/rdflib",
   "issueTracker": "https://github.com/ropensci/rdflib/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.2.4",
+  "version": "0.2.6",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.1.2 (2021-11-01)",
+  "runtimePlatform": "R version 4.2.2 (2022-10-31)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -335,7 +335,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "344.795KB",
+  "fileSize": "345.68KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",

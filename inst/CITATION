@@ -1,6 +1,6 @@
 
-citEntry(
-  entry = 'manual',
+bibentry(
+  bibtype = 'manual',
   title = 'rdflib: A high level wrapper around the redland package for common rdf applications',
   author = person("Carl", "Boettiger", email = "cboettig@gmail.com"),
                     role = c("aut", "cre", "cph"),

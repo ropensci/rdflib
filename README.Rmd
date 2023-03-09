@@ -7,7 +7,6 @@ output: github_document
  <!-- badges: start -->
   [![R-CMD-check](https://github.com/ropensci/rdflib/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/rdflib/actions)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/)
-[![Coverage Status](https://img.shields.io/codecov/c/github/ropensci/rdflib/master.svg)](https://codecov.io/github/ropensci/rdflib?branch=master)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rdflib)](https://cran.r-project.org/package=rdflib)
 [![](http://badges.ropensci.org/169_status.svg)](https://github.com/ropensci/software-review/issues/169)
 [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/rdflib)](https://CRAN.R-project.org/package=rdflib)
