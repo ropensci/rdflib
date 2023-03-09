@@ -1,3 +1,7 @@
+# rdflib 0.2.6
+
+* bugfix vroom warning
+
 # rdflib 0.2.5
 
 * bugfix UTF-8
