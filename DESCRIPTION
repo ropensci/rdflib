@@ -42,7 +42,7 @@ Imports:
     readr,
     dplyr,
     tidyr
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Suggests: 
     magrittr,
