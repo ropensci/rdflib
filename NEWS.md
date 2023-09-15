@@ -1,3 +1,7 @@
+# rdflib 0.2.7
+
+make jsonld an optional dependency
+
 # rdflib 0.2.6
 
 * bugfix vroom warning

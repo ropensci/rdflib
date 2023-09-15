@@ -14,7 +14,6 @@
 #'  and model objects
 #' @importClassesFrom redland World Storage Model Parser
 #' @importMethodsFrom redland parseFileIntoModel freeParser
-#' @importFrom jsonld jsonld_to_rdf
 #' @export
 #'
 #' @examples
@@ -50,6 +49,12 @@ rdf_parse <- function(doc,
   ## We use tmp to avoid altering input doc, since parsing a local file should
   ## be a read-only task!
   if(format == "jsonld"){
+    
+    has_jsonld <- requireNamespace("jsonld", quietly = TRUE)
+    if (!has_jsonld) {
+      stop("please install the jsonld package to use this functionality.")
+    }
+    
     x <- jsonld::jsonld_to_rdf(doc, 
                                options = 
            list(base = getOption("rdf_base_uri", "localhost://"),

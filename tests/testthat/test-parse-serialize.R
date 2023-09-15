@@ -43,6 +43,8 @@ testthat::test_that("we can add a namespace on serializing", {
 
 
 testthat::test_that("we can parse and serialize json-ld", {
+  
+  skip_if_not_installed("jsonld")
   rdf <- rdf_parse(doc)
   rdf_serialize(rdf, "out.json")
   roundtrip <- rdf_parse("out.json")
@@ -130,6 +132,10 @@ testthat::test_that("we can serialize turtle with a baseUri", {
 ## JSON-LD tests with default base uri
 
   testthat::test_that("@id is not a URI, we should get localhost", {
+    
+    skip_if_not_installed("jsonld")
+    
+    
     ex <- '{
       "@context": "http://schema.org/",
       "@id": "person_id",
@@ -142,6 +148,9 @@ testthat::test_that("we can serialize turtle with a baseUri", {
   })
 
   testthat::test_that("@id is a URI, we should not get localhost", {
+    
+    skip_if_not_installed("jsonld")
+    
     ex <- '{
       "@context": "http://schema.org/",
       "@id": "uri:person_id",
@@ -153,6 +162,10 @@ testthat::test_that("we can serialize turtle with a baseUri", {
   })  
   
   testthat::test_that("we can alter the base URI", {
+    
+    skip_if_not_installed("jsonld")
+    
+    
     ex <- '{
       "@id": "person_id",
       "schema:name": "Jane Doe"

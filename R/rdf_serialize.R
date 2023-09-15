@@ -12,7 +12,6 @@
 #' @importFrom methods new
 #' @importClassesFrom redland Serializer
 #' @importMethodsFrom redland setNameSpace serializeToFile freeSerializer
-#' @importFrom jsonld jsonld_compact
 #'
 #' @export
 #' @examples
@@ -86,13 +85,20 @@ rdf_serialize <- function(rdf,
   }
   
   if(jsonld_output){
+    
+    has_jsonld <- requireNamespace("jsonld", quietly = TRUE)
+    if (!has_jsonld) {
+      stop("please install the jsonld package to use this functionality.")
+    }
+    
+    
     txt <- paste(readLines(doc), collapse = "\n")
     if(length(txt) > 0){ ## don't attempt to write empty file into json
       json <- jsonld::jsonld_from_rdf(txt,
                                       options = list(
                                         base = base,
                                         format = "application/nquads"))
-      compact_json <- jsonld_compact(json, "{}")
+      compact_json <- jsonld::jsonld_compact(json, "{}")
       writeLines(compact_json, doc)
     }
   }

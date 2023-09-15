@@ -24,7 +24,6 @@ URI
 URIs
 URNs
 UUIDs
-VM
 Wickham
 XMLSchema
 Zenodo
@@ -34,22 +33,17 @@ bugfix
 charset
 consise
 csv
-dajobe
 datatypes
 dev
-doi
 dsn
 getNextResult
-github
 homebrew
-https
 ifying
 javascript
 json
 jsonld
 ld
 libdb
-librdf
 lossy
 md
 mysql
@@ -69,7 +63,6 @@ readr
 rectangling
 redland
 rofooter
-ropensci
 serializeToFile
 serializer
 serializers
@@ -83,5 +76,5 @@ triplestores
 ubiquitious
 un
 uri
+vroom
 yml
-zenodo
