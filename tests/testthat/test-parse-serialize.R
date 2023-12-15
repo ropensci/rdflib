@@ -206,8 +206,8 @@ testthat::test_that("we can parse into an existing rdf model", {
   
 
 testthat::test_that("we can parse from a url", {
-  # CRAN seems okay with tests requiring an internet connection
-  #testthat::skip_on_cran()
+  
+  testthat::skip_on_cran()
   rdf <- rdf_parse("https://tinyurl.com/ycf95c9h")
   testthat::expect_is(rdf, "rdf")
   
