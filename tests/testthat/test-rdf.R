@@ -39,6 +39,7 @@ testthat::test_that("we can concatenate rdfs", {
 testthat::test_that("we can add, parse and serialize json-ld", {
   
   skip_if_not_installed("jsonld")
+  skip_on_cran()
   
   x <- rdf()
   x <- rdf_add(x, 

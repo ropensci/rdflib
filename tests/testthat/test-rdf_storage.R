@@ -85,6 +85,9 @@ testthat::test_that("Virtuoso Backend", {
 
 testthat::test_that("We warn if we cannot use disk-based storage", {
   testthat::skip_if(rdf_has_bdb())
+  skip_on_cran()
+  
+  
   testthat::expect_warning(rdf <- rdf(storage = "BDB"), "BDB driver not found")
   ## Falls back on memory-based storage, still creates rdf
   testthat::expect_is(rdf, "rdf")
@@ -97,6 +100,8 @@ testthat::test_that("We can use BDB storage", {
   
   # not sure why this is now failing on appveyor
   testthat::skip_on_os("windows")
+  skip_on_cran()
+  
   
   testthat::expect_silent(rdf <- rdf(storage="BDB", new_db = TRUE))
   

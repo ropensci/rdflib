@@ -45,6 +45,8 @@ testthat::test_that("we can add a namespace on serializing", {
 testthat::test_that("we can parse and serialize json-ld", {
   
   skip_if_not_installed("jsonld")
+  skip_on_cran() # JSON-LD uses internet resources
+  
   rdf <- rdf_parse(doc)
   rdf_serialize(rdf, "out.json")
   roundtrip <- rdf_parse("out.json")
@@ -109,6 +111,9 @@ testthat::test_that("we can parse and serialize rdfxml", {
 
 
 testthat::test_that("we can parse by guessing on the file extension", {
+  
+  
+  
   ex <- system.file("extdata/person.nq", package="rdflib")
   rdf <- rdf_parse(ex)
   rdf_serialize(rdf, "tmp.nq", base = "http://schema.org/")
@@ -134,7 +139,7 @@ testthat::test_that("we can serialize turtle with a baseUri", {
   testthat::test_that("@id is not a URI, we should get localhost", {
     
     skip_if_not_installed("jsonld")
-    
+    skip_on_cran()
     
     ex <- '{
       "@context": "http://schema.org/",
@@ -150,6 +155,7 @@ testthat::test_that("we can serialize turtle with a baseUri", {
   testthat::test_that("@id is a URI, we should not get localhost", {
     
     skip_if_not_installed("jsonld")
+    skip_on_cran()
     
     ex <- '{
       "@context": "http://schema.org/",
@@ -164,6 +170,7 @@ testthat::test_that("we can serialize turtle with a baseUri", {
   testthat::test_that("we can alter the base URI", {
     
     skip_if_not_installed("jsonld")
+    skip_on_cran()
     
     
     ex <- '{
