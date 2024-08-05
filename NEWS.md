@@ -1,3 +1,8 @@
+# rdflib 0.2.9
+
+* Address CRAN vignette building.
+
+
 # rdflib 0.2.8
 
 * tests fail gracefully on CRAN without internet resources

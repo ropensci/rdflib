@@ -14,7 +14,7 @@ vignette: >
 ```{r include=FALSE}
 options(rdf_print_format = "nquads")
 is_linux <- Sys.info()["sysname"] == "Linux"
-knitr::opts_chunk$set(eval=is_linux)
+knitr::opts_chunk$set(eval=FALSE)
 ```
 
 In the world of data science, RDF is a bit of an ugly duckling.  Like XML and Java, only without the massive-adoption-that-refuses-to-die part.  In fact RDF is most frequently expressed in XML, and RDF tools are written in Java, which help give RDF has the aesthetics of *steampunk*, of some technology for some futuristic Semantic Web[^1] in a toolset that feels about as lightweight and modern as iron dreadnought.
